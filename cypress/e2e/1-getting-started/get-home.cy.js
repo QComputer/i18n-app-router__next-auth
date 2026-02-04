@@ -12,7 +12,7 @@
 // https://on.cypress.io/introduction-to-cypress
 describe('Home Page', () => {
   it('Getting home page', () => {
-    cy.visit('/') // 1.
+    cy.visit('localhost:3000/fa') // 1.
 
   });
 });
