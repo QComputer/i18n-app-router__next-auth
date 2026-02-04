@@ -1,7 +1,6 @@
 import NextAuth from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 import CredentialsProvider from "next-auth/providers/credentials"
-import EmailProvider from "next-auth/providers/email"
 import prisma from "@/lib/db/prisma"
 import type { Provider } from "next-auth/providers"
 import type { JWT } from "next-auth/jwt";
@@ -68,6 +67,10 @@ const providers: Provider[] = [
         throw new Error("Invalid username")
       }
 
+      if (!user.password) {
+        return null
+      }
+
       const valid = await bcrypt.compare(password, user.password);
       if (!valid) return null;
 
@@ -83,7 +86,7 @@ const providers: Provider[] = [
     },
   }),
 ]
-
+/*
 // Conditionally add EmailProvider if SMTP is configured
 if (process.env.EMAIL_SERVER && process.env.EMAIL_FROM) {
   providers.push(
@@ -92,7 +95,7 @@ if (process.env.EMAIL_SERVER && process.env.EMAIL_FROM) {
       from: process.env.EMAIL_FROM,
     }) as Provider
   )
-}
+}*/
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   session: {

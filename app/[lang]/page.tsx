@@ -12,8 +12,6 @@ export default async function IndexPage(props: {
 
   return (
     <div>
-      <Counter dictionary={dictionary.counter} />
-
       <div className=" min-h-screen flex flex-col items-center justify-center p-4">
 
         <h1 className="text-4xl font-bold mb-4">
@@ -41,7 +39,9 @@ export default async function IndexPage(props: {
         </div>
 
         <div className="mt-12 text-center">
-          <h2 className="text-2xl font-semibold mb-4">Features</h2>
+          <h2 className="text-2xl font-semibold mb-4"> 
+            {lang === "fa" as Locale ? "ویژگی ها" : "Features"}
+            </h2>
           <ul className="text-muted-foreground space-y-2">
             {lang === "fa" as Locale ? (
               <>

@@ -156,6 +156,31 @@
     "inFuture": "gelecekte"
   },
 
+  "signin": {
+    "title": "Giriş Yap",
+    "description": "Hesabınıza erişmek için kimlik bilgilerinizi giriniz",
+    "username": "Kullanıcı Adı",
+    "password": "Şifre",
+    "signinButton": "Giriş Yap",
+    "error": "Bir hata oluştu"
+  },
+  "signout": {
+    "title": "Çıkış Yap",
+    "description": "Çıkış yapmak istediğinizden emin misiniz?",
+    "signoutButton": "Çıkış Yap",
+    "cancelButton": "İptal"
+  },
+
+  "signup": {
+    "title": "Kayıt Ol",
+    "description": "Başlamak için hesabınızı oluşturun",
+    "username": "Kullanıcı Adı",
+    "password": "Şifre",
+    "signupButton": "Kayıt Ol",
+    "usernameRequired": "Kullanıcı adı gereklidir",
+    "passwordRequirements": "Şifre şunları içermelidir"
+  },
+
   "server-component": {
     "welcome": "Welcome"
   },

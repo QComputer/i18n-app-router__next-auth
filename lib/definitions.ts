@@ -5,7 +5,7 @@ Use the Server Action to validate the form fields on the server. If your authent
 Using Zod as an example, you can define a form schema with appropriate error messages:
 */
 import * as z from 'zod'
- 
+  
 export const SignupFormSchema = z.object({
   username: z
     .string()
@@ -20,13 +20,17 @@ export const SignupFormSchema = z.object({
       error: 'Contain at least one special character.',
     })
     .trim(),
+  role: z
+    .string()
+    .default('CLIENT'),
 })
- 
+  
 export type FormState =
   | {
       errors?: {
         username?: string[]
         password?: string[]
+        role?: string[]
       }
       message?: string
     }

@@ -122,6 +122,29 @@
     "saveSuccess": "Settings saved successfully"
   },
 
+  "signin": {
+    "title": "Sign In",
+    "description": "Enter your credentials to access your account",
+    "username": "Username",
+    "password": "Password",
+    "signinButton": "Sign In",
+    "error": "An error occurred"
+  },
+  "signout": {
+    "title": "Sign Out",
+    "description": "Are you sure you want to sign out?",
+    "signoutButton": "Sign Out",
+    "cancelButton": "Cancel"
+  },
+  "signup": {
+    "title": "Sign Up",
+    "description": "Create your account to get started",
+    "username": "Username",
+    "password": "Password",
+    "signupButton": "Sign Up",
+    "usernameRequired": "Username is required",
+    "passwordRequirements": "Password must"
+  },
   "server-component": {
     "welcome": "Welcome"
   },

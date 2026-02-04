@@ -1,11 +1,13 @@
 import { i18nConfig, Locale} from "@/i18n-config";
 import "@/app/globals.css"
 import LocaleSwitcher from "@/components/locale-switcher";
+import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeSwitcher } from "@/components/theme-switcher";
 
 
 export const metadata = {
-  title: "i18n within app router - Vercel Examples",
-  description: "How to do i18n in Next.js 16 within app router",
+  title: "Appointment Booking",
+  description: "Build your appointment booking system",
 };
 
 export async function generateStaticParams() {
@@ -22,11 +24,20 @@ export default async function LangLayout(props: {
   const { children } = props;
 
   return (
-    
-    <html lang={params.lang} dir={isRTL ? "rtl" : "ltr"} className="dark">
+    <html lang={params.lang} dir={isRTL ? "rtl" : "ltr"} suppressHydrationWarning>
       <body className={"min-h-screen bg-background font-sans antialiased"}>
-        <LocaleSwitcher />
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <div className="flex items-center justify-end gap-2 p-4">
+            <ThemeSwitcher />
+            <LocaleSwitcher />
+          </div>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

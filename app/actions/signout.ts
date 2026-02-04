@@ -1,7 +1,9 @@
 "use server";
 
-import { redirect } from "next/navigation";
+import { signOut } from '@/lib/auth'
+import { redirect } from 'next/navigation'
 
 export async function signOutAction(locale: string) {
-  redirect(`/${locale}/auth/signin`);
+  await signOut({ redirect: false })
+  redirect(`/${locale}/auth/signin`)
 }

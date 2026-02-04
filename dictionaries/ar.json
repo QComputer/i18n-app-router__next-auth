@@ -155,6 +155,31 @@
     "inFuture": "في المستقبل"
   },
 
+  "signin": {
+    "title": "تسجيل الدخول",
+    "description": "أدخل بيانات الاعتماد للوصول إلى حسابك",
+    "username": "اسم المستخدم",
+    "password": "كلمة المرور",
+    "signinButton": "تسجيل الدخول",
+    "error": "حدث خطأ"
+  },
+  "signout": {
+    "title": "تسجيل الخروج",
+    "description": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
+    "signoutButton": "تسجيل الخروج",
+    "cancelButton": "إلغاء"
+  },
+
+  "signup": {
+    "title": "إنشاء حساب",
+    "description": "أنشئ حسابك للبدء",
+    "username": "اسم المستخدم",
+    "password": "كلمة المرور",
+    "signupButton": "إنشاء حساب",
+    "usernameRequired": "اسم المستخدم مطلوب",
+    "passwordRequirements": "يجب أن تكون كلمة المرور"
+  },
+
   "server-component": {
     "welcome": "Welcome"
   },
