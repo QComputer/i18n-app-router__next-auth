@@ -6,6 +6,8 @@ import { i18nConfig } from "./i18n-config";
 import { match as matchLocale } from "@formatjs/intl-localematcher";
 import Negotiator from "negotiator";
 
+export { auth as proxy } from "@/lib/auth"
+
 function getLocale(request: NextRequest): string | undefined {
   // Negotiator expects plain object so we need to transform headers
   const negotiatorHeaders: Record<string, string> = {};
@@ -13,18 +15,19 @@ function getLocale(request: NextRequest): string | undefined {
 
   const locales = Array.from(i18nConfig.locales);
 
-  // Use negotiator and intl-localematcher to get best locale
+  // Use negotiator and intl-localematcher to get best lang
   const languages = new Negotiator({ headers: negotiatorHeaders }).languages(
     locales,
   );
 
-  const locale = matchLocale(languages, locales, i18nConfig.defaultLocale);
+  const lang = matchLocale(languages, locales, i18nConfig.defaultLocale);
 
-  return locale;
+  return lang;
 }
 
-export function proxy(request: NextRequest) {
+export function proxy0(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
+  console.log('PROXY--------------->pathname:', pathname);
 
   // // `/_next/` and `/api/` are ignored by the watcher, but we need to ignore files in `public` manually.
   // // If you have one
@@ -37,21 +40,21 @@ export function proxy(request: NextRequest) {
   // )
   //   return
 
-  // Check if there is any supported locale in the pathname
+  // Check if there is any supported lang in the pathname
   const pathnameIsMissingLocale = i18nConfig.locales.every(
-    (locale) =>
-      !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`,
+    (lang) =>
+      !pathname.startsWith(`/${lang}/`) && pathname !== `/${lang}`,
   );
 
-  // Redirect if there is no locale
+  // Redirect if there is no lang
   if (pathnameIsMissingLocale) {
-    const locale = getLocale(request);
+    const lang = getLocale(request);
 
     // e.g. incoming request is /products
     // The new URL is now /en-US/products
     return NextResponse.redirect(
       new URL(
-        `/${locale}${pathname.startsWith("/") ? "" : "/"}${pathname}`,
+        `/${lang}${pathname.startsWith("/") ? "" : "/"}${pathname}`,
         request.url,
       ),
     );

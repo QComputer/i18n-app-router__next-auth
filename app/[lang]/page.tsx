@@ -8,7 +8,6 @@ export default async function IndexPage(props: {
   params: Promise<{ lang: Locale }>;
 }) {
   const { lang } = await props.params;
-
   const dictionary = await getDictionary(lang);
 
   return (
@@ -28,13 +27,13 @@ export default async function IndexPage(props: {
 
         <div className="flex gap-4">
           <Link
-            href="/auth/signin"
+            href={`${lang}/auth/signin`}
             className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
           >
             {lang === "fa" as Locale ? "ورود" : "Sign In"}
           </Link>
           <Link
-            href="/auth/signup"
+            href={`${lang}/auth/signup`}
             className="px-6 py-3 border border-input bg-background rounded-lg hover:bg-accent hover:text-accent-foreground transition-colors"
           >
             {lang === "fa" as Locale ? "ثبت‌نام" : "Sign Up"}

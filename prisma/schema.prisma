@@ -1,0 +1,255 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+// ============================================
+// Organization (Multi-tenant support)
+// ============================================
+
+model Organization {
+  id                String            @id @default(cuid())
+  name              String
+  slug              String            @unique
+  type              OrganizationType
+  logo              String?
+  description       String?
+  website           String?
+  phone             String?
+  email             String?
+  address           String?
+  timezone          String            @default("Asia/Tehran")
+  locale            String            @default("fa")
+  themeMode         ThemeMode         @default(SYSTEM)
+  primaryColor      String            @default("#0ea5e9")
+  secondaryColor    String            @default("#64748b")
+  isActive          Boolean           @default(true)
+  
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  
+  // Relations
+  users             User[]
+  services          Service[]
+  appointments      Appointment[]
+  businessHours     BusinessHours[]
+  holidays          Holiday[]
+  staff             Staff[]
+  
+  @@index([slug])
+  @@index([type])
+}
+
+enum OrganizationType {
+  LAWYER
+  DOCTOR
+  SUPERMARKET
+  RESTAURANT
+  SALON
+  OTHER
+}
+
+enum ThemeMode {
+  LIGHT
+  DARK
+  SYSTEM
+}
+
+// ============================================
+// User & Authentication
+// ============================================
+
+model User {
+  id                String    @id @default(cuid())
+  username          String    @unique
+  email             String?    @unique
+  name              String?
+  phone             String?
+  image             String?
+  emailVerified     DateTime?
+  password          String?   // For credentials auth
+  role              String    @default("CLIENT") // Use string for NextAuth compatibility
+  locale            String    @default("fa")
+  themeMode         ThemeMode @default(SYSTEM)
+  
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  
+  // Relations
+  organizationId    String?
+  organization      Organization? @relation(fields: [organizationId], references: [id])
+  accounts          Account[]
+  sessions          Session[]
+  appointments      Appointment[] // Client's appointments
+  
+  @@index([username])
+  @@index([organizationId])
+  @@index([role])
+}
+
+// NextAuth Models
+model Account {
+  id                String    @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?   @db.Text
+  access_token      String?   @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?   @db.Text
+  session_state     String?
+  
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  userRole     String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+  
+  @@unique([identifier, token])
+}
+
+// ============================================
+// Services & Staff
+// ============================================
+
+model Service {
+  id                String        @id @default(cuid())
+  name              String
+  description       String?
+  duration          Int           // Duration in minutes
+  price             Float?
+  currency          String        @default("IRR")
+  color             String?       // For calendar display
+  isActive          Boolean       @default(true)
+  slotInterval      Int           @default(30) // minutes between slots
+  
+  organizationId    String
+  organization      Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  appointments      Appointment[]
+  
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  
+  @@index([organizationId])
+}
+
+model Staff {
+  id                String        @id @default(cuid())
+  name              String
+  email             String?
+  phone             String?
+  bio               String?
+  image             String?
+  isActive          Boolean       @default(true)
+  isDefault         Boolean       @default(false) // Default staff for new bookings
+  
+  organizationId    String
+  organization      Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  appointments      Appointment[]
+  
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  
+  @@unique([email, organizationId])
+  @@index([organizationId])
+}
+
+// ============================================
+// Appointments
+// ============================================
+
+model Appointment {
+  id                String            @id @default(cuid())
+  startTime         DateTime
+  endTime           DateTime
+  status            String            @default("PENDING") // Use string for compatibility
+  notes             String?           @db.Text
+  clientName        String
+  clientEmail       String
+  clientPhone       String?
+  cancellationReason String?
+  
+  // Foreign Keys
+  organizationId    String
+  organization      Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  serviceId         String
+  service           Service           @relation(fields: [serviceId], references: [id])
+  clientId          String?
+  client            User?             @relation(fields: [clientId], references: [id])
+  staffId           String?
+  staff             Staff?            @relation(fields: [staffId], references: [id])
+  
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  
+  @@index([organizationId])
+  @@index([startTime])
+  @@index([status])
+  @@index([serviceId])
+  @@index([clientId])
+  @@index([staffId])
+}
+
+// ============================================
+// Business Hours & Holidays
+// ============================================
+
+model BusinessHours {
+  id                String        @id @default(cuid())
+  dayOfWeek         Int           // 0 = Sunday, 6 = Saturday
+  startTime         String        // "09:00"
+  endTime           String        // "17:00"
+  isActive          Boolean       @default(true)
+  
+  organizationId    String
+  organization      Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  @@unique([organizationId, dayOfWeek])
+  @@index([organizationId])
+}
+
+model Holiday {
+  id                String        @id @default(cuid())
+  date              DateTime
+  name              String
+  isRecurring       Boolean       @default(false) // Annual holiday
+  
+  organizationId    String
+  organization      Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  @@index([organizationId])
+  @@index([date])
+}

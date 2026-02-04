@@ -21,7 +21,6 @@ export default async function DashboardPage({
   return (
     <div className="p-6">
       <h1 className="text-3xl font-bold mb-6">{dictionary.common.appName}</h1>
-
     </div>
   )
 }

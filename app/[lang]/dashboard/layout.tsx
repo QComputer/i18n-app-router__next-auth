@@ -2,6 +2,7 @@ import { redirect } from "next/navigation"
 import Link from "next/link"
 import { getDictionary } from "@/get-dictionary";
 import { i18nConfig, Locale } from "@/i18n-config";
+import { signOutAction } from "@/app/actions/signout";
 
 
 export async function generateStaticParams() {
@@ -22,6 +23,9 @@ export default async function DashboardLayout(props: {
     }
   }//await auth()
   const t = await getDictionary(locale as Locale);
+
+  // Create bound action for sign out
+  const signOut = signOutAction.bind(null, locale);
 
   return (
     <div className="min-h-screen flex">
@@ -48,11 +52,7 @@ export default async function DashboardLayout(props: {
         </nav>
 
         <div className="p-4 border-t">
-          <form
-            action={async () => {
-              redirect(`/${locale}/auth/signin`)
-            }}
-          >
+          <form action={signOut}>
             <button
               type="submit"
               className="w-full px-4 py-2 text-left rounded-lg hover:bg-accent transition-colors text-destructive"
