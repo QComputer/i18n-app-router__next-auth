@@ -1,0 +1,131 @@
+{
+  "common": {
+    "appName": "رزرو نوبت",
+    "loading": "در حال بارگذاری...",
+    "error": "خطا",
+    "success": "موفق",
+    "save": "ذخیره",
+    "cancel": "لغو",
+    "confirm": "تأیید",
+    "delete": "حذف",
+    "edit": "ویرایش",
+    "search": "جستجو",
+    "filter": "فیلتر",
+    "export": "خروجی",
+    "import": "ورودی"
+  },
+  "auth": {
+    "signIn": "ورود",
+    "signUp": "ثبت‌نام",
+    "signOut": "خروج",
+    "email": "ایمیل",
+    "password": "رمز عبور",
+    "confirmPassword": "تأیید رمز عبور",
+    "username": "نام کاربری",
+    "rememberMe": "مرا به خاطر بسپار",
+    "forgotPassword": "فراموشی رمز عبور؟",
+    "orContinueWith": "یا ادامه با",
+    "noAccount": "حساب کاربری ندارید؟",
+    "hasAccount": "حساب کاربری دارید؟",
+    "createAccount": "ایجاد حساب",
+    "signInWithGoogle": "ورود با گوگل",
+    "invalidCredentials": "نام کاربری یا رمز عبور اشتباه است"
+  },
+  "navigation": {
+    "home": "خانه",
+    "dashboard": "داشبورد",
+    "appointments": "نوبت‌ها",
+    "services": "خدمات",
+    "staff": "کارکنان",
+    "settings": "تنظیمات",
+    "reports": "گزارش‌ها",
+    "logout": "خروج"
+  },
+  "dashboard": {
+    "title": "داشبورد",
+    "stats": {
+      "totalAppointments": "کل نوبت‌ها",
+      "pendingAppointments": "نوبت‌های در انتظار",
+      "completedAppointments": "نوبت‌های تکمیل شده",
+      "totalServices": "کل خدمات",
+      "totalStaff": "کل کارکنان"
+    },
+    "quickActions": "عملیات سریع",
+    "actions": {
+      "newAppointment": "نوبت جدید",
+      "newAppointmentDesc": "ایجاد نوبت جدید",
+      "addService": "افزودن خدمت",
+      "addServiceDesc": "افزودن خدمت جدید",
+      "addStaff": "افزودن کارمند",
+      "addStaffDesc": "افزودن کارمند جدید"
+    },
+    "recentAppointments": "نوبت‌های اخیر",
+    "table": {
+      "date": "تاریخ",
+      "client": "مشتری",
+      "service": "خدمت",
+      "status": "وضعیت"
+    },
+    "noAppointments": "هیچ نوبتی یافت نشد"
+  },
+  "appointment": {
+    "title": "نوبت‌ها",
+    "newAppointment": "نوبت جدید",
+    "appointmentDetails": "جزئیات نوبت",
+    "clientInfo": "اطلاعات مشتری",
+    "appointmentDate": "تاریخ نوبت",
+    "appointmentTime": "زمان نوبت",
+    "duration": "مدت زمان",
+    "service": "خدمت",
+    "staff": "کارمند",
+    "notes": "توضیحات",
+    "status": "وضعیت",
+    "createdAt": "تاریخ ایجاد",
+    "updatedAt": "تاریخ بروزرسانی",
+    "cancel": "لغو نوبت",
+    "cancelConfirm": "آیا از لغو این نوبت مطمئن هستید؟",
+    "saveSuccess": "نوبت با موفقیت ذخیره شد",
+    "cancelSuccess": "نوبت با موفقیت لغو شد"
+  },
+  "service": {
+    "title": "خدمات",
+    "newService": "خدمت جدید",
+    "serviceDetails": "جزئیات خدمت",
+    "name": "نام",
+    "description": "توضیحات",
+    "duration": "مدت زمان (دقیقه)",
+    "price": "قیمت",
+    "category": "دسته‌بندی",
+    "image": "تصویر",
+    "saveSuccess": "خدمت با موفقیت ذخیره شد"
+  },
+  "staff": {
+    "title": "کارکنان",
+    "newStaff": "کارمند جدید",
+    "staffDetails": "جزئیات کارمند",
+    "name": "نام",
+    "email": "ایمیل",
+    "phone": "شماره تماس",
+    "position": "سمت",
+    "avatar": "تصویر پروفایل",
+    "saveSuccess": "کارمند با موفقیت ذخیره شد"
+  },
+  "settings": {
+    "title": "تنظیمات",
+    "profile": "پروفایل",
+    "account": "حساب کاربری",
+    "business": "کسب و کار",
+    "notifications": "اعلان‌ها",
+    "language": "زبان",
+    "theme": "تم",
+    "saveSuccess": "تنظیمات با موفقیت ذخیره شد"
+  },
+
+  "server-component": {
+    "welcome": "Welcome"
+  },
+  "counter": {
+    "increment": "Increment",
+    "decrement": "Decrement"
+  }
+}

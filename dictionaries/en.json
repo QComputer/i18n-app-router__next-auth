@@ -1,0 +1,132 @@
+{
+  "common": {
+    "appName": "Appointment Booking",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "edit": "Edit",
+    "search": "Search",
+    "filter": "Filter",
+    "export": "Export",
+    "import": "Import",
+    "loading": "Loading..."
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "signOut": "Sign Out",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "username": "Username",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "orContinueWith": "Or continue with",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "createAccount": "Create account",
+    "signInWithGoogle": "Sign in with Google",
+    "invalidCredentials": "Invalid email or password"
+  },
+  "navigation": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "appointments": "Appointments",
+    "services": "Services",
+    "staff": "Staff",
+    "settings": "Settings",
+    "reports": "Reports",
+    "logout": "Logout"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "stats": {
+      "totalAppointments": "Total Appointments",
+      "pendingAppointments": "Pending Appointments",
+      "completedAppointments": "Completed Appointments",
+      "totalServices": "Total Services",
+      "totalStaff": "Total Staff"
+    },
+    "quickActions": "Quick Actions",
+    "actions": {
+      "newAppointment": "New Appointment",
+      "newAppointmentDesc": "Create a new appointment",
+      "addService": "Add Service",
+      "addServiceDesc": "Add a new service",
+      "addStaff": "Add Staff",
+      "addStaffDesc": "Add a new staff member"
+    },
+    "recentAppointments": "Recent Appointments",
+    "table": {
+      "date": "Date",
+      "client": "Client",
+      "service": "Service",
+      "status": "Status"
+    },
+    "noAppointments": "No appointments found"
+  },
+  "appointment": {
+    "title": "Appointments",
+    "newAppointment": "New Appointment",
+    "appointmentDetails": "Appointment Details",
+    "clientInfo": "Client Information",
+    "appointmentDate": "Appointment Date",
+    "appointmentTime": "Appointment Time",
+    "duration": "Duration",
+    "service": "Service",
+    "staff": "Staff",
+    "notes": "Notes",
+    "status": "Status",
+    "createdAt": "Created At",
+    "updatedAt": "Updated At",
+    "cancel": "Cancel Appointment",
+    "cancelConfirm": "Are you sure you want to cancel this appointment?",
+    "saveSuccess": "Appointment saved successfully",
+    "cancelSuccess": "Appointment canceled successfully"
+  },
+  "service": {
+    "title": "Services",
+    "newService": "New Service",
+    "serviceDetails": "Service Details",
+    "name": "Name",
+    "description": "Description",
+    "duration": "Duration (minutes)",
+    "price": "Price",
+    "category": "Category",
+    "image": "Image",
+    "saveSuccess": "Service saved successfully"
+  },
+  "staff": {
+    "title": "Staff",
+    "newStaff": "New Staff",
+    "staffDetails": "Staff Details",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "position": "Position",
+    "avatar": "Avatar",
+    "saveSuccess": "Staff saved successfully"
+  },
+  "settings": {
+    "title": "Settings",
+    "profile": "Profile",
+    "account": "Account",
+    "business": "Business",
+    "notifications": "Notifications",
+    "language": "Language",
+    "theme": "Theme",
+    "saveSuccess": "Settings saved successfully"
+  },
+
+  "server-component": {
+    "welcome": "Welcome"
+  },
+  "counter": {
+    "increment": "Increment",
+    "decrement": "Decrement"
+  }
+}

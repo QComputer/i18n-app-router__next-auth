@@ -1,0 +1,165 @@
+{
+  "common": {
+    "appName": "حجز المواعيد",
+    "loading": "جاري التحميل...",
+    "error": "خطأ",
+    "success": "نجاح",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "confirm": "تأكيد",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "search": "بحث",
+    "filter": "تصفية",
+    "export": "تصدير",
+    "import": "استيراد"
+  },
+  "auth": {
+    "signIn": "تسجيل الدخول",
+    "signUp": "إنشاء حساب",
+    "signOut": "تسجيل الخروج",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "username": "اسم المستخدم",
+    "rememberMe": "تذكرني",
+    "forgotPassword": "نسيت كلمة المرور؟",
+    "orContinueWith": "أو متابعة مع",
+    "noAccount": "ليس لديك حساب؟",
+    "hasAccount": "لديك حساب؟",
+    "createAccount": "إنشاء حساب",
+    "signInWithGoogle": "تسجيل الدخول مع جوجل",
+    "invalidCredentials": "البريد الإلكتروني أو كلمة المرور غير صالحة"
+  },
+  "navigation": {
+    "home": "الرئيسية",
+    "dashboard": "لوحة التحكم",
+    "appointments": "المواعيد",
+    "services": "الخدمات",
+    "staff": "الموظفين",
+    "settings": "الإعدادات",
+    "reports": "التقارير",
+    "logout": "تسجيل الخروج"
+  },
+  "dashboard": {
+    "title": "لوحة التحكم",
+    "stats": {
+      "totalAppointments": "إجمالي المواعيد",
+      "pendingAppointments": "المواعيد المعلقة",
+      "completedAppointments": "المواعيد المكتملة",
+      "totalServices": "إجمالي الخدمات",
+      "totalStaff": "إجمالي الموظفين"
+    },
+    "quickActions": "إجراءات سريعة",
+    "actions": {
+      "newAppointment": "موعد جديد",
+      "newAppointmentDesc": "إنشاء موعد جديد",
+      "addService": "إضافة خدمة",
+      "addServiceDesc": "إضافة خدمة جديدة",
+      "addStaff": "إضافة موظف",
+      "addStaffDesc": "إضافة موظف جديد"
+    },
+    "recentAppointments": "المواعيد الأخيرة",
+    "table": {
+      "date": "التاريخ",
+      "client": "العميل",
+      "service": "الخدمة",
+      "status": "الحالة"
+    },
+    "noAppointments": "لم يتم العثور على مواعيد"
+  },
+  "appointment": {
+    "title": "المواعيد",
+    "newAppointment": "موعد جديد",
+    "appointmentDetails": "تفاصيل الموعد",
+    "clientInfo": "معلومات العميل",
+    "appointmentDate": "تاريخ الموعد",
+    "appointmentTime": "وقت الموعد",
+    "duration": "المدة",
+    "service": "الخدمة",
+    "staff": "الموظف",
+    "notes": "ملاحظات",
+    "status": "الحالة",
+    "createdAt": "تاريخ الإنشاء",
+    "updatedAt": "تاريخ التحديث",
+    "cancel": "إلغاء الموعد",
+    "cancelConfirm": "هل أنت متأكد من إلغاء هذا الموعد؟",
+    "saveSuccess": "تم حفظ الموعد بنجاح",
+    "cancelSuccess": "تم إلغاء الموعد بنجاح"
+  },
+  "service": {
+    "title": "الخدمات",
+    "newService": "خدمة جديدة",
+    "serviceDetails": "تفاصيل الخدمة",
+    "name": "الاسم",
+    "description": "الوصف",
+    "duration": "المدة (دقائق)",
+    "price": "السعر",
+    "category": "الفئة",
+    "image": "الصورة",
+    "saveSuccess": "تم حفظ الخدمة بنجاح"
+  },
+  "staff": {
+    "title": "الموظفين",
+    "newStaff": "موظف جديد",
+    "staffDetails": "تفاصيل الموظف",
+    "name": "الاسم",
+    "email": "البريد الإلكتروني",
+    "phone": "رقم الهاتف",
+    "position": "المنصب",
+    "avatar": "الصورة الشخصية",
+    "saveSuccess": "تم حفظ الموظف بنجاح"
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "profile": "الملف الشخصي",
+    "account": "الحساب",
+    "business": "الشركة",
+    "notifications": "الإشعارات",
+    "language": "اللغة",
+    "theme": "المظهر",
+    "saveSuccess": "تم حفظ الإعدادات بنجاح"
+  },
+  "calendar": {
+    "today": "اليوم",
+    "tomorrow": "غداً",
+    "thisWeek": "هذا الأسبوع",
+    "nextWeek": "الأسبوع القادم",
+    "noSlots": "لا توجد مواعيد متاحة",
+    "available": "متاح",
+    "unavailable": "غير متاح"
+  },
+  "business": {
+    "workingHours": "ساعات العمل",
+    "closed": "مغلق",
+    "holiday": "عطلة",
+    "bookOnline": "احجز أونلاين"
+  },
+  "errors": {
+    "required": "هذا الحقل مطلوب",
+    "invalidEmail": "بريد إلكتروني غير صالح",
+    "invalidPhone": "رقم هاتف غير صالح",
+    "minLength": "الحد الأدنى {{min}} حرف",
+    "maxLength": "الحد الأقصى {{max}} حرف",
+    "serverError": "خطأ في الخادم",
+    "notFound": "غير موجود",
+    "unauthorized": "غير مصرح"
+  },
+  "time": {
+    "minute": "دقيقة",
+    "hour": "ساعة",
+    "day": "يوم",
+    "week": "أسبوع",
+    "month": "شهر",
+    "ago": "منذ",
+    "inFuture": "في المستقبل"
+  },
+
+  "server-component": {
+    "welcome": "Welcome"
+  },
+  "counter": {
+    "increment": "Increment",
+    "decrement": "Decrement"
+  }
+}

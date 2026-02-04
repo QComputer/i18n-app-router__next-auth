@@ -1,0 +1,166 @@
+{
+  "common": {
+    "appName": "Randevu Rezervasyonu",
+    "loading": "Yükleniyor...",
+    "error": "Hata",
+    "success": "Başarılı",
+    "save": "Kaydet",
+    "cancel": "İptal",
+    "confirm": "Onayla",
+    "delete": "Sil",
+    "edit": "Düzenle",
+    "search": "Ara",
+    "filter": "Filtrele",
+    "export": "Dışa Aktar",
+    "import": "İçe Aktar"
+  },
+  "navigation": {
+    "home": "Ana Sayfa",
+    "dashboard": "Kontrol Paneli",
+    "appointments": "Randevular",
+    "services": "Hizmetler",
+    "staff": "Personel",
+    "settings": "Ayarlar",
+    "reports": "Raporlar",
+    "logout": "Çıkış Yap"
+  },
+  "auth": {
+    "signIn": "Giriş Yap",
+    "signUp": "Kayıt Ol",
+    "signOut": "Çıkış Yap",
+    "username": "Kullanıcı Adı",
+    "email": "E-posta",
+    "password": "Şifre",
+    "forgotPassword": "Şifremi Unuttum?",
+    "rememberMe": "Beni Hatırla",
+    "noAccount": "Hesabınız yok mu?",
+    "hasAccount": "Hesabınız var mı?",
+    "createAccount": "Hesap oluştur"
+  },
+  "appointment": {
+    "title": "Randevular",
+    "newAppointment": "Yeni Randevu",
+    "bookNow": "Şimdi Rezervasyon Yap",
+    "selectService": "Hizmet Seçin",
+    "selectDate": "Tarih Seçin",
+    "selectTime": "Saat Seçin",
+    "selectStaff": "Personel Seçin",
+    "yourInformation": "Bilgileriniz",
+    "fullName": "Ad Soyad",
+    "phoneNumber": "Telefon Numarası",
+    "notes": "Notlar",
+    "notesPlaceholder": "Notlarınızı buraya yazın...",
+    "confirmBooking": "Rezervasyonu Onayla",
+    "bookingSuccess": "Randevu başarıyla oluşturuldu!",
+    "bookingFailed": "Randevu oluşturulamadı",
+    "status": {
+      "pending": "Beklemede",
+      "confirmed": "Onaylandı",
+      "cancelled": "İptal Edildi",
+      "completed": "Tamamlandı",
+      "noShow": "Gelmadi"
+    }
+  },
+  "calendar": {
+    "today": "Bugün",
+    "tomorrow": "Yarın",
+    "thisWeek": "Bu Hafta",
+    "nextWeek": "Gelecek Hafta",
+    "noSlots": "Müsait saat yok",
+    "available": "Müsait",
+    "unavailable": "Müsait Değil"
+  },
+  "business": {
+    "workingHours": "Çalışma Saatleri",
+    "closed": "Kapalı",
+    "holiday": "Tatil",
+    "bookOnline": "Online Rezervasyon"
+  },
+  "errors": {
+    "required": "Bu alan zorunludur",
+    "invalidEmail": "Geçersiz e-posta adresi",
+    "invalidPhone": "Geçersiz telefon numarası",
+    "minLength": "Minimum {{min}} karakter",
+    "maxLength": "Maksimum {{max}} karakter",
+    "serverError": "Sunucu hatası",
+    "notFound": "Bulunamadı",
+    "unauthorized": "Yetkisiz"
+  },
+  "dashboard": {
+    "title": "Kontrol Paneli",
+    "stats": {
+      "totalAppointments": "Toplam Randevular",
+      "pendingAppointments": "Bekleyen Randevular",
+      "completedAppointments": "Tamamlanan Randevular",
+      "totalServices": "Toplam Hizmetler",
+      "totalStaff": "Toplam Personel"
+    },
+    "quickActions": "Hızlı İşlemler",
+    "actions": {
+      "newAppointment": "Yeni Randevu",
+      "newAppointmentDesc": "Yeni bir randevu oluştur",
+      "addService": "Hizmet Ekle",
+      "addServiceDesc": "Yeni bir hizmet ekle",
+      "addStaff": "Personel Ekle",
+      "addStaffDesc": "Yeni bir personel üyesi ekle"
+    },
+    "recentAppointments": "Son Randevular",
+    "table": {
+      "date": "Tarih",
+      "client": "Müşteri",
+      "service": "Hizmet",
+      "status": "Durum"
+    },
+    "noAppointments": "Randevu bulunamadı"
+  },
+  "service": {
+    "title": "Hizmetler",
+    "newService": "Yeni Hizmet",
+    "serviceDetails": "Hizmet Detayları",
+    "name": "Ad",
+    "description": "Açıklama",
+    "duration": "Süre (dakika)",
+    "price": "Fiyat",
+    "category": "Kategori",
+    "image": "Resim",
+    "saveSuccess": "Hizmet başarıyla kaydedildi"
+  },
+  "staff": {
+    "title": "Personel",
+    "newStaff": "Yeni Personel",
+    "staffDetails": "Personel Detayları",
+    "name": "Ad",
+    "email": "E-posta",
+    "phone": "Telefon",
+    "position": "Pozisyon",
+    "avatar": "Profil Resmi",
+    "saveSuccess": "Personel başarıyla kaydedildi"
+  },
+  "settings": {
+    "title": "Ayarlar",
+    "profile": "Profil",
+    "account": "Hesap",
+    "business": "İş",
+    "notifications": "Bildirimler",
+    "language": "Dil",
+    "theme": "Tema",
+    "saveSuccess": "Ayarlar başarıyla kaydedildi"
+  },
+  "time": {
+    "minute": "dakika",
+    "hour": "saat",
+    "day": "gün",
+    "week": "hafta",
+    "month": "ay",
+    "ago": "önce",
+    "inFuture": "gelecekte"
+  },
+
+  "server-component": {
+    "welcome": "Welcome"
+  },
+  "counter": {
+    "increment": "Increment",
+    "decrement": "Decrement"
+  }
+}
