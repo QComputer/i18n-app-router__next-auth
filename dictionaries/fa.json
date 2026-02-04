@@ -141,6 +141,7 @@
     "description": "حساب کاربری خود را ایجاد کنید",
     "username": "نام کاربری",
     "password": "رمز عبور",
+    "role": "نقش",
     "signupButton": "ثبت‌نام",
     "usernameRequired": "نام کاربری الزامی است",
     "passwordRequirements": "رمز عبور باید"

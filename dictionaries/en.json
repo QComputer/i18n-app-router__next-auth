@@ -141,6 +141,7 @@
     "description": "Create your account to get started",
     "username": "Username",
     "password": "Password",
+    "role": "Role",
     "signupButton": "Sign Up",
     "usernameRequired": "Username is required",
     "passwordRequirements": "Password must"

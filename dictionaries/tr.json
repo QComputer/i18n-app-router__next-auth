@@ -176,6 +176,7 @@
     "description": "Başlamak için hesabınızı oluşturun",
     "username": "Kullanıcı Adı",
     "password": "Şifre",
+    "role": "Rol",
     "signupButton": "Kayıt Ol",
     "usernameRequired": "Kullanıcı adı gereklidir",
     "passwordRequirements": "Şifre şunları içermelidir"

@@ -175,6 +175,7 @@
     "description": "أنشئ حسابك للبدء",
     "username": "اسم المستخدم",
     "password": "كلمة المرور",
+    "role": "الدور",
     "signupButton": "إنشاء حساب",
     "usernameRequired": "اسم المستخدم مطلوب",
     "passwordRequirements": "يجب أن تكون كلمة المرور"

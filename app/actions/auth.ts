@@ -11,6 +11,7 @@ export async function signup(state: FormState, formData: FormData) {
   const validatedFields = SignupFormSchema.safeParse({
     username: formData.get('username'),
     password: formData.get('password'),
+    role: formData.get('role'),
   })
   
   // If any form fields are invalid, return early
@@ -21,27 +22,33 @@ export async function signup(state: FormState, formData: FormData) {
   }
   
   // 2. Prepare data for insertion into database
-  const { username, password } = validatedFields.data
+  const { username, password, role } = validatedFields.data
   // e.g. Hash the user's password before storing it
   const hashedPassword = await bcrypt.hash(password, 10)
   
   // 3. Insert the user into the database or call an Auth Library's API
-  const user = await prisma.user.create({
-    data: {
-      username,
-      password: hashedPassword,
+  try {
+    const user = await prisma.user.create({
+      data: {
+        username,
+        password: hashedPassword,
+        role,
+      }
+    })
+    
+    // 4. Create user session and redirect
+    await signIn('credentials', { username, password })
+    
+    // This line will only be reached if signIn doesn't redirect
+    redirect('/dashboard')
+  } catch (error: unknown) {
+    if (error && typeof error === 'object' && 'code' in error && error.code === 'P2002') {
+      return {
+        message: 'Username already exists. Please choose a different username.',
+      }
     }
-  })
-  
-  if (!user) {
     return {
       message: 'An error occurred while creating your account.',
     }
   }
-  
-  // 4. Create user session and redirect
-  await signIn('credentials', { username, password , redirect: false})
-  
-  // 5.redirect user
-  redirect('/dashboard')
 }

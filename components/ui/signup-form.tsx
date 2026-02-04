@@ -34,7 +34,7 @@ interface SignupFormProps {
 }
 
 export default function SignupForm({ dictionary, lang }: SignupFormProps) {
-  const [state, action, pending] = useActionState(signup, undefined)
+  const [state, formAction, pending] = useActionState(signup, undefined)
 
   return (
     <Card className="w-full max-w-md">
@@ -42,8 +42,13 @@ export default function SignupForm({ dictionary, lang }: SignupFormProps) {
         <CardTitle>{dictionary.signup.title}</CardTitle>
         <CardDescription>{dictionary.signup.description}</CardDescription>
       </CardHeader>
-      <form action={action}>
+      <form action={formAction}>
         <CardContent className="space-y-4">
+          {state?.message && (
+            <div className="p-3 rounded-md bg-destructive/10 text-destructive text-sm">
+              {state.message}
+            </div>
+          )}
           <div className="space-y-2">
             <Label htmlFor="username">{dictionary.signup.username}</Label>
             <Input
