@@ -1,15 +1,15 @@
-import { i18nConfig} from "@/i18n-config";
+import { i18nConfig, Locale} from "@/i18n-config";
 import "@/app/globals.css"
 import LocaleSwitcher from "@/components/locale-switcher";
 
 
 export const metadata = {
   title: "i18n within app router - Vercel Examples",
-  description: "How to do i18n in Next.js 15 within app router",
+  description: "How to do i18n in Next.js 16 within app router",
 };
 
 export async function generateStaticParams() {
-  return i18n.locales.map((locale) => ({ lang: locale }));
+  return i18nConfig.locales.map((locale) => ({ lang: locale }));
 }
 
 export default async function LangLayout(props: {

@@ -1,7 +1,12 @@
 import { redirect } from "next/navigation"
 import Link from "next/link"
-import { getTranslations } from "next-intl/server"
+import { getDictionary } from "@/get-dictionary";
+import { i18nConfig, Locale } from "@/i18n-config";
 
+
+export async function generateStaticParams() {
+  return i18nConfig.locales.map((locale) => ({ lang: locale }));
+}
 
 export default async function DashboardLayout(props: {
   children: React.ReactNode;
@@ -16,14 +21,14 @@ export default async function DashboardLayout(props: {
       name: "user name"
     }
   }//await auth()
-  const t = await getTranslations({ locale, namespace: "dashboard" })
+  const t = await getDictionary(locale as Locale);
 
   return (
     <div className="min-h-screen flex">
       {/* Sidebar */}
       <aside className="w-64 border-r bg-card hidden md:block">
         <div className="p-4 border-b">
-          <h1 className="text-xl font-bold">{t("dashboard")}</h1>
+          <h1 className="text-xl font-bold">{t.appointment.title}</h1>
           <p className="text-sm text-muted-foreground">{session.user?.name}</p>
         </div>
 
@@ -32,31 +37,13 @@ export default async function DashboardLayout(props: {
             href={`/${locale}/dashboard`}
             className="block px-4 py-2 rounded-lg hover:bg-accent transition-colors"
           >
-            {t("dashboard")}
+            {t.dashboard.title}
           </Link>
           <Link
             href={`/${locale}/appointments`}
             className="block px-4 py-2 rounded-lg hover:bg-accent transition-colors"
           >
-            {t("appointments")}
-          </Link>
-          <Link
-            href={`/${locale}/services`}
-            className="block px-4 py-2 rounded-lg hover:bg-accent transition-colors"
-          >
-            {t("services")}
-          </Link>
-          <Link
-            href={`/${locale}/staff`}
-            className="block px-4 py-2 rounded-lg hover:bg-accent transition-colors"
-          >
-            {t("staff")}
-          </Link>
-          <Link
-            href={`/${locale}/settings`}
-            className="block px-4 py-2 rounded-lg hover:bg-accent transition-colors"
-          >
-            {t("settings")}
+            {t.appointment.title}
           </Link>
         </nav>
 
@@ -70,7 +57,7 @@ export default async function DashboardLayout(props: {
               type="submit"
               className="w-full px-4 py-2 text-left rounded-lg hover:bg-accent transition-colors text-destructive"
             >
-              {t("logout")}
+              {t.auth.signOut}
             </button>
           </form>
         </div>
