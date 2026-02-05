@@ -13,7 +13,7 @@ export default async function DashboardPage({
 }) {
   const { locale } = await params
 
-  const dictionary = await getDictionary(locale as Locale)
+  const dictionary = (await getDictionary(locale as Locale)).dashboard;
 
   // Get the session
   const session = await auth()

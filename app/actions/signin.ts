@@ -41,8 +41,8 @@ export async function signInAction(
     })
 
     // Check if sign-in was successful
-    // In NextAuth v5, signIn returns undefined on success
-    if (result === undefined) {
+    // In my customized signIn() returns true on success
+    if (!!result) {
       // Sign-in successful, redirect will be handled by the component
       return { success: true }
     }

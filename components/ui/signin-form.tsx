@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
@@ -30,30 +30,32 @@ interface SigninFormProps {
  * Sign In Form Component
  * 
  * Client component that handles user sign-in with username and password.
- * Uses useState for form state management and handles submission
- * with the server action.
+ * Uses useTransition for loading state management.
  */
 export function SigninForm({ dictionary, lang }: SigninFormProps) {
   const router = useRouter()
+  const [isPending, startTransition] = useTransition()
   const [state, setState] = useState<FormState>(undefined)
-  const [isLoading, setIsLoading] = useState(false)
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    setIsLoading(true)
-    
-    try {
-      const formData = new FormData(event.currentTarget)
-      const result = await signInAction(state, formData)
-      setState(result)
-      
-      if (result?.success) {
-        router.push(`/${lang}/dashboard`)
-        router.refresh()
+  async function handleSubmit(formData: FormData) {
+    startTransition(async () => {
+      try {
+        const result = await signInAction(state, formData)
+        
+        // If signInAction returns success, the redirect will happen automatically
+        // because we're using redirect: true in the action
+        if (result?.success) {
+          router.refresh()
+        }
+      } catch (error) {
+        // If it's a redirect error, let it propagate
+        if (error instanceof Error && error.message.includes('NEXT_REDIRECT')) {
+          throw error
+        }
+        // For other errors, set the state
+        console.error('Sign in error:', error)
       }
-    } finally {
-      setIsLoading(false)
-    }
+    })
   }
 
   return (
@@ -62,7 +64,7 @@ export function SigninForm({ dictionary, lang }: SigninFormProps) {
         <CardTitle>{dictionary.signin.title}</CardTitle>
         <CardDescription>{dictionary.signin.description}</CardDescription>
       </CardHeader>
-      <form onSubmit={handleSubmit}>
+      <form action={handleSubmit}>
         <CardContent className="space-y-4">
           {/* Username Input */}
           <div className="space-y-2">
@@ -74,7 +76,7 @@ export function SigninForm({ dictionary, lang }: SigninFormProps) {
               placeholder="username"
               required
               autoComplete="username"
-              disabled={isLoading}
+              disabled={isPending}
             />
             {state?.errors?.username && (
               <p className="text-sm text-destructive">{state.errors.username[0]}</p>
@@ -90,7 +92,7 @@ export function SigninForm({ dictionary, lang }: SigninFormProps) {
               type="password"
               required
               autoComplete="current-password"
-              disabled={isLoading}
+              disabled={isPending}
             />
             {state?.errors?.password && (
               <p className="text-sm text-destructive">{state.errors.password[0]}</p>
@@ -110,9 +112,9 @@ export function SigninForm({ dictionary, lang }: SigninFormProps) {
           <Button 
             className="w-full" 
             type="submit" 
-            disabled={isLoading}
+            disabled={isPending}
           >
-            {isLoading ? dictionary.common.loading : dictionary.signin.signinButton}
+            {isPending ? dictionary.common.loading : dictionary.signin.signinButton}
           </Button>
           
           {/* Sign Up Link */}
