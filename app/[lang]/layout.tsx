@@ -53,6 +53,8 @@ export default async function LangLayout(props: {
 
   // Get current session for auth-aware navigation
   const session = await auth();
+  console.log('-------------->session:', session);
+  
 
   return (
     <html lang={locale} dir={isRTL ? "rtl" : "ltr"} suppressHydrationWarning>

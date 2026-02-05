@@ -1,8 +1,6 @@
 "use server";
 
 import { signIn } from '@/lib/auth'
-import { redirect } from 'next/navigation'
-import { i18nConfig, type Locale } from '@/i18n-config'
 import type { FormState } from '@/lib/definitions'
 
 /**

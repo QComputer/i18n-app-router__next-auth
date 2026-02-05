@@ -28,17 +28,17 @@ import { User, Settings, LogOut, LayoutDashboard } from "lucide-react"
  */
 interface UserMenuProps {
   user: {
-    name?: string | null
     username: string
+    role: string
+    name?: string | null
     email?: string | null
     image?: string | null
-    role: string
   }
   locale: string
 }
 
 export function UserMenu({ user, locale }: UserMenuProps) {
-  const router = useRouter()
+  //const router = useRouter()
   
   // Generate initials from user name or username
   const initials = user.name 
@@ -69,7 +69,7 @@ export function UserMenu({ user, locale }: UserMenuProps) {
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none">
-              {user.name || user.username}
+              {initials}
             </p>
             {user.email && (
               <p className="text-xs leading-none text-muted-foreground">
@@ -128,10 +128,10 @@ interface AuthNavProps {
     user: {
       id: string
       username: string
+      role: string
       name?: string | null
       email?: string | null
       image?: string | null
-      role: string
     }
   } | null
   locale: string

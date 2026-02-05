@@ -1,6 +1,5 @@
-import { getDictionary } from "@/get-dictionary";
+//import { getDictionary } from "@/get-dictionary";
 import { Locale } from "@/i18n-config";
-import Counter from "@/components/counter";
 import Link from "next/link";
 import "@/app/globals.css"
 
@@ -8,7 +7,7 @@ export default async function IndexPage(props: {
   params: Promise<{ lang: Locale }>;
 }) {
   const { lang } = await props.params;
-  const dictionary = await getDictionary(lang);
+  //const dictionary = await getDictionary(lang);
 
   return (
     <div>
