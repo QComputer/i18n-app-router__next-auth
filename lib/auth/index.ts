@@ -1,3 +1,13 @@
+/**
+ * NextAuth Configuration
+ * 
+ * This module configures NextAuth.js for authentication with:
+ * - Credentials provider for username/password login
+ * - Google OAuth provider
+ * - JWT session strategy
+ * - Custom user type extensions for role and organization
+ */
+
 import NextAuth from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 import CredentialsProvider from "next-auth/providers/credentials"
@@ -6,10 +16,13 @@ import type { Provider } from "next-auth/providers"
 import type { JWT } from "next-auth/jwt";
 import bcrypt from "bcryptjs";
 
-// Extend the default NextAuth types
+/**
+ * Extended User type with application-specific fields
+ */
 declare module "next-auth" {
   interface User {
     role: string
+    username: string
     organizationId: string | null
     name?: string | null
     image?: string | null
@@ -27,118 +40,188 @@ declare module "next-auth" {
   }
 
   interface JWT {
+    id: string
     role: string
     organizationId: string | null
   }
 }
 
-// Build providers array conditionally
-const providers: Provider[] = [
-  GoogleProvider({
-    clientId: process.env.GOOGLE_CLIENT_ID!,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    authorization: {
-      params: {
-        prompt: "consent",
-        access_type: "offline",
-        response_type: "code",
+/**
+ * Build the authentication providers array
+ */
+const buildProviders = (): Provider[] => {
+  const providers: Provider[] = [
+    /**
+     * Google OAuth Provider
+     * Requires GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET environment variables
+     */
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code",
+        },
       },
-    },
-  }),
-  CredentialsProvider({
-    name: "credentials",
-    credentials: {
-      username: { label: "Username", type: "text" },
-      password: { label: "Password", type: "password" }
-    },
-    async authorize(credentials) {
-      if (!credentials?.username || !credentials?.password) {
-        throw new Error("Username and password are required")
-      }
-      const username = credentials.username as string;
-      const password = credentials.password as string;
-      const normalizedUsername = username.trim().toLowerCase();
+    }),
+    
+    /**
+     * Credentials Provider for username/password authentication
+     */
+    CredentialsProvider({
+      name: "credentials",
+      credentials: {
+        username: { 
+          label: "Username", 
+          type: "text",
+          placeholder: "Enter your username"
+        },
+        password: { 
+          label: "Password", 
+          type: "password",
+          placeholder: "Enter your password"
+        }
+      },
+      async authorize(credentials) {
+        // Validate that credentials are provided
+        if (!credentials?.username || !credentials?.password) {
+          console.warn("[Auth] Missing credentials during sign-in attempt");
+          throw new Error("Username and password are required");
+        }
 
-      const user = await prisma.user.findFirst({
-          where: { username: normalizedUsername },
-      });
+        const username = credentials.username as string;
+        const password = credentials.password as string;
+        
+        // Normalize username to lowercase for consistent lookup
+        const normalizedUsername = username.trim().toLowerCase();
 
-      if (!user) {
-        throw new Error("Invalid username")
-      }
+        try {
+          // Find user by username
+          const user = await prisma.user.findFirst({
+            where: { username: normalizedUsername },
+          });
 
-      if (!user.password) {
-        return null
-      }
+          // User not found
+          if (!user) {
+            console.warn(`[Auth] User not found: ${normalizedUsername}`);
+            throw new Error("Invalid username or password");
+          }
 
-      const valid = await bcrypt.compare(password, user.password);
-      if (!valid) return null;
+          // User has no password set (OAuth user trying to use credentials)
+          if (!user.password) {
+            console.warn(`[Auth] OAuth user attempted credentials login: ${normalizedUsername}`);
+            return null;
+          }
 
+          // Verify password
+          const validPassword = await bcrypt.compare(password, user.password);
+          if (!validPassword) {
+            console.warn(`[Auth] Invalid password for user: ${normalizedUsername}`);
+            throw new Error("Invalid username or password");
+          }
 
-      return {
-        id: user.id,
-        username: user.username,
-        email: user.email,
-        name: user.name,
-        role: user.role,
-        organizationId: user.organizationId,
-      }
-    },
-  }),
-]
-/*
-// Conditionally add EmailProvider if SMTP is configured
-if (process.env.EMAIL_SERVER && process.env.EMAIL_FROM) {
-  providers.push(
-    EmailProvider({
-      server: process.env.EMAIL_SERVER,
-      from: process.env.EMAIL_FROM,
-    }) as Provider
-  )
-}*/
+          // Return user object with required fields
+          console.log(`[Auth] Successful sign-in for user: ${user.id}`);
+          return {
+            id: user.id,
+            username: user.username,
+            email: user.email || undefined,
+            name: user.name || undefined,
+            role: user.role,
+            organizationId: user.organizationId,
+          };
+        } catch (error) {
+          console.error("[Auth] Error during credentials validation:", error);
+          throw error;
+        }
+      },
+    }),
+  ];
 
+  return providers;
+};
+
+/**
+ * NextAuth Configuration
+ */
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  // Use JWT for session management
   session: {
     strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
   },
+  
+  // Custom pages for authentication flows
   pages: {
     signIn: "/auth/signin",
     signOut: "/auth/signout",
     error: "/auth/error",
     newUser: "/auth/signup",
   },
-  providers,
+  
+  // Authentication providers
+  providers: buildProviders(),
+  
+  // Callbacks for customizing token and session behavior
   callbacks: {
+    /**
+     * JWT callback - called whenever a JWT is created or updated
+     * Stores user info in the token
+     */
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id
-        token.role = user.role
-        token.organizationId = user.organizationId
+        token.id = user.id;
+        token.role = user.role;
+        token.organizationId = user.organizationId;
       }
-      return token
+      return token;
     },
+    
+    /**
+     * Session callback - called whenever a session is checked
+     * Maps token data to session user object
+     */
     async session({ session, token }) {
       if (token && session.user) {
-        session.user.id = token.id as string
-        session.user.role = token.role as string
-        session.user.organizationId = token.organizationId as string | null
+        session.user.id = token.id as string;
+        session.user.role = token.role as string;
+        session.user.organizationId = token.organizationId as string | null;
       }
-      return session
+      return session;
     },
+    
+    /**
+     * SignIn callback - called after successful authentication
+     * Can be used to prevent sign-ins based on user status
+     */
     async signIn({ user, account }) {
+      // Allow OAuth sign-ins
       if (account?.provider === "google") {
-        return true
+        return true;
       }
+      
+      // Allow credentials sign-ins (already validated in authorize)
       if (account?.provider === "credentials") {
-        return true
+        return true;
       }
-      return true
+      
+      // Default: allow sign-in
+      return true;
     },
   },
+  
+  // Event handlers for lifecycle events
   events: {
+    /**
+     * Called when a new user is created (e.g., via OAuth signup)
+     */
     async createUser({ user }) {
-      console.log("New user created:", user.id)
+      console.log("[Auth] New user created via OAuth:", user.id);
     },
   },
+  
+  // Enable debug logging in development
   debug: process.env.NODE_ENV === "development",
-})
+});

@@ -1,11 +1,20 @@
 /**
-Validate form fields on the server
-Use the Server Action to validate the form fields on the server. If your authentication provider doesn't provide form validation, you can use a schema validation library like Zod or Yup.
+ * Form Definitions and Validation Schemas
+ * 
+ * This module defines form validation schemas and types
+ * for the authentication flow.
+ */
 
-Using Zod as an example, you can define a form schema with appropriate error messages:
-*/
 import * as z from 'zod'
-  
+
+/**
+ * Sign Up Form Validation Schema
+ * 
+ * Validates username, password, and role fields with:
+ * - Username: minimum 2 characters
+ * - Password: minimum 8 chars, at least 1 letter, 1 number, 1 special character
+ * - Role: defaults to CLIENT
+ */
 export const SignupFormSchema = z.object({
   username: z
     .string()
@@ -24,7 +33,15 @@ export const SignupFormSchema = z.object({
     .string()
     .default('CLIENT'),
 })
-  
+
+/**
+ * Form State Type
+ * 
+ * Represents the state of a form action, including:
+ * - errors: Field-specific validation errors
+ * - message: General error or success messages
+ * - success: Flag indicating successful form submission
+ */
 export type FormState =
   | {
       errors?: {
@@ -33,5 +50,26 @@ export type FormState =
         role?: string[]
       }
       message?: string
+      success?: boolean
     }
   | undefined
+
+/**
+ * Sign In Form Validation Schema
+ * 
+ * Validates username and password fields
+ */
+export const SigninFormSchema = z.object({
+  username: z
+    .string()
+    .min(1, { error: 'Username is required' })
+    .trim(),
+  password: z
+    .string()
+    .min(1, { error: 'Password is required' }),
+})
+
+/**
+ * Type for sign-in form data
+ */
+export type SigninFormData = z.infer<typeof SigninFormSchema>
