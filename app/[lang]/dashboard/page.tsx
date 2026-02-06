@@ -13,7 +13,7 @@ export default async function DashboardPage({
 }) {
   const { locale } = await params
 
-  const dictionary = (await getDictionary(locale as Locale)).dashboard;
+  const dictionary = (await getDictionary(locale as Locale));
 
   // Get the session
   const session = await auth()
@@ -27,7 +27,7 @@ export default async function DashboardPage({
 
   return (
     <div className="p-6">
-      <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
+      <h1 className="text-3xl font-bold mb-6">{dictionary.dashboard.title}</h1>
       
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {/* Welcome Card */}
@@ -57,10 +57,10 @@ export default async function DashboardPage({
           <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
           <div className="space-y-2">
             <a href={`/${locale}/appointments`} className="block p-2 rounded hover:bg-accent">
-              📅 Appointments
+              📅 {dictionary.appointment.title}
             </a>
             <a href={`/${locale}/settings`} className="block p-2 rounded hover:bg-accent">
-              ⚙️ Settings
+              ⚙️ {dictionary.settings.title}
             </a>
           </div>
         </div>

@@ -37,7 +37,7 @@ export default async function DashboardLayout(props: {
       {/* Sidebar */}
       <aside className="w-64 border-r bg-card hidden md:block">
         <div className="p-4 border-b">
-          <h1 className="text-xl font-bold">{t.appointment?.title || "Dashboard"}</h1>
+          <h1 className="text-xl font-bold">{t.appointment.title || "Dashboard"}</h1>
           <p className="text-sm text-muted-foreground">
             {session.user?.name || session.user?.username || "User"}
           </p>

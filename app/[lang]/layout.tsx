@@ -16,6 +16,7 @@ import { ThemeSwitcher } from "@/components/theme-switcher";
 import { AuthNav } from "@/components/auth-nav";
 import { auth } from "@/lib/auth";
 import Link from "next/link";
+import { getDictionary } from "@/get-dictionary";
 
 
 export const metadata = {
@@ -44,6 +45,7 @@ export default async function LangLayout(props: {
   // Await params (required in Next.js 16)
   const params = await props.params;
   const locale = params.lang as Locale;
+  const dictionary = await getDictionary(locale);
   
   // Determine text direction based on locale
   // RTL languages: Persian (fa), Arabic (ar)
@@ -53,8 +55,6 @@ export default async function LangLayout(props: {
 
   // Get current session for auth-aware navigation
   const session = await auth();
-  console.log('-------------->session:', session);
-  
 
   return (
     <html lang={locale} dir={isRTL ? "rtl" : "ltr"} suppressHydrationWarning>
@@ -74,8 +74,7 @@ export default async function LangLayout(props: {
                   href={`/${locale}`} 
                   className="flex items-center space-x-2 font-bold text-xl"
                 >
-                  <span>📅</span>
-                  <span>Appointment</span>
+                  <span>Zero</span>
                 </Link>
                 
                 {/* Main Navigation Links */}
@@ -84,13 +83,13 @@ export default async function LangLayout(props: {
                     href={`/${locale}/appointments`}
                     className="text-sm font-medium transition-colors hover:text-primary"
                   >
-                    Appointments
+                    {(await dictionary).appointment.title}
                   </Link>
                   <Link 
                     href={`/${locale}/services`}
                     className="text-sm font-medium transition-colors hover:text-primary"
                   >
-                    Services
+                    {dictionary.navigation.services}
                   </Link>
                 </div>
               </div>
@@ -104,7 +103,7 @@ export default async function LangLayout(props: {
                 <LocaleSwitcher />
                 
                 {/* Auth Navigation - Shows Sign In/Sign Up or User Avatar */}
-                <AuthNav session={session} locale={locale} />
+                <AuthNav session={session} locale={locale} dictionary={dictionary} />
               </div>
             </nav>
           </header>

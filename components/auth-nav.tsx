@@ -35,9 +35,10 @@ interface UserMenuProps {
     image?: string | null
   }
   locale: string
+  dictionary: any
 }
 
-export function UserMenu({ user, locale }: UserMenuProps) {
+export function UserMenu({ user, locale, dictionary }: UserMenuProps) {
   //const router = useRouter()
   
   // Generate initials from user name or username
@@ -77,7 +78,7 @@ export function UserMenu({ user, locale }: UserMenuProps) {
               </p>
             )}
             <p className="text-xs leading-none text-muted-foreground mt-1">
-              Role: {user.role}
+              {dictionary.navigation.role}: {user.role}
             </p>
           </div>
         </DropdownMenuLabel>
@@ -87,14 +88,14 @@ export function UserMenu({ user, locale }: UserMenuProps) {
         <DropdownMenuItem asChild>
           <Link href={`/${locale}/dashboard`} className="cursor-pointer">
             <LayoutDashboard className="mr-2 h-4 w-4" />
-            <span>Dashboard</span>
+            <span>{dictionary.navigation.dashboard}</span>
           </Link>
         </DropdownMenuItem>
         
         <DropdownMenuItem asChild>
           <Link href={`/${locale}/settings`} className="cursor-pointer">
             <Settings className="mr-2 h-4 w-4" />
-            <span>Settings</span>
+            <span>{dictionary.navigation.settings}</span>
           </Link>
         </DropdownMenuItem>
         
@@ -106,7 +107,7 @@ export function UserMenu({ user, locale }: UserMenuProps) {
             className="w-full cursor-pointer text-destructive focus:text-destructive"
           >
             <LogOut className="mr-2 h-4 w-4" />
-            <span>Sign out</span>
+            <span>{dictionary.navigation.logout}</span>
           </button>
         </DropdownMenuItem>
       </DropdownMenuContent>
@@ -135,12 +136,17 @@ interface AuthNavProps {
     }
   } | null
   locale: string
+  dictionary: {
+    auth: {
+      role: string
+    }
+  } | any
 }
 
-export function AuthNav({ session, locale }: AuthNavProps) {
+export function AuthNav({ session, locale, dictionary }: AuthNavProps) {
   // If user is authenticated, show user avatar menu
   if (session?.user) {
-    return <UserMenu user={session.user} locale={locale} />
+    return <UserMenu user={session.user} locale={locale} dictionary={dictionary} />
   }
 
   // If user is not authenticated, show sign in/sign up buttons
@@ -148,7 +154,7 @@ export function AuthNav({ session, locale }: AuthNavProps) {
     <div className="flex items-center gap-2">
       <Button variant="ghost" size="sm" asChild>
         <Link href={`/${locale}/auth/signin`}>
-          Sign In
+          Sign In 
         </Link>
       </Button>
       <Button size="sm" asChild>

@@ -39,7 +39,8 @@
     "staff": "کارکنان",
     "settings": "تنظیمات",
     "reports": "گزارش‌ها",
-    "logout": "خروج"
+    "logout": "خروج",
+    "role":"نقش"
   },
   "dashboard": {
     "title": "داشبورد",
@@ -135,7 +136,6 @@
     "signoutButton": "خروج",
     "cancelButton": "لغو"
   },
-
   "signup": {
     "title": "ثبت‌نام",
     "description": "حساب کاربری خود را ایجاد کنید",
@@ -153,5 +153,8 @@
   "counter": {
     "increment": "Increment",
     "decrement": "Decrement"
+  },
+  "roles": {
+    "STAFF": "کارکن"
   }
 }
