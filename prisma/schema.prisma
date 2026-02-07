@@ -40,12 +40,11 @@ model Organization {
   updatedAt DateTime @updatedAt
 
   // Relations
-  users         User[]
   services      Service[]
   appointments  Appointment[]
   businessHours BusinessHours[]
-  holidays      Holiday[]
-  staff         Staff[]
+  holidays       Holiday[]
+  staffs         Staff[]
 
   @@index([slug])
   @@index([type])
@@ -69,6 +68,13 @@ enum ThemeMode {
 // ============================================
 // User & Authentication
 // ============================================
+/*
+enum UserRole {
+  CLIENT
+  STAFF
+  ADMIN
+}
+*/
 
 model User {
   id            String    @id @default(cuid())
@@ -87,15 +93,39 @@ model User {
   updatedAt DateTime @updatedAt
 
   // Relations
-  organizationId String?
-  organization   Organization? @relation(fields: [organizationId], references: [id])
+  staff           Staff?  @relation()
   accounts       Account[]
   sessions       Session[]
   appointments   Appointment[] // Client's appointments
 
   @@index([username])
-  @@index([organizationId])
   @@index([role])
+}
+
+/*
+enum StaffRole {
+  ///...?
+}
+*/
+model Staff {
+  id        String  @id @default(cuid())
+  bio       String?
+  isActive  Boolean @default(true)
+  isDefault Boolean @default(false) // Default staff for new bookings
+
+  userId    String @unique
+  user      User   @relation(fields: [userId], references: [id])
+  
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  appointments Appointment[] // Staff's appointments
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([organizationId])
+  @@index([organizationId])
 }
 
 // NextAuth Models
@@ -164,27 +194,6 @@ model Service {
   @@index([organizationId])
 }
 
-model Staff {
-  id        String  @id @default(cuid())
-  name      String
-  email     String?
-  phone     String?
-  bio       String?
-  image     String?
-  isActive  Boolean @default(true)
-  isDefault Boolean @default(false) // Default staff for new bookings
-
-  organizationId String
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-
-  appointments Appointment[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([email, organizationId])
-  @@index([organizationId])
-}
 
 // ============================================
 // Appointments

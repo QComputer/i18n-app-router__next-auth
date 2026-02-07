@@ -15,6 +15,7 @@ import prisma from "@/lib/db/prisma"
 import type { Provider } from "next-auth/providers"
 import type { JWT } from "next-auth/jwt";
 import bcrypt from "bcryptjs";
+import { getStaffIDAndOrganizationIdByUserId } from "../staff/staff"
 
 /**
  * Extended User type with application-specific fields
@@ -23,7 +24,8 @@ declare module "next-auth" {
   interface User {
     role: string
     username: string
-    organizationId: string | null
+    staffId?: string | null
+    organizationId?: string | null
     name?: string | null
     image?: string | null
   }
@@ -31,18 +33,20 @@ declare module "next-auth" {
   interface Session {
     user: {
       id: string
-      username: string
       role: string
-      organizationId: string | null
+      username: string
       name?: string | null
       image?: string | null
+      staffId?: string | null
+      organizationId: string | null
     }
   }
 
   interface JWT {
     id: string
     role: string
-    organizationId: string | null
+    username: string
+    staffId: string
   }
 }
 
@@ -130,7 +134,6 @@ const buildProviders = (): Provider[] => {
             email: user.email || undefined,
             name: user.name || undefined,
             role: user.role,
-            organizationId: user.organizationId,
           };
         } catch (error) {
           console.error("[Auth] Error during credentials validation:", error);
@@ -175,7 +178,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.id = user.id;
         token.role = user.role;
         token.username = user.username;
-        token.organizationId = user.organizationId;
       }
       return token;
     },
@@ -185,11 +187,21 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
      * Maps token data to session user object
      */
     async session({ session, token }) {
+      const userId:string = token.id as string;
+      let staffId: string|null = null;
+      let organizationId: string|null = null;
+      if (token.role === "STAFF"){
+        const staffData = await getStaffIDAndOrganizationIdByUserId(userId);
+        if (staffData) {
+          ({staffId,  organizationId } = staffData);
+        }
+      }
       if (token && session.user) {
-        session.user.id = token.id as string;
-        session.user.role = token.role as string;
+        session.user.id = userId;
         session.user.username = token.username as string;
-        session.user.organizationId = token.organizationId as string | null;
+        session.user.role = token.role as string ;
+        session.user.staffId = staffId  || null;
+        session.user.organizationId = organizationId|| null;
       }
       return session;
     },
@@ -227,3 +239,4 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   // Enable debug logging in development
   debug: process.env.NODE_ENV === "development",
 });
+

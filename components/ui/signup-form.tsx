@@ -137,7 +137,6 @@ export default function SignupForm({ dictionary, lang }: SignupFormProps) {
               <SelectContent>
                 <SelectItem value="CLIENT">Client</SelectItem>
                 <SelectItem value="ADMIN">Admin</SelectItem>
-                <SelectItem value="MANAGER">Manager</SelectItem>
                 <SelectItem value="STAFF">Staff</SelectItem>
               </SelectContent>
             </Select>
