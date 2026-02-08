@@ -31,7 +31,8 @@ CREATE TABLE "Organization" (
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
+    "username" TEXT NOT NULL,
+    "email" TEXT,
     "name" TEXT,
     "phone" TEXT,
     "image" TEXT,
@@ -39,11 +40,25 @@ CREATE TABLE "User" (
     "password" TEXT,
     "role" TEXT NOT NULL DEFAULT 'CLIENT',
     "locale" TEXT NOT NULL DEFAULT 'fa',
+    "themeMode" "ThemeMode" NOT NULL DEFAULT 'SYSTEM',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "organizationId" TEXT,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Staff" (
+    "id" TEXT NOT NULL,
+    "bio" TEXT,
+    "isActive" BOOLEAN NOT NULL DEFAULT true,
+    "isDefault" BOOLEAN NOT NULL DEFAULT false,
+    "userId" TEXT NOT NULL,
+    "organizationId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Staff_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -69,6 +84,7 @@ CREATE TABLE "Session" (
     "id" TEXT NOT NULL,
     "sessionToken" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
+    "userRole" TEXT NOT NULL,
     "expires" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Session_pkey" PRIMARY KEY ("id")
@@ -97,23 +113,6 @@ CREATE TABLE "Service" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Service_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Staff" (
-    "id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
-    "phone" TEXT,
-    "bio" TEXT,
-    "image" TEXT,
-    "isActive" BOOLEAN NOT NULL DEFAULT true,
-    "isDefault" BOOLEAN NOT NULL DEFAULT false,
-    "organizationId" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "Staff_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -170,16 +169,25 @@ CREATE INDEX "Organization_slug_idx" ON "Organization"("slug");
 CREATE INDEX "Organization_type_idx" ON "Organization"("type");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
-CREATE INDEX "User_email_idx" ON "User"("email");
-
--- CreateIndex
-CREATE INDEX "User_organizationId_idx" ON "User"("organizationId");
+CREATE INDEX "User_username_idx" ON "User"("username");
 
 -- CreateIndex
 CREATE INDEX "User_role_idx" ON "User"("role");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Staff_userId_key" ON "Staff"("userId");
+
+-- CreateIndex
+CREATE INDEX "Staff_organizationId_idx" ON "Staff"("organizationId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Staff_organizationId_key" ON "Staff"("organizationId");
 
 -- CreateIndex
 CREATE INDEX "Account_userId_idx" ON "Account"("userId");
@@ -201,12 +209,6 @@ CREATE UNIQUE INDEX "VerificationToken_identifier_token_key" ON "VerificationTok
 
 -- CreateIndex
 CREATE INDEX "Service_organizationId_idx" ON "Service"("organizationId");
-
--- CreateIndex
-CREATE INDEX "Staff_organizationId_idx" ON "Staff"("organizationId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Staff_email_organizationId_key" ON "Staff"("email", "organizationId");
 
 -- CreateIndex
 CREATE INDEX "Appointment_organizationId_idx" ON "Appointment"("organizationId");
@@ -239,7 +241,10 @@ CREATE INDEX "Holiday_organizationId_idx" ON "Holiday"("organizationId");
 CREATE INDEX "Holiday_date_idx" ON "Holiday"("date");
 
 -- AddForeignKey
-ALTER TABLE "User" ADD CONSTRAINT "User_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Staff" ADD CONSTRAINT "Staff_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Staff" ADD CONSTRAINT "Staff_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -249,9 +254,6 @@ ALTER TABLE "Session" ADD CONSTRAINT "Session_userId_fkey" FOREIGN KEY ("userId"
 
 -- AddForeignKey
 ALTER TABLE "Service" ADD CONSTRAINT "Service_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Staff" ADD CONSTRAINT "Staff_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Appointment" ADD CONSTRAINT "Appointment_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE CASCADE ON UPDATE CASCADE;

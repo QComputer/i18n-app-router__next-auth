@@ -3,7 +3,6 @@ import { redirect } from "next/navigation"
 import { getDictionary } from "@/get-dictionary";
 import { type Locale } from "@/i18n-config";
 
-
 export const dynamic = "force-dynamic"
 
 export default async function DashboardPage({
@@ -25,42 +24,58 @@ export default async function DashboardPage({
 
   const user = session.user as { id: string; username: string; role: string; name?: string | null; email?: string | null }
 
+  // Translation helpers
+  const dict = dictionary as unknown as Record<string, Record<string, string>>
+  const t = {
+    title: dict.dashboard?.title || "Dashboard",
+    welcome: dict.serverComponent?.welcome || "Welcome",
+    manage: dict.dashboard?.title || "Manage your appointments and settings from this dashboard.",
+    profile: dict.settings?.profile || "Profile",
+    username: dict.auth?.username || "Username:",
+    role: dict.navigation?.role || "Role:",
+    email: dict.auth?.email || "Email:",
+    appointments: dict.appointment?.title || "Appointments",
+    settings: dict.settings?.title || "Settings",
+    appointmentsLink: dict.navigation?.appointments || "Appointments",
+    settingsLink: dict.navigation?.settings || "Settings",
+  }
+
   return (
     <div className="p-6">
-      <h1 className="text-3xl font-bold mb-6">{dictionary.dashboard.title}</h1>
+      <h1 className="text-3xl font-bold mb-6">{t.title}</h1>
       
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {/* Welcome Card */}
         <div className="p-6 bg-card rounded-lg border">
           <h2 className="text-xl font-semibold mb-2">
-            Welcome, {user.name || user.username}!
+            {t.welcome}, {user.name || user.username}!
           </h2>
           <p className="text-muted-foreground">
-            Manage your appointments and settings from this dashboard.
+            {t.manage}
           </p>
         </div>
 
         {/* User Info Card */}
         <div className="p-6 bg-card rounded-lg border">
-          <h3 className="text-lg font-semibold mb-4">Profile</h3>
+          <h3 className="text-lg font-semibold mb-4">{t.profile}</h3>
           <div className="space-y-2">
-            <p><span className="text-muted-foreground">Username:</span> {user.username}</p>
-            <p><span className="text-muted-foreground">Role:</span> {user.role}</p>
+            <p><span className="text-muted-foreground">{t.username}</span> {user.username}</p>
+            <p><span className="text-muted-foreground">{t.role}</span> {user.role}</p>
             {user.email && (
-              <p><span className="text-muted-foreground">Email:</span> {user.email}</p>
+              <p><span className="text-muted-foreground">{t.email}</span> {user.email}</p>
             )}
           </div>
         </div>
 
         {/* Quick Actions Card */}
         <div className="p-6 bg-card rounded-lg border">
-          <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
+          <h3 className="text-lg font-semibold mb-4">{t.title}</h3>
           <div className="space-y-2">
             <a href={`/${locale}/appointments`} className="block p-2 rounded hover:bg-accent">
-              📅 {dictionary.appointment.title}
+              📅 {t.appointmentsLink}
             </a>
             <a href={`/${locale}/settings`} className="block p-2 rounded hover:bg-accent">
-              ⚙️ {dictionary.settings.title}
+              ⚙️ {t.settingsLink}
             </a>
           </div>
         </div>

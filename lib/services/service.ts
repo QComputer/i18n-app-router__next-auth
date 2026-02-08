@@ -150,7 +150,6 @@ export async function searchServices(
       isActive: true,
       name: {
         contains: query,
-        mode: "insensitive",
       },
     },
     orderBy: { name: "asc" },

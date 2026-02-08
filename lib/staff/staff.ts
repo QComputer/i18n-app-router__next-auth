@@ -29,7 +29,7 @@ export type Staff = {
   isDefault: boolean
 
   userId?: string
-  organizationId: string
+  organizationId?: string
   createdAt: Date
   updatedAt: Date
 }

@@ -228,7 +228,6 @@ export async function searchOrganizations(query: string): Promise<Organization[]
       isActive: true,
       name: {
         contains: query,
-        mode: "insensitive",
       },
     },
     orderBy: { name: "asc" },

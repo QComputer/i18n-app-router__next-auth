@@ -2,7 +2,6 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import {
@@ -14,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { signOutAction } from "@/app/actions/signout"
-import { User, Settings, LogOut, LayoutDashboard } from "lucide-react"
+import { Settings, LogOut, LayoutDashboard } from "lucide-react"
 
 /**
  * User Menu Component
@@ -25,6 +24,7 @@ import { User, Settings, LogOut, LayoutDashboard } from "lucide-react"
  * 
  * @param user - The authenticated user object
  * @param locale - Current locale for navigation
+ * @param dictionary - Translation dictionary
  */
 interface UserMenuProps {
   user: {
@@ -35,17 +35,28 @@ interface UserMenuProps {
     image?: string | null
   }
   locale: string
-  dictionary: any
+  dictionary: {
+    navigation?: {
+      role?: string
+      dashboard?: string
+      settings?: string
+      logout?: string
+    }
+    auth?: {
+      signIn?: string
+      signUp?: string
+    }
+  }
 }
 
 export function UserMenu({ user, locale, dictionary }: UserMenuProps) {
-  //const router = useRouter()
-  
   // Generate initials from user name or username
   const initials = user.name 
     ? user.name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2)
     : user.username?.toString().slice(0, 2).toUpperCase()
 
+  const navDict = dictionary.navigation || {}
+  
   const handleSignOut = async () => {
     // Call the server action to sign out
     await signOutAction(locale)
@@ -78,7 +89,7 @@ export function UserMenu({ user, locale, dictionary }: UserMenuProps) {
               </p>
             )}
             <p className="text-xs leading-none text-muted-foreground mt-1">
-              {dictionary.navigation.role}: {user.role}
+              {navDict.role || "Role"}: {user.role}
             </p>
           </div>
         </DropdownMenuLabel>
@@ -88,14 +99,14 @@ export function UserMenu({ user, locale, dictionary }: UserMenuProps) {
         <DropdownMenuItem asChild>
           <Link href={`/${locale}/dashboard`} className="cursor-pointer">
             <LayoutDashboard className="mr-2 h-4 w-4" />
-            <span>{dictionary.navigation.dashboard}</span>
+            <span>{navDict.dashboard || "Dashboard"}</span>
           </Link>
         </DropdownMenuItem>
         
         <DropdownMenuItem asChild>
           <Link href={`/${locale}/settings`} className="cursor-pointer">
             <Settings className="mr-2 h-4 w-4" />
-            <span>{dictionary.navigation.settings}</span>
+            <span>{navDict.settings || "Settings"}</span>
           </Link>
         </DropdownMenuItem>
         
@@ -107,7 +118,7 @@ export function UserMenu({ user, locale, dictionary }: UserMenuProps) {
             className="w-full cursor-pointer text-destructive focus:text-destructive"
           >
             <LogOut className="mr-2 h-4 w-4" />
-            <span>{dictionary.navigation.logout}</span>
+            <span>{navDict.logout || "Logout"}</span>
           </button>
         </DropdownMenuItem>
       </DropdownMenuContent>
@@ -123,6 +134,7 @@ export function UserMenu({ user, locale, dictionary }: UserMenuProps) {
  * 
  * @param session - The current session object (null if not authenticated)
  * @param locale - Current locale for navigation
+ * @param dictionary - Translation dictionary
  */
 interface AuthNavProps {
   session: {
@@ -137,10 +149,17 @@ interface AuthNavProps {
   } | null
   locale: string
   dictionary: {
-    auth: {
-      role: string
+    navigation?: {
+      role?: string
+      dashboard?: string
+      settings?: string
+      logout?: string
     }
-  } | any
+    auth?: {
+      signIn?: string
+      signUp?: string
+    }
+  }
 }
 
 export function AuthNav({ session, locale, dictionary }: AuthNavProps) {
@@ -150,16 +169,18 @@ export function AuthNav({ session, locale, dictionary }: AuthNavProps) {
   }
 
   // If user is not authenticated, show sign in/sign up buttons
+  const authDict = dictionary.auth || {}
+  
   return (
     <div className="flex items-center gap-2">
       <Button variant="ghost" size="sm" asChild>
         <Link href={`/${locale}/auth/signin`}>
-          Sign In 
+          {authDict.signIn || "Sign In"}
         </Link>
       </Button>
       <Button size="sm" asChild>
         <Link href={`/${locale}/auth/signup`}>
-          Sign Up
+          {authDict.signUp || "Sign Up"}
         </Link>
       </Button>
     </div>

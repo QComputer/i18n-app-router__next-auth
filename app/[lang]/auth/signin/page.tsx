@@ -22,15 +22,6 @@ export default async function SigninPage(props: SigninPageProps) {
         
         <SigninForm dictionary={dictionary} lang={lang} />
         
-        <p className="text-center text-sm text-muted-foreground">
-          {dictionary.auth.noAccount}{" "}
-          <Link
-            href={`/${lang}/auth/signup`}
-            className="font-medium text-primary underline-offset-4 hover:underline"
-          >
-            {dictionary.auth.createAccount}
-          </Link>
-        </p>
       </div>
     </div>
   );

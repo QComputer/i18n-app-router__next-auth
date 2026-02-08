@@ -86,6 +86,11 @@ export default async function OrganizationSettingsPage(props: {
     address: dict.organization?.address || "Address",
     addressPlaceholder: dict.organization?.addressPlaceholder || "Enter organization address",
     timezone: dict.organization?.timezone || "Timezone",
+    timezoneTehran: dict.organization?.timezone_tehran || "Tehran (UTC+03:30)",
+    timezoneDubai: dict.organization?.timezone_dubai || "Dubai (UTC+04:00)",
+    timezoneLondon: dict.organization?.timezone_london || "London (UTC+00:00)",
+    timezoneNewYork: dict.organization?.timezone_newyork || "New York (UTC-05:00)",
+    timezoneBerlin: dict.organization?.timezone_berlin || "Berlin (UTC+01:00)",
     locale: dict.organization?.locale || "Default Language",
     save: dict.common?.save || "Save",
     cancel: dict.common?.cancel || "Cancel",
@@ -107,7 +112,7 @@ export default async function OrganizationSettingsPage(props: {
         className="inline-flex items-center text-sm text-muted-foreground hover:text-primary mb-6"
       >
         <ArrowRight className="ml-2 h-4 w-4" />
-        {t.back} {locale === "fa" ? "داشبورد" : "Dashboard"}
+        {t.back}
       </Link>
 
       {/* Page Header */}
@@ -119,9 +124,9 @@ export default async function OrganizationSettingsPage(props: {
       {/* Form Card */}
       <Card>
         <CardHeader>
-          <CardTitle>{locale === "fa" ? "اطلاعات سازمان" : "Organization Information"}</CardTitle>
+          <CardTitle>{dict.organization?.title || "Organization Information"}</CardTitle>
           <CardDescription>
-            {locale === "fa" ? "اطلاعات پایه سازمان خود را وارد کنید" : "Enter the basic information for your organization"}
+            {dict.organization?.subtitle || "Enter the basic information for your organization"}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -224,11 +229,11 @@ export default async function OrganizationSettingsPage(props: {
                   <SelectValue placeholder={t.timezone} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Asia/Tehran">Asia/Tehran (UTC+03:30)</SelectItem>
-                  <SelectItem value="Asia/Dubai">Asia/Dubai (UTC+04:00)</SelectItem>
-                  <SelectItem value="Europe/London">Europe/London (UTC+00:00)</SelectItem>
-                  <SelectItem value="America/New_York">America/New_York (UTC-05:00)</SelectItem>
-                  <SelectItem value="Europe/Berlin">Europe/Berlin (UTC+01:00)</SelectItem>
+                  <SelectItem value="Asia/Tehran">{t.timezoneTehran}</SelectItem>
+                  <SelectItem value="Asia/Dubai">{t.timezoneDubai}</SelectItem>
+                  <SelectItem value="Europe/London">{t.timezoneLondon}</SelectItem>
+                  <SelectItem value="America/New_York">{t.timezoneNewYork}</SelectItem>
+                  <SelectItem value="Europe/Berlin">{t.timezoneBerlin}</SelectItem>
                 </SelectContent>
               </Select>
             </div>

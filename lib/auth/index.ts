@@ -46,7 +46,6 @@ declare module "next-auth" {
     id: string
     role: string
     username: string
-    staffId: string
   }
 }
 
@@ -199,9 +198,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (token && session.user) {
         session.user.id = userId;
         session.user.username = token.username as string;
-        session.user.role = token.role as string ;
+        session.user.role = token.role as string;
         session.user.staffId = staffId  || null;
-        session.user.organizationId = organizationId|| null;
+        session.user.organizationId = organizationId || null;
       }
       return session;
     },

@@ -45,8 +45,8 @@ export async function signup(
   }
   
   // 2. Prepare data for insertion
-  const { username, password, role } = validatedFields.data
-  const normalizedUsername = username.trim().toLowerCase()
+  const { username, password, role } = validatedFields.data 
+  const normalizedUsername = username.trim().toLowerCase() as string
   
   // Hash the password before storing
   const hashedPassword = await bcrypt.hash(password, 10)

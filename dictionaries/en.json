@@ -20,8 +20,7 @@
     "next": "Next",
     "submit": "Submit",
     "yes": "Yes",
-    "no": "No",
-    "loading": "Loading..."
+    "no": "No"
   },
   "auth": {
     "signIn": "Sign In",
@@ -203,6 +202,11 @@
     "address": "Address",
     "addressPlaceholder": "Enter organization address",
     "timezone": "Timezone",
+    "timezone_tehran": "Tehran (UTC+03:30)",
+    "timezone_dubai": "Dubai (UTC+04:00)",
+    "timezone_london": "London (UTC+00:00)",
+    "timezone_newyork": "New York (UTC-05:00)",
+    "timezone_berlin": "Berlin (UTC+01:00)",
     "locale": "Default Language",
     "lawyer": "Lawyer",
     "doctor": "Doctor",

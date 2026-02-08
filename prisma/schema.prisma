@@ -43,8 +43,8 @@ model Organization {
   services      Service[]
   appointments  Appointment[]
   businessHours BusinessHours[]
-  holidays       Holiday[]
-  staffs         Staff[]
+  holidays      Holiday[]
+  staffs        Staff[]
 
   @@index([slug])
   @@index([type])
@@ -68,13 +68,13 @@ enum ThemeMode {
 // ============================================
 // User & Authentication
 // ============================================
-/*
-enum UserRole {
-  CLIENT
-  STAFF
-  ADMIN
-}
-*/
+/**
+ * enum UserRole {
+ * CLIENT
+ * STAFF
+ * ADMIN
+ * }
+ */
 
 model User {
   id            String    @id @default(cuid())
@@ -93,29 +93,29 @@ model User {
   updatedAt DateTime @updatedAt
 
   // Relations
-  staff           Staff?  @relation()
-  accounts       Account[]
-  sessions       Session[]
-  appointments   Appointment[] // Client's appointments
+  staff        Staff?        @relation()
+  accounts     Account[]
+  sessions     Session[]
+  appointments Appointment[] // Client's appointments
 
   @@index([username])
   @@index([role])
 }
 
-/*
-enum StaffRole {
-  ///...?
-}
-*/
+/**
+ * enum StaffRole {
+ * ///...?
+ * }
+ */
 model Staff {
   id        String  @id @default(cuid())
   bio       String?
   isActive  Boolean @default(true)
   isDefault Boolean @default(false) // Default staff for new bookings
 
-  userId    String @unique
-  user      User   @relation(fields: [userId], references: [id])
-  
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
@@ -193,7 +193,6 @@ model Service {
 
   @@index([organizationId])
 }
-
 
 // ============================================
 // Appointments
