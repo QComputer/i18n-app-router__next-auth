@@ -256,5 +256,122 @@
   "counter": {
     "increment": "Increment",
     "decrement": "Decrement"
+  },
+  "admin": {
+    "sidebar": {
+      "title": "Admin Panel",
+      "dashboard": "Dashboard",
+      "users": "Users",
+      "organizations": "Organizations",
+      "staff": "Staff",
+      "services": "Services",
+      "appointments": "Appointments"
+    },
+    "header": {
+      "welcome": "Welcome",
+      "logout": "Logout"
+    },
+    "dashboard": {
+      "title": "Admin Dashboard",
+      "totalUsers": "Total Users",
+      "latestUsers": "Latest 5 users",
+      "totalOrganizations": "Total Organizations",
+      "latestOrganizations": "Latest 5 organizations",
+      "totalStaff": "Total Staff",
+      "latestStaff": "Latest 5 staff members",
+      "totalServices": "Total Services",
+      "latestServices": "Latest 5 services",
+      "totalAppointments": "Total Appointments",
+      "latestAppointments": "Latest 5 appointments",
+      "quickActions": "Quick Actions",
+      "createUser": "Create User",
+      "createOrganization": "Create Organization",
+      "createStaff": "Create Staff",
+      "viewServices": "View Services"
+    },
+    "users": {
+      "title": "User Management",
+      "listDescription": "Manage all users in the system",
+      "newUser": "Create New User",
+      "userDetails": "User Details",
+      "editUser": "Edit User",
+      "username": "Username",
+      "email": "Email",
+      "name": "Name",
+      "phone": "Phone",
+      "role": "Role",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "saveSuccess": "User saved successfully",
+      "deleteConfirm": "Are you sure you want to delete this user?",
+      "deleteSuccess": "User deleted successfully",
+      "noUsers": "No users found"
+    },
+    "organizations": {
+      "title": "Organization Management",
+      "listDescription": "Manage all organizations in the system",
+      "newOrganization": "Create New Organization",
+      "organizationDetails": "Organization Details",
+      "editOrganization": "Edit Organization",
+      "name": "Name",
+      "slug": "Slug",
+      "type": "Type",
+      "description": "Description",
+      "logo": "Logo",
+      "website": "Website",
+      "phone": "Phone",
+      "email": "Email",
+      "address": "Address",
+      "timezone": "Timezone",
+      "locale": "Locale",
+      "primaryColor": "Primary Color",
+      "secondaryColor": "Secondary Color",
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "saveSuccess": "Organization saved successfully",
+      "deleteConfirm": "Are you sure you want to delete this organization?",
+      "deleteSuccess": "Organization deleted successfully",
+      "noOrganizations": "No organizations found"
+    },
+    "staff": {
+      "title": "Staff Management",
+      "listDescription": "Manage all staff members in the system",
+      "newStaff": "Create New Staff",
+      "staffDetails": "Staff Details",
+      "editStaff": "Edit Staff",
+      "userId": "User",
+      "organizationId": "Organization",
+      "hierarchy": "Hierarchy",
+      "bio": "Bio",
+      "isActive": "Active",
+      "isDefault": "Default Staff",
+      "saveSuccess": "Staff saved successfully",
+      "deleteConfirm": "Are you sure you want to delete this staff member?",
+      "deleteSuccess": "Staff deleted successfully",
+      "noStaff": "No staff members found"
+    },
+    "roles": {
+      "CLIENT": "Client",
+      "STAFF": "Staff",
+      "ADMIN": "Admin",
+      "OTHER": "Other"
+    },
+    "hierarchy": {
+      "OWNER": "Owner",
+      "MANAGER": "Manager",
+      "MERCHANT": "Merchant"
+    },
+    "organizationTypes": {
+      "LAWYER": "Lawyer",
+      "DOCTOR": "Doctor",
+      "SUPERMARKET": "Supermarket",
+      "RESTAURANT": "Restaurant",
+      "SALON": "Salon",
+      "OTHER": "Other"
+    }
   }
 }

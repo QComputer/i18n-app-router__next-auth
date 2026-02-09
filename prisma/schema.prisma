@@ -68,13 +68,12 @@ enum ThemeMode {
 // ============================================
 // User & Authentication
 // ============================================
-/**
- * enum UserRole {
- * CLIENT
- * STAFF
- * ADMIN
- * }
- */
+enum Role {
+  CLIENT
+  STAFF
+  ADMIN
+  OTHER
+}
 
 model User {
   id            String    @id @default(cuid())
@@ -85,7 +84,7 @@ model User {
   image         String?
   emailVerified DateTime?
   password      String? // For credentials auth
-  role          String    @default("CLIENT") // Use string for NextAuth compatibility
+  role          String    @default("CLIENT")
   locale        String    @default("fa")
   themeMode     ThemeMode @default(SYSTEM)
 
@@ -102,13 +101,15 @@ model User {
   @@index([role])
 }
 
-/**
- * enum StaffRole {
- * ///...?
- * }
- */
+enum Hierarchy {
+  OWNER
+  MANAGER
+  MERCHANT
+}
+
 model Staff {
   id        String  @id @default(cuid())
+  hierarchy String  @default("MERCHANT")
   bio       String?
   isActive  Boolean @default(true)
   isDefault Boolean @default(false) // Default staff for new bookings
@@ -198,14 +199,21 @@ model Service {
 // Appointments
 // ============================================
 
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
 model Appointment {
   id                 String   @id @default(cuid())
   startTime          DateTime
   endTime            DateTime
-  status             String   @default("PENDING") // Use string for compatibility
+  status             String   @default("PENDING")
   notes              String?  @db.Text
   clientName         String
-  clientEmail        String
+  clientEmail        String?
   clientPhone        String?
   cancellationReason String?
 

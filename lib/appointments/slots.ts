@@ -8,20 +8,19 @@
  */
 
 import prisma from "@/lib/db/prisma"
+import { toPersianDigits } from "@/lib/utils"
 import { 
   addDays, 
   format, 
-  parse, 
   setHours, 
   setMinutes, 
   isBefore, 
   isAfter,
-  isSameDay,
   startOfDay,
-  endOfDay,
-  differenceInMinutes
+  endOfDay
 } from "date-fns"
-import { faIR } from "date-fns/locale"
+import { toJalaali } from "jalaali-js"
+
 
 /**
  * Day name mappings for Persian locale
@@ -86,17 +85,14 @@ export function getDayName(date: Date, locale: string = "fa"): string {
  */
 export function formatDatePersian(date: Date, locale: string = "fa"): string {
   if (locale === "fa") {
-    // Use Persian calendar format
-    // For demonstration, using standard format with Persian digits
-    const year = date.getFullYear()
-    const month = date.getMonth() + 1
-    const day = date.getDate()
+    // Use Jalali (Persian) calendar format
+    const jalaaliDate = toJalaali(date.getFullYear(), date.getMonth() + 1, date.getDate())
     
     const persianDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"]
     const toPersian = (num: number) => 
       String(num).split("").map(d => persianDigits[parseInt(d)]).join("")
     
-    return `${toPersian(year)}/${toPersian(month)}/${toPersian(day)}`
+    return `${toPersian(jalaaliDate.jy)}/${toPersian(jalaaliDate.jm)}/${toPersian(jalaaliDate.jd)}`
   }
   
   return format(date, "yyyy-MM-dd")
@@ -439,17 +435,6 @@ function convertToPersianDigits(time: string): string {
       return isNaN(digit) ? char : persianDigits[digit]
     })
     .join("")
-}
-
-/**
- * Convert English digits to Persian
- * 
- * @param num - Number or string to convert
- * @returns Persian digit string
- */
-export function toPersianDigits(num: number | string): string {
-  const persianDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"]
-  return String(num).replace(/[0-9]/g, (digit) => persianDigits[parseInt(digit)])
 }
 
 /**

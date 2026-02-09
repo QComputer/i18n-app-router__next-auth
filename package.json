@@ -12,9 +12,6 @@
     "db:seed": "npx tsx prisma/seed.ts",
     "db:studio": "npx prisma studio"
   },
-  "prisma": {
-    "seed": "npx tsx prisma/seed.ts"
-  },
   "dependencies": {
     "@prisma/adapter-pg": "^6.19.2",
     "@prisma/client": "^6.19.2",
@@ -26,6 +23,7 @@
     "date-fns": "^4.1.0",
     "i18next": "^25.8.1",
     "i18next-resources-to-backend": "^1.2.1",
+    "jalaali-js": "^1.2.8",
     "lucide-react": "^0.563.0",
     "negotiator": "^1.0.0",
     "next": "^16.1.6",
@@ -41,6 +39,7 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.18",
     "@types/date-fns": "^2.5.3",
+    "@types/jalaali-js": "^1.2.0",
     "@types/negotiator": "0.6.3",
     "@types/node": "^20",
     "@types/react": "^19",

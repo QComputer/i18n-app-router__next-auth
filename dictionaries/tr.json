@@ -111,7 +111,7 @@
       "service": "Hizmet",
       "status": "Durum"
     },
-    "noAppointments": "Randevu bulunamadı"
+    "noAppointments": "Randevu bulunmadı"
   },
   "service": {
     "title": "Hizmetler",
@@ -155,7 +155,6 @@
     "ago": "önce",
     "inFuture": "gelecekte"
   },
-
   "signin": {
     "title": "Giriş Yap",
     "description": "Hesabınıza erişmek için kimlik bilgilerinizi giriniz",
@@ -170,7 +169,6 @@
     "signoutButton": "Çıkış Yap",
     "cancelButton": "İptal"
   },
-
   "signup": {
     "title": "Kayıt Ol",
     "description": "Başlamak için hesabınızı oluşturun",
@@ -181,12 +179,128 @@
     "usernameRequired": "Kullanıcı adı gereklidir",
     "passwordRequirements": "Şifre şunları içermelidir"
   },
-
   "server-component": {
     "welcome": "Welcome"
   },
   "counter": {
     "increment": "Increment",
     "decrement": "Decrement"
+  },
+   "admin": {
+     "sidebar": {
+       "title": "Yönetim Paneli",
+       "dashboard": "Kontrol Paneli",
+       "users": "Kullanıcılar",
+       "organizations": "Organizasyonlar",
+       "staff": "Personel",
+       "services": "Hizmetler",
+       "appointments": "Randevular"
+     },
+    "header": {
+      "welcome": "Hoş Geldiniz",
+      "logout": "Çıkış"
+    },
+    "dashboard": {
+      "title": "Yönetici Kontrol Paneli",
+      "totalUsers": "Toplam Kullanıcılar",
+      "latestUsers": "Son 5 kullanıcı",
+      "totalOrganizations": "Toplam Organizasyonlar",
+      "latestOrganizations": "Son 5 organizasyon",
+      "totalStaff": "Toplam Personel",
+      "latestStaff": "Son 5 personel",
+      "totalServices": "Toplam Hizmetler",
+      "latestServices": "Son 5 hizmet",
+      "totalAppointments": "Toplam Randevular",
+      "latestAppointments": "Son 5 randevu",
+      "quickActions": "Hızlı İşlemler",
+      "createUser": "Kullanıcı Oluştur",
+      "createOrganization": "Organizasyon Oluştur",
+      "createStaff": "Personel Oluştur",
+      "viewServices": "Hizmetleri Görüntüle"
+    },
+    "users": {
+      "title": "Kullanıcı Yönetimi",
+      "listDescription": "Sisteminizdeki tüm kullanıcıları yönetin",
+      "newUser": "Yeni Kullanıcı Oluştur",
+      "userDetails": "Kullanıcı Detayları",
+      "editUser": "Kullanıcı Düzenle",
+      "username": "Kullanıcı Adı",
+      "email": "E-posta",
+      "name": "Ad",
+      "phone": "Telefon",
+      "role": "Rol",
+      "password": "Şifre",
+      "confirmPassword": "Şifre Onayı",
+      "status": "Durum",
+      "active": "Aktif",
+      "inactive": "Pasif",
+      "saveSuccess": "Kullanıcı başarıyla kaydedildi",
+      "deleteConfirm": "Bu kullanıcıyı silmek istediğinizden emin misiniz?",
+      "deleteSuccess": "Kullanıcı başarıyla silindi",
+      "noUsers": "Kullanıcı bulunamadı"
+    },
+    "organizations": {
+      "title": "Organizasyon Yönetimi",
+      "listDescription": "Sisteminizdeki tüm organizasyonları yönetin",
+      "newOrganization": "Yeni Organizasyon Oluştur",
+      "organizationDetails": "Organizasyon Detayları",
+      "editOrganization": "Organizasyon Düzenle",
+      "name": "Ad",
+      "slug": "Kısa Ad",
+      "type": "Tür",
+      "description": "Açıklama",
+      "logo": "Logo",
+      "website": "Web Sitesi",
+      "phone": "Telefon",
+      "email": "E-posta",
+      "address": "Adres",
+      "timezone": "Zaman Dilimi",
+      "locale": "Dil",
+      "primaryColor": "Birincil Renk",
+      "secondaryColor": "İkincil Renk",
+      "status": "Durum",
+      "active": "Aktif",
+      "inactive": "Pasif",
+      "saveSuccess": "Organizasyon başarıyla kaydedildi",
+      "deleteConfirm": "Bu organizasyonu silmek istediğinizden emin misiniz?",
+      "deleteSuccess": "Organizasyon başarıyla silindi",
+      "noOrganizations": "Organizasyon bulunamadı"
+    },
+    "staff": {
+      "title": "Personel Yönetimi",
+      "listDescription": "Sisteminizdeki tüm personel üyelerini yönetin",
+      "newStaff": "Yeni Personel Oluştur",
+      "staffDetails": "Personel Detayları",
+      "editStaff": "Personel Düzenle",
+      "userId": "Kullanıcı",
+      "organizationId": "Organizasyon",
+      "hierarchy": "Hiyerarşi",
+      "bio": "Biyografi",
+      "isActive": "Aktif",
+      "isDefault": "Varsayılan Personel",
+      "saveSuccess": "Personel başarıyla kaydedildi",
+      "deleteConfirm": "Bu personeli silmek istediğinizden emin misiniz?",
+      "deleteSuccess": "Personel başarıyla silindi",
+      "noStaff": "Personel bulunamadı"
+    },
+    "roles": {
+      "CLIENT": "Müşteri",
+      "STAFF": "Personel",
+      "ADMIN": "Yönetici",
+      "OTHER": "Diğer"
+    },
+    "hierarchy": {
+      "OWNER": "Sahip",
+      "MANAGER": "Yönetici",
+      "MERCHANT": "Tüccar"
+    },
+    "organizationTypes": {
+      "LAWYER": "Avukat",
+      "DOCTOR": "Doktor",
+      "SUPERMARKET": "Süpermarket",
+      "RESTAURANT": "Restoran",
+      "SALON": "Kuaför",
+      "OTHER": "Diğer"
+    }
   }
 }

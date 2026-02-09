@@ -8,18 +8,18 @@ export const dynamic = "force-dynamic"
 export default async function DashboardPage({
   params
 }: {
-  params: Promise<{ locale: string }>
+  params: Promise<{ lang: string }>
 }) {
-  const { locale } = await params
-
-  const dictionary = (await getDictionary(locale as Locale));
+  const { lang } = await params
+  
+  const dictionary = (await getDictionary(lang as Locale));
 
   // Get the session
   const session = await auth()
 
   // If no session, redirect to signin
   if (!session?.user) {
-    redirect(`/${locale}/auth/signin`)
+    redirect(`/${lang}/auth/signin`)
   }
 
   const user = session.user as { id: string; username: string; role: string; name?: string | null; email?: string | null }
@@ -71,10 +71,10 @@ export default async function DashboardPage({
         <div className="p-6 bg-card rounded-lg border">
           <h3 className="text-lg font-semibold mb-4">{t.title}</h3>
           <div className="space-y-2">
-            <a href={`/${locale}/appointments`} className="block p-2 rounded hover:bg-accent">
+            <a href={`/${lang}/appointments`} className="block p-2 rounded hover:bg-accent">
               📅 {t.appointmentsLink}
             </a>
-            <a href={`/${locale}/settings`} className="block p-2 rounded hover:bg-accent">
+            <a href={`/${lang}/settings`} className="block p-2 rounded hover:bg-accent">
               ⚙️ {t.settingsLink}
             </a>
           </div>

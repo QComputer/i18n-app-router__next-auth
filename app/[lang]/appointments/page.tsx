@@ -13,7 +13,6 @@ import { getDictionary } from "@/get-dictionary"
 import { i18nConfig, type Locale } from "@/i18n-config"
 import prisma from "@/lib/db/prisma"
 import { format } from "date-fns"
-import { faIR } from "date-fns/locale"
 import Link from "next/link"
 import { 
   Calendar, 
@@ -45,20 +44,13 @@ import {
 } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { formatDatePersian, getDayName } from "@/lib/appointments/slots"
+import { toPersianDigits } from "@/lib/utils"
 
 /**
  * Generate static params for all supported locales
  */
 export async function generateStaticParams() {
   return i18nConfig.locales.map((locale) => ({ lang: locale }))
-}
-
-/**
- * Convert English digits to Persian
- */
-function toPersianDigits(num: number | string): string {
-  const persianDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"]
-  return String(num).replace(/[0-9]/g, (digit) => persianDigits[parseInt(digit)])
 }
 
 /**
@@ -78,6 +70,18 @@ function getStatusLabel(status: string, locale: string): string {
       CONFIRMED: "Confirmed",
       COMPLETED: "Completed",
       CANCELLED: "Cancelled",
+    },
+    ar: {
+      PENDING: "قيد الانتظار",
+      CONFIRMED: "مؤكد",
+      COMPLETED: "مكتمل",
+      CANCELLED: "ملغي",
+    },
+    tr: {
+      PENDING: "Bekliyor",
+      CONFIRMED: "Onaylandı",
+      COMPLETED: "Tamamlandı",
+      CANCELLED: "İptal Edildi",
     },
   }
   return labels[locale]?.[status] || status

@@ -17,7 +17,6 @@ import { getDictionary } from "@/get-dictionary"
 import { i18nConfig, type Locale } from "@/i18n-config"
 import prisma from "@/lib/db/prisma"
 import { addDays, format, startOfDay } from "date-fns"
-import { faIR } from "date-fns/locale"
 import Link from "next/link"
 import { ArrowRight, ArrowLeft, Calendar, Clock, User, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -36,9 +35,9 @@ import { Badge } from "@/components/ui/badge"
 import { 
   getAvailableDates, 
   formatDatePersian, 
-  getDayName,
-  toPersianDigits
+  getDayName
 } from "@/lib/appointments/slots"
+import { toPersianDigits } from "@/lib/utils"
 
 /**
  * Generate static params for all supported locales

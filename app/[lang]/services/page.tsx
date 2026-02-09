@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { toPersianDigits } from "@/lib/appointments/slots"
+import { toPersianDigits } from "@/lib/utils"
 import { getServicesByOrganization } from "@/lib/services/service"
 
 /**
@@ -37,7 +37,7 @@ function getStatusVariant(isActive: boolean): "default" | "secondary" | "success
 /**
  * Service list page component
  * 
- * @param props.params - Promise resolving to { lang: Locale }
+ * @param props.params - Promise resolving to { lang: string }
  */
 export default async function ServicesPage(props: {
   params: Promise<{ lang: string }>
@@ -57,7 +57,7 @@ export default async function ServicesPage(props: {
   const dictionary = await getDictionary(locale)
 
   // Get user's organization ID
-  //const staffId = session.user.staffId || null
+    //const staffId = session.user.staffId || null
     const organizationId = session.user.organizationId || null
 
   // Redirect to dashboard if no organization

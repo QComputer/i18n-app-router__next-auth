@@ -57,7 +57,7 @@ export async function signup(
       data: {
         username: normalizedUsername,
         password: hashedPassword,
-        role: role || 'CLIENT',
+        role: (role as 'CLIENT' | 'STAFF' | 'ADMIN' | 'OTHER') || 'CLIENT',
       }
     })
     

@@ -30,7 +30,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 import { formatDatePersian, getDayName } from "@/lib/appointments/slots"
-import { toPersianDigits } from "@/lib/appointments/slots"
+import { toPersianDigits } from "@/lib/utils"
 
 /**
  * Generate days between two dates

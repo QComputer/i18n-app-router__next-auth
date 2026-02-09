@@ -13,7 +13,6 @@ import { getDictionary } from "@/get-dictionary"
 import { i18nConfig, type Locale } from "@/i18n-config"
 import prisma from "@/lib/db/prisma"
 import { format } from "date-fns"
-import { faIR } from "date-fns/locale"
 import Link from "next/link"
 import { 
   Calendar, 
@@ -45,7 +44,7 @@ import {
   formatDatePersian, 
   getDayName 
 } from "@/lib/appointments/slots"
-import { toPersianDigits } from "@/lib/appointments/slots"
+import { toPersianDigits } from "@/lib/utils"
 
 /**
  * Generate static params for all supported locales

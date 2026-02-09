@@ -4,6 +4,15 @@ CREATE TYPE "OrganizationType" AS ENUM ('LAWYER', 'DOCTOR', 'SUPERMARKET', 'REST
 -- CreateEnum
 CREATE TYPE "ThemeMode" AS ENUM ('LIGHT', 'DARK', 'SYSTEM');
 
+-- CreateEnum
+CREATE TYPE "Role" AS ENUM ('CLIENT', 'STAFF', 'ADMIN', 'OTHER');
+
+-- CreateEnum
+CREATE TYPE "Hierarchy" AS ENUM ('OWNER', 'MANAGER', 'MERCHANT');
+
+-- CreateEnum
+CREATE TYPE "AppointmentStatus" AS ENUM ('PENDING', 'CONFIRMED', 'CANCELLED', 'COMPLETED');
+
 -- CreateTable
 CREATE TABLE "Organization" (
     "id" TEXT NOT NULL,
@@ -50,6 +59,7 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "Staff" (
     "id" TEXT NOT NULL,
+    "hierarchy" TEXT NOT NULL DEFAULT 'MERCHANT',
     "bio" TEXT,
     "isActive" BOOLEAN NOT NULL DEFAULT true,
     "isDefault" BOOLEAN NOT NULL DEFAULT false,
@@ -123,7 +133,7 @@ CREATE TABLE "Appointment" (
     "status" TEXT NOT NULL DEFAULT 'PENDING',
     "notes" TEXT,
     "clientName" TEXT NOT NULL,
-    "clientEmail" TEXT NOT NULL,
+    "clientEmail" TEXT,
     "clientPhone" TEXT,
     "cancellationReason" TEXT,
     "organizationId" TEXT NOT NULL,

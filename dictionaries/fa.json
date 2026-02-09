@@ -260,6 +260,120 @@
     "decrement": "Decrement"
   },
   "roles": {
-    "STAFF": "کارکن"
+    "STAFF": "کارکن",
+    "ADMIN": "مدیر",
+    "CLIENT": "مشتری",
+    "OTHER": "سایر"
+  },
+  "admin": {
+    "sidebar": {
+      "title": "پنل مدیریت",
+      "dashboard": "داشبورد",
+      "users": "کاربران",
+      "organizations": "سازمان‌ها",
+      "staff": "کارکنان",
+      "services": "خدمات",
+      "appointments": "نوبت‌ها"
+    },
+    "header": {
+      "welcome": "خوش آمدید",
+      "logout": "خروج"
+    },
+    "dashboard": {
+      "title": "داشبورد مدیریت",
+      "totalUsers": "کل کاربران",
+      "latestUsers": "آخرین 5 کاربر",
+      "totalOrganizations": "کل سازمان‌ها",
+      "latestOrganizations": "آخرین 5 سازمان",
+      "totalStaff": "کل کارکنان",
+      "latestStaff": "آخرین 5 کارمند",
+      "totalServices": "کل خدمات",
+      "latestServices": "آخرین 5 خدمت",
+      "totalAppointments": "کل نوبت‌ها",
+      "latestAppointments": "آخرین 5 نوبت",
+      "quickActions": "عملیات سریع",
+      "createUser": "ایجاد کاربر",
+      "createOrganization": "ایجاد سازمان",
+      "createStaff": "ایجاد کارمند",
+      "viewServices": "مشاهده خدمات"
+    },
+    "users": {
+      "title": "مدیریت کاربران",
+      "listDescription": "مدیریت همه کاربران سیستم",
+      "newUser": "ایجاد کاربر جدید",
+      "userDetails": "جزئیات کاربر",
+      "editUser": "ویرایش کاربر",
+      "username": "نام کاربری",
+      "email": "ایمیل",
+      "name": "نام",
+      "phone": "شماره تماس",
+      "role": "نقش",
+      "password": "رمز عبور",
+      "confirmPassword": "تأیید رمز عبور",
+      "status": "وضعیت",
+      "active": "فعال",
+      "inactive": "غیرفعال",
+      "saveSuccess": "کاربر با موفقیت ذخیره شد",
+      "deleteConfirm": "آیا از حذف این کاربر مطمئن هستید؟",
+      "deleteSuccess": "کاربر با موفقیت حذف شد",
+      "noUsers": "هیچ کاربری یافت نشد"
+    },
+    "organizations": {
+      "title": "مدیریت سازمان‌ها",
+      "listDescription": "مدیریت همه سازمان‌های سیستم",
+      "newOrganization": "ایجاد سازمان جدید",
+      "organizationDetails": "جزئیات سازمان",
+      "editOrganization": "ویرایش سازمان",
+      "name": "نام",
+      "slug": "نامک",
+      "type": "نوع",
+      "description": "توضیحات",
+      "logo": "لوگو",
+      "website": "وب‌سایت",
+      "phone": "تلفن",
+      "email": "ایمیل",
+      "address": "آدرس",
+      "timezone": "منطقه زمانی",
+      "locale": "زبان",
+      "primaryColor": "رنگ اصلی",
+      "secondaryColor": "رنگ ثانویه",
+      "status": "وضعیت",
+      "active": "فعال",
+      "inactive": "غیرفعال",
+      "saveSuccess": "سازمان با موفقیت ذخیره شد",
+      "deleteConfirm": "آیا از حذف این سازمان مطمئن هستید؟",
+      "deleteSuccess": "سازمان با موفقیت حذف شد",
+      "noOrganizations": "هیچ سازمانی یافت نشد"
+    },
+    "staff": {
+      "title": "مدیریت کارکنان",
+      "listDescription": "مدیریت همه کارکنان سیستم",
+      "newStaff": "ایجاد کارمند جدید",
+      "staffDetails": "جزئیات کارمند",
+      "editStaff": "ویرایش کارمند",
+      "userId": "کاربر",
+      "organizationId": "سازمان",
+      "hierarchy": "سطح دسترسی",
+      "bio": "بیوگرافی",
+      "isActive": "فعال",
+      "isDefault": "کارمند پیش‌فرض",
+      "saveSuccess": "کارمند با موفقیت ذخیره شد",
+      "deleteConfirm": "آیا از حذف این کارمند مطمئن هستید؟",
+      "deleteSuccess": "کارمند با موفقیت حذف شد",
+      "noStaff": "هیچ کارمندی یافت نشد"
+    },
+    "hierarchy": {
+      "OWNER": "صاحب",
+      "MANAGER": "مدیر",
+      "MERCHANT": "فروشنده"
+    },
+    "organizationTypes": {
+      "LAWYER": "وکیل",
+      "DOCTOR": "پزشک",
+      "SUPERMARKET": "سوپرمارکت",
+      "RESTAURANT": "رستوران",
+      "SALON": "سالن زیبایی",
+      "OTHER": "سایر"
+    }
   }
 }
