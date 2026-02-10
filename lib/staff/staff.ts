@@ -18,6 +18,7 @@
  */
 
 import prisma from "@/lib/db/prisma"
+import { User } from "../generated/prisma/client"
 
 /**
  * Staff type definition - matches Prisma Staff model
@@ -130,6 +131,37 @@ export async function getStaffByOrganization(
   }
 
   return prisma.staff.findMany({
+    where,
+    take: options?.limit,
+    skip: options?.offset,
+  })
+}
+
+
+/**
+ * Get all User members for an organization
+ * 
+ * @param organizationId - Organization ID
+ * @param options - Query options (includeInactive, limit, offset)
+ * @returns Array of staff members
+ */
+export async function getUserByOrganization(
+  organizationId: string,
+  options?: {
+    includeInactive?: boolean
+    limit?: number
+    offset?: number
+  }
+): Promise<User[]> {
+  const where: Record<string, unknown> = {
+    organizationId,
+  }
+
+  if (!options?.includeInactive) {
+    where.isActive = true
+  }
+
+  return prisma.user.findMany({
     where,
     take: options?.limit,
     skip: options?.offset,

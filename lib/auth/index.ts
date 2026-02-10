@@ -131,7 +131,7 @@ const buildProviders = (): Provider[] => {
           }
 
           // Return user object with required fields
-          console.log(`[Auth] Successful sign-in for user: ${user.id}`);
+          console.log(`[Auth] Successful sign-in for user: ${user}`);
           return {
             id: user.id,
             username: user.username,
@@ -179,27 +179,22 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
      */
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
-        token.role = user.role;
-        token.username = user.username;
+        const userId: string = user.id as string;
+        token.id = userId;
+        token.role = user.role as string;
+        token.username = user.username as string;
 
-
-      const userId:string = token.id as string;
-      let staffId: string|null = null;
-      let hierarchy: string|null = null;
-      let organizationId: string|null = null;
-      
-      if (token.role === "STAFF"){
+        let staffId: string | null = null;
+        let hierarchy: string | null = null;
+        let organizationId: string | null = null;
         const staffData = await getStaffDataByUserId(userId);
         if (staffData) {
           ({staffId, hierarchy,  organizationId } = staffData);
+          token.staffId = staffId  || null;
+          token.hierarchy = hierarchy  || null;
+          token.organizationId = organizationId || null;
         }
       }
-        token.staffId = staffId  || null;
-        token.hierarchy = hierarchy  || null;
-        token.organizationId = organizationId || null;
-      }
-      console.log('------>token:', token);
 
       return token;
     },
@@ -249,7 +244,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
      * Called when a new user is created (e.g., via OAuth signup)
      */
     async createUser({ user }) {
-      console.log("[Auth] New user created via OAuth:", user.id);
+      console.log("[Auth] New user created via OAuth:", user);
+    },
+     /**
+     * Called when a user signed in  (e.g., via OAuth signin)
+     */
+    async signIn({ user }) {
+      console.log("[Auth][Event] A user signed in via OAuth:", user);
     },
   },
   

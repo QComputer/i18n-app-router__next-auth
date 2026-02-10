@@ -77,6 +77,32 @@
     },
     "noAppointments": "هیچ نوبتی یافت نشد"
   },
+  "calendar": {
+    "title": "تقویم",
+    "month": "ماهانه",
+    "week": "هفتگی",
+    "day": "روزانه",
+    "today": "امروز",
+    "previous": "قبلی",
+    "next": "بعدی",
+    "noAppointments": "جلسه‌ای یافت نشد",
+    "newAppointment": "نوبت جدید",
+    "upcomingAppointments": "جلسات آینده",
+    "pastAppointments": "جلسات گذشته",
+    "allAppointments": "همه جلسات",
+    "status": {
+      "pending": "در انتظار",
+      "confirmed": "تایید شده",
+      "completed": "انجام شده",
+      "cancelled": "لغو شده"
+    },
+    "actions": {
+      "create": "ایجاد",
+      "edit": "ویرایش",
+      "delete": "حذف",
+      "view": "مشاهده"
+    }
+  },
   "appointment": {
     "title": "نوبت‌ها",
     "newAppointment": "نوبت جدید",

@@ -32,6 +32,8 @@ const protectedRoutes = [
   "/appointments",
   "/settings",
   "/admin",
+  "/calendar",
+  "/services"
 ] as const
 
 /**
@@ -47,11 +49,12 @@ const adminRoutes = [
  * Higher number = more privileges
  */
 const roleHierarchy: Record<string, number> = {
-  SUPER_ADMIN: 100,
-  ADMIN: 80,
+  ADMIN: 100,
+  OWNER: 70,
   MANAGER: 60,
-  STAFF: 40,
+  MERCHANT: 50,
   CLIENT: 20,
+  GUEST: 10,
 }
 
 /**

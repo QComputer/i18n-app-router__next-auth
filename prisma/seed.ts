@@ -13,7 +13,6 @@ import { OrganizationType, ThemeMode, Hierarchy } from "@/lib/generated/prisma/e
 import bcrypt from "bcryptjs"
 
 import { PrismaClient } from "@/lib/generated/prisma/client"
-//import { PrismaPg } from '@prisma/adapter-pg'
 
 // Prevent multiple instances of Prisma Client in development
 const prisma = new PrismaClient({
@@ -198,6 +197,43 @@ async function createAdminUser() {
   
   console.log(`Created admin user: ${admin.username}`)
   return admin as CreatedUser
+}
+
+async function createTestUsers() {
+  console.log("Creating test users with specific roles...")
+  
+  const testUsers = [
+    { username: "owner", name: "Organization Owner", role: "OWNER", hierarchy: Hierarchy.OWNER },
+    { username: "manager", name: "Manager User", role: "MANAGER", hierarchy: Hierarchy.MANAGER },
+    { username: "staff", name: "Staff User", role: "STAFF", hierarchy: Hierarchy.MERCHANT },
+    { username: "client", name: "Client User", role: "CLIENT", hierarchy: null },
+  ]
+  
+  const createdUsers: CreatedUser[] = []
+  
+  for (const testUser of testUsers) {
+    const hashedPassword = await bcrypt.hash("Password123!", 10)
+    
+    const user = await prisma.user.upsert({
+      where: { username: testUser.username },
+      update: {},
+      create: {
+        username: testUser.username,
+        email: `${testUser.username}@example.com`,
+        name: testUser.name,
+        phone: generatePhone(),
+        password: hashedPassword,
+        role: testUser.role,
+        locale: "fa",
+        themeMode: ThemeMode.SYSTEM,
+      },
+    })
+    
+    createdUsers.push({ id: user.id, username: user.username, name: user.name, role: user.role })
+    console.log(`Created test user: ${user.username} (${user.role})`)
+  }
+  
+  return createdUsers
 }
 
 async function createClientUsers(): Promise<CreatedUser[]> {
@@ -466,38 +502,58 @@ async function createStaffMembers(staffUsers: CreatedUser[], organizations: Crea
   for (const org of organizations) {
     if (org.services.length === 0) continue
     
-    const appointmentCountOrg = randomBetween(5, 15)
+    // Create appointments for different time periods
+    const dateRanges = [
+      { daysAgo: 14, daysAhead: 7, label: "Past and current" },
+      { daysAgo: 0, daysAhead: 14, label: "Current and near future" },
+      { daysAgo: -7, daysAhead: 30, label: "Future appointments" },
+    ]
     
-    for (let i = 0; i < appointmentCountOrg; i++) {
-      const service = randomElement(org.services)
-      const status = randomElement(statuses)
-      const client = randomElement(CLIENT_NAMES)
-      const clientNameParts = client.split(" ")
+    for (const range of dateRanges) {
+      const appointmentCountRange = randomBetween(8, 15)
       
-      const startTime = new Date()
-      startTime.setDate(startTime.getDate() + randomBetween(-7, 30))
-      startTime.setHours(randomBetween(9, 18), randomBetween(0, 59), 0, 0)
-      
-      const endTime = new Date(startTime)
-      endTime.setMinutes(endTime.getMinutes() + service.duration)
-      
-      await prisma.appointment.create({
-        data: {
-          startTime,
-          endTime,
-          status,
-          notes: status === "CANCELLED" ? "Customer requested cancellation" : "Appointment booked for service",
-          clientName: client,
-          clientEmail: `${clientNameParts[0].toLowerCase()}.${clientNameParts[1].toLowerCase()}@email.com`,
-          clientPhone: generatePhone(),
-          cancellationReason: status === "CANCELLED" ? "Customer requested cancellation" : null,
-          organizationId: org.id,
-          serviceId: service.id,
-          clientId: randomBetween(0, 1) === 0 ? staffUsers[randomBetween(0, staffUsers.length - 1)]?.id : null,
-        },
-      })
-      
-      appointmentCount++
+      for (let i = 0; i < appointmentCountRange; i++) {
+        const service = randomElement(org.services)
+        const status = randomElement(statuses)
+        const client = randomElement(CLIENT_NAMES)
+        const clientNameParts = client.split(" ")
+        
+        const startTime = new Date()
+        startTime.setDate(startTime.getDate() + randomBetween(range.daysAgo, range.daysAhead))
+        startTime.setHours(randomBetween(9, 18), randomBetween(0, 59), 0, 0)
+        
+        // Skip weekends
+        if (startTime.getDay() === 6) {
+          startTime.setDate(startTime.getDate() + 1)
+        }
+        
+        const endTime = new Date(startTime)
+        endTime.setMinutes(endTime.getMinutes() + service.duration)
+        
+        // Get a random staff member for this organization
+        const staff = await prisma.staff.findFirst({
+          where: { organizationId: org.id },
+        })
+        
+        await prisma.appointment.create({
+          data: {
+            startTime,
+            endTime,
+            status,
+            notes: status === "CANCELLED" ? "Customer requested cancellation" : "Appointment booked for service",
+            clientName: client,
+            clientEmail: `${clientNameParts[0].toLowerCase()}.${clientNameParts[1].toLowerCase()}@email.com`,
+            clientPhone: generatePhone(),
+            cancellationReason: status === "CANCELLED" ? "Customer requested cancellation" : null,
+            organizationId: org.id,
+            serviceId: service.id,
+            staffId: staff?.id || null,
+            clientId: randomBetween(0, 1) === 0 ? staffUsers[randomBetween(0, staffUsers.length - 1)]?.id : null,
+          },
+        })
+        
+        appointmentCount++
+      }
     }
   }
   
@@ -531,6 +587,9 @@ export default async function main() {
     // Step 1: Create admin user
     const admin = await createAdminUser()
     
+    // Step 1.5: Create test users
+    const testUsers = await createTestUsers()
+    
     // Step 2: Create client users
     const clientUsers = await createClientUsers()
     
@@ -552,13 +611,40 @@ export default async function main() {
     // Step 8: Create staff members from converted staff users
     await createStaffMembers(staffUsers, organizations)
     
+    // Step 8.5: Create staff for test users (first organization)
+    console.log("Creating staff members from test users...")
+    if (organizations.length > 0) {
+      const org = organizations[0]
+      for (let i = 0; i < testUsers.length; i++) {
+        const testUser = testUsers[i]
+        if (testUser.role === "OWNER" || testUser.role === "MANAGER" || testUser.role === "MERCHANT"|| testUser.role === "STAFF") {
+          await prisma.staff.upsert({
+            where: { userId: testUser.id },
+            update: {},
+            create: {
+              userId: testUser.id,
+              organizationId: org.id,
+              hierarchy: testUser.role === "OWNER" ? Hierarchy.OWNER as string : 
+                         testUser.role === "MANAGER" ? Hierarchy.MANAGER as string : 
+                         Hierarchy.MERCHANT as string,
+              bio: `${testUser.name} - Test ${testUser.role}`,
+              isActive: true,
+              isDefault: testUser.role === "OWNER",
+            },
+          })
+          console.log(`Created staff member for test user: ${testUser.username}`)
+        }
+      }
+    }
+    
     // Step 9: Create appointments
     const appointmentCount = await createAppointments(staffUsers, organizations)
 
     console.log("\n========================================")
     console.log("Seed Complete!")
     console.log("========================================")
-    console.log(`- Admin User: ${admin.username} / Admin@123!`)
+    console.log(`- Admin User: admin / Admin@123!`)
+    console.log(`- Test Users: owner / Password123!, manager / Password123!, staff / Password123!, client / Password123!`)
     console.log(`- Organizations: ${organizations.length}`)
     console.log(`- Client Users: ${clientUsers.length}`)
     console.log(`- Converted to Staff: ${staffUsers.length}`)

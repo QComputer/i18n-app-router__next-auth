@@ -1,3 +1,10 @@
+/**
+ * Dashboard Layout
+ *
+ * Main layout for the authenticated dashboard area.
+ * Includes sidebar navigation and user session management.
+ */
+
 import { redirect } from "next/navigation"
 import { getDictionary } from "@/get-dictionary"
 import { i18nConfig, type Locale } from "@/i18n-config"
@@ -12,23 +19,29 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from "@/components/ui/sidebar"
-import { LayoutDashboard, CalendarClock, Settings, LogOut } from "lucide-react"
+import { LayoutDashboard, Calendar, Settings, LogOut } from "lucide-react"
 
 // Generate static params for all supported locales
 export async function generateStaticParams() {
   return i18nConfig.locales.map((locale) => ({ lang: locale }));
 }
 
-
-// RTL locales array (Arabic and Farsi)
+/**
+ * RTL locales array (Arabic and Farsi)
+ */
 const RTL_LOCALES = ["ar", "fa"]
 
-// Type definition for the dashboard dictionary structure
+/**
+ * Type definition for the dashboard dictionary structure
+ */
 type DashboardDict = {
   dashboard: {
     title: string
   }
   appointment: {
+    title: string
+  }
+  calendar: {
     title: string
   }
   admin: {
@@ -68,13 +81,14 @@ export default async function DashboardLayout(props: {
 
   // Navigation menu items
   const menuItems = [
-    { title: dict.dashboard.title, href: `/${lang}/dashboard`, icon: LayoutDashboard },
-    { title: dict.appointment.title, href: `/${lang}/appointments`, icon: CalendarClock },
+    { title: dict.dashboard?.title || "Dashboard", href: `/${lang}/dashboard`, icon: LayoutDashboard },
+    { title: dict.appointment?.title || "Appointments", href: `/${lang}/appointments`, icon: Calendar },
+    { title: dict.calendar?.title || "Calendar", href: `/${lang}/calendar`, icon: Calendar },
   ]
 
   // Add admin-only menu items if user has access
   if (session.user?.role === "ADMIN" || session.user?.role === "STAFF") {
-    menuItems.push({ title: dict.admin.sidebar.services, href: `/${lang}/services`, icon: Settings })
+    menuItems.push({ title: dict.admin?.sidebar?.services || "Services", href: `/${lang}/services`, icon: Settings })
   }
 
   return (
@@ -87,10 +101,8 @@ export default async function DashboardLayout(props: {
         <DesktopSidebar lang={lang}>
           
           <SidebarContent>
-           
-
             <SidebarMenu>
-              {menuItems.length>0 && menuItems.map((item) => (
+              {menuItems.length > 0 && menuItems.map((item) => (
                 <SidebarMenuItem key={item.href}>
                   <SidebarMenuButton asChild>
                     <a href={item.href}>
@@ -131,7 +143,7 @@ export default async function DashboardLayout(props: {
                   className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
                 <LogOut className="h-4 w-4" />
-                <span>{dict.auth.signOut}</span>
+                <span>{dict.auth?.signOut || "Sign Out"}</span>
               </a>
               </div>
             </div>
@@ -142,7 +154,7 @@ export default async function DashboardLayout(props: {
         <div className="flex-1 overflow-auto ps-16 lg:ps-0 lg:pe-16">
 
         <header className="p-4 border-none flex">
-          <h1 className="text-l font-bold">{dict.dashboard.title}</h1>
+          <h1 className="text-l font-bold">{dict.dashboard?.title || "Dashboard"}</h1>
           <p className="text-sm text-muted-foreground px-10">
             {user?.name || user?.username || "User"}
           </p>
