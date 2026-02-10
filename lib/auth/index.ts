@@ -15,7 +15,7 @@ import prisma from "@/lib/db/prisma"
 import type { Provider } from "next-auth/providers"
 import type { JWT } from "next-auth/jwt";
 import bcrypt from "bcryptjs";
-import { getStaffIDAndOrganizationIdByUserId } from "../staff/staff"
+import { getStaffDataByUserId } from "@/lib//staff/staff"
 
 /**
  * Extended User type with application-specific fields
@@ -24,10 +24,11 @@ declare module "next-auth" {
   interface User {
     role: string
     username: string
-    staffId?: string | null
-    organizationId?: string | null
     name?: string | null
     image?: string | null
+    staffId?: string | null
+    hierarchy?: string | null
+    organizationId?: string | null
   }
 
   interface Session {
@@ -38,8 +39,16 @@ declare module "next-auth" {
       name?: string | null
       image?: string | null
       staffId?: string | null
-      organizationId: string | null
+      hierarchy?: string | null
+      organizationId?: string | null
     }
+  }
+
+  interface Staff {
+    id: string
+    userId: string
+    hierarchy?: string
+    organizationId?: string
   }
 
   interface JWT {
@@ -188,11 +197,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async session({ session, token }) {
       const userId:string = token.id as string;
       let staffId: string|null = null;
+      let hierarchy: string|null = null;
       let organizationId: string|null = null;
+      
       if (token.role === "STAFF"){
-        const staffData = await getStaffIDAndOrganizationIdByUserId(userId);
+        const staffData = await getStaffDataByUserId(userId);
         if (staffData) {
-          ({staffId,  organizationId } = staffData);
+          ({staffId, hierarchy,  organizationId } = staffData);
         }
       }
       if (token && session.user) {
@@ -200,6 +211,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         session.user.username = token.username as string;
         session.user.role = token.role as string;
         session.user.staffId = staffId  || null;
+        session.user.hierarchy = hierarchy  || null;
         session.user.organizationId = organizationId || null;
       }
       return session;

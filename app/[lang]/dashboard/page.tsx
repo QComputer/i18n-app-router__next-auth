@@ -42,8 +42,6 @@ export default async function DashboardPage({
 
   return (
     <div className="p-6">
-      <h1 className="text-3xl font-bold mb-6">{t.title}</h1>
-      
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {/* Welcome Card */}
         <div className="p-6 bg-card rounded-lg border">

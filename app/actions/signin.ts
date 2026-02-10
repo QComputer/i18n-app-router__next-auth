@@ -39,22 +39,20 @@ export async function signInAction(
     })
 
     // Check if sign-in was successful
-    // In my customized signIn() returns true on success
-    if (!!result) {
-      // Sign-in successful, redirect will be handled by the component
-      return { success: true }
+    if (result?.error) {
+      // Sign-in failed
+      console.error('[SignIn] Error:', result.error)
+      return { message: 'Invalid username or password' }
     }
 
-    // Sign-in failed (shouldn't happen with redirect: false, but handle anyway)
-    console.error('[SignIn] Unexpected result:', result)
-    return { message: 'An unexpected error occurred' }
+    // Sign-in successful
+    return { success: true }
   } catch (error) {
     console.error('[SignIn] Error during sign-in:', error)
     
     // Check if it's a redirect error
     if (error instanceof Error && error.message.includes('NEXT_REDIRECT')) {
       // Redirect was thrown by NextAuth, which means sign-in was successful
-      // The component will handle the redirect
       return { success: true }
     }
     

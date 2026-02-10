@@ -200,13 +200,12 @@ async function createAdminUser() {
   return admin as CreatedUser
 }
 
-async function createStaffUsers(): Promise<CreatedUser[]> {
-  console.log("Creating staff users...")
+async function createClientUsers(): Promise<CreatedUser[]> {
+  console.log("Creating client users...")
   
-  const staffUsers: CreatedUser[] = []
-  const roles: string[] = ["STAFF", "STAFF", "CLIENT"]
+  const clientUsers: CreatedUser[] = []
   
-  for (let i = 0; i < 15; i++) {
+  for (let i = 0; i < 20; i++) {
     const firstName = randomElement(NAMES.first)
     const lastName = randomElement(NAMES.last)
     const username = generateSlug(`${firstName}${lastName}${i}`)
@@ -221,16 +220,46 @@ async function createStaffUsers(): Promise<CreatedUser[]> {
         name: `${firstName} ${lastName}`,
         phone: generatePhone(),
         password: hashedPassword,
-        role: randomElement(roles),
+        role: "CLIENT",
         locale: randomElement(["fa", "en", "ar"]),
         themeMode: randomElement([ThemeMode.LIGHT, ThemeMode.DARK, ThemeMode.SYSTEM]),
       },
     })
     
-    staffUsers.push({ id: user.id, username: user.username, name: user.name, role: user.role })
+    clientUsers.push({ id: user.id, username: user.username, name: user.name, role: user.role })
   }
   
-  console.log(`Created ${staffUsers.length} staff users`)
+  console.log(`Created ${clientUsers.length} client users`)
+  return clientUsers
+}
+
+async function convertClientsToStaff(clientUsers: CreatedUser[]): Promise<CreatedUser[]> {
+  console.log("Converting some CLIENT users to STAFF...")
+  
+  const staffUsers: CreatedUser[] = []
+  
+  // Convert 8 random clients to staff
+  const staffCount = Math.min(8, clientUsers.length)
+  const shuffled = [...clientUsers].sort(() => Math.random() - 0.5)
+  const selectedClients = shuffled.slice(0, staffCount)
+  
+  for (const client of selectedClients) {
+    const updatedUser = await prisma.user.update({
+      where: { id: client.id },
+      data: { role: "STAFF" },
+    })
+    
+    staffUsers.push({ 
+      id: updatedUser.id, 
+      username: updatedUser.username, 
+      name: updatedUser.name, 
+      role: updatedUser.role 
+    })
+    
+    console.log(`Converted client ${client.username} to STAFF`)
+  }
+  
+  console.log(`Converted ${staffUsers.length} clients to staff`)
   return staffUsers
 }
 
@@ -384,40 +413,51 @@ async function createHolidays(organizations: CreatedOrg[]) {
 }
 
 async function createStaffMembers(staffUsers: CreatedUser[], organizations: CreatedOrg[]) {
-  console.log("Creating staff members...")
+  console.log("Creating staff members from converted staff users...")
+  
+  let staffCreated = 0
+  const usedStaff = new Set<string>()
   
   for (const org of organizations) {
+    // Assign 2-4 staff members per organization
     const staffCount = randomBetween(2, 4)
-    const usedIndices = new Set<number>()
     
-    for (let i = 0; i < staffCount; i++) {
-      let userIndex
-      do {
-        userIndex = randomBetween(0, staffUsers.length - 1)
-      } while (usedIndices.has(userIndex))
+    // Get available staff not already assigned to this organization
+    const availableStaff = staffUsers.filter(s => !usedStaff.has(s.id))
+    const selectedStaff = availableStaff.slice(0, staffCount)
+    
+    for (let i = 0; i < selectedStaff.length; i++) {
+      const user = selectedStaff[i]
       
-      usedIndices.add(userIndex)
-      const user = staffUsers[userIndex]
-      
-      await prisma.staff.upsert({
+      // Check if staff already exists
+      const existingStaff = await prisma.staff.findUnique({
         where: { userId: user.id },
-        update: {},
-        create: {
-          userId: user.id,
-          organizationId: org.id,
-          hierarchy: i === 0 ? Hierarchy.OWNER as string : randomElement([Hierarchy.MANAGER, Hierarchy.MERCHANT]) as string,
-          bio: `${user.name} is a staff member at ${org.name}`,
-          isActive: true,
-          isDefault: i === 0,
-        },
       })
+      
+      if (!existingStaff) {
+        await prisma.staff.upsert({
+          where: { userId: user.id },
+          update: {},
+          create: {
+            userId: user.id,
+            organizationId: org.id,
+            hierarchy: i === 0 ? Hierarchy.OWNER as string : randomElement([Hierarchy.MANAGER, Hierarchy.MERCHANT]) as string,
+            bio: `${user.name} is a staff member at ${org.name}`,
+            isActive: true,
+            isDefault: i === 0,
+          },
+        })
+        usedStaff.add(user.id)
+        staffCreated++
+        console.log(`Created staff member ${user.username} for ${org.name}`)
+      }
     }
   }
   
-  console.log("Staff members created")
+  console.log(`Created ${staffCreated} staff members`)
 }
 
-async function createAppointments(staffUsers: CreatedUser[], organizations: CreatedOrg[]) {
+ async function createAppointments(staffUsers: CreatedUser[], organizations: CreatedOrg[]) {
   console.log("Creating appointments...")
   
   let appointmentCount = 0
@@ -469,7 +509,7 @@ async function createAppointments(staffUsers: CreatedUser[], organizations: Crea
 // Main Seed Function
 // ============================================
 
-async function main() {
+export default async function main() {
   console.log("========================================")
   console.log("Database Seed Script")
   console.log("========================================\n")
@@ -488,13 +528,31 @@ async function main() {
     await prisma.user.deleteMany()
     console.log("Existing data cleaned\n")
 
+    // Step 1: Create admin user
     const admin = await createAdminUser()
-    const staffUsers = await createStaffUsers()
+    
+    // Step 2: Create client users
+    const clientUsers = await createClientUsers()
+    
+    // Step 3: Convert some clients to staff
+    const staffUsers = await convertClientsToStaff(clientUsers)
+    
+    // Step 4: Create organizations
     const organizations = await createOrganizations()
+    
+    // Step 5: Create services
     await createServices(organizations)
+    
+    // Step 6: Create business hours
     await createBusinessHours(organizations)
+    
+    // Step 7: Create holidays
     await createHolidays(organizations)
+    
+    // Step 8: Create staff members from converted staff users
     await createStaffMembers(staffUsers, organizations)
+    
+    // Step 9: Create appointments
     const appointmentCount = await createAppointments(staffUsers, organizations)
 
     console.log("\n========================================")
@@ -502,7 +560,8 @@ async function main() {
     console.log("========================================")
     console.log(`- Admin User: ${admin.username} / Admin@123!`)
     console.log(`- Organizations: ${organizations.length}`)
-    console.log(`- Staff Users: ${staffUsers.length}`)
+    console.log(`- Client Users: ${clientUsers.length}`)
+    console.log(`- Converted to Staff: ${staffUsers.length}`)
     console.log(`- Appointments: ${appointmentCount}`)
     console.log("========================================\n")
   } catch (error) {
@@ -513,9 +572,7 @@ async function main() {
   }
 }
 
-export default async function seed(){
-  await main().catch((e) => {
-    console.error(e)
-    process.exit(1)
-  })
-}
+await main().catch((e) => {
+  console.error(e)
+  process.exit(1)
+})

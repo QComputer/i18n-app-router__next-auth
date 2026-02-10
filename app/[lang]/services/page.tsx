@@ -57,11 +57,11 @@ export default async function ServicesPage(props: {
   const dictionary = await getDictionary(locale)
 
   // Get user's organization ID
-    //const staffId = session.user.staffId || null
+    const staffId = session.user.staffId || null
     const organizationId = session.user.organizationId || null
 
   // Redirect to dashboard if no organization
-  if (!organizationId) {
+  if (!organizationId && !staffId) {
     redirect(`/${locale}/dashboard`)
   }
 

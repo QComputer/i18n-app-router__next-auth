@@ -24,11 +24,12 @@ import prisma from "@/lib/db/prisma"
  */
 export type Staff = {
   id: string
-  bio: string | null
+  bio?: string | null
   isActive: boolean
   isDefault: boolean
 
   userId?: string
+  hierarchy: string
   organizationId?: string
   createdAt: Date
   updatedAt: Date
@@ -55,6 +56,7 @@ export type StaffWithUser = Staff & {
  */
 export async function createStaff(data: {
   userId:string
+  hierarchy?: string
   bio?: string | null
   image?: string
   organizationId: string
@@ -62,6 +64,7 @@ export async function createStaff(data: {
   return prisma.staff.create({
     data: {
       userId: data.userId,
+      hierarchy: data.hierarchy,
       organizationId: data.organizationId,
       bio: data.bio || null,
     },
@@ -86,18 +89,19 @@ export async function getStaffById(id: string): Promise<Staff | null> {
  * @param userId - User ID
  * @returns staffId,organizationId or null if not found
  */
-export async function getStaffIDAndOrganizationIdByUserId(userId: string): Promise<{ staffId: string; organizationId: string } | null> {
+export async function getStaffDataByUserId(userId: string): Promise<{ staffId: string; hierarchy: string; organizationId: string } | null> {
   const user = await prisma.user.findUnique({
     where: { id: userId },
     include: { staff: true },
   })
   
-  if (!user?.staff) {
+  if (!user?.staff ) {
     return null
   }
   
   return {
     staffId: user.staff.id,
+    hierarchy: user.staff.hierarchy,
     organizationId: user.staff.organizationId,
   }
 }

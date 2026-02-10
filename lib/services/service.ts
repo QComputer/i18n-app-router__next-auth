@@ -58,13 +58,18 @@ export async function getServiceById(id: string): Promise<Service | null> {
  * Get all services for an organization
  */
 export async function getServicesByOrganization(
-  organizationId: string,
+  organizationId: string | null,
   options?: {
     includeInactive?: boolean
     limit?: number
     offset?: number
   }
 ): Promise<Service[]> {
+  // If no organization ID, return empty array
+  if (!organizationId) {
+    return []
+  }
+
   const where: Record<string, unknown> = {
     organizationId,
   }
