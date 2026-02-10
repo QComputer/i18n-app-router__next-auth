@@ -44,3 +44,20 @@ export function isAdmin(role: string): boolean {
 export function isStaffOrAdmin(role: string): boolean {
   return role === 'STAFF' || role === 'ADMIN'
 }
+
+/**
+ * Require staff or admin role for access to a route or function
+ * 
+ * Redirects to signin page if user is not authenticated or not a staff/admin
+ * 
+ * @returns Authenticated staff/admin user session
+ */
+export async function requireStaff() {
+  const session = await auth()
+  
+  if (!session?.user || !['STAFF', 'ADMIN'].includes(session.user.role)) {
+    redirect('/auth/signin')
+  }
+  
+  return session.user
+}

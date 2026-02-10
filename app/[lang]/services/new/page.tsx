@@ -11,6 +11,7 @@ import { redirect } from "next/navigation"
 import { getDictionary } from "@/get-dictionary"
 import { i18nConfig, type Locale } from "@/i18n-config"
 import Link from "next/link"
+import { createServiceAction } from "@/app/actions/services"
 import { ArrowRight, Save } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -99,12 +100,16 @@ export default async function NewServicePage(props: {
           <CardDescription>{t.description}</CardDescription>
         </CardHeader>
         <CardContent>
-          <form className="space-y-6">
+          <form action={async (formData: FormData) => {
+            "use server"
+            await createServiceAction(formData, locale)
+          }} className="space-y-6">
             {/* Service Name */}
             <div className="space-y-2">
               <Label htmlFor="name">{t.name}</Label>
               <Input
                 id="name"
+                name="name"
                 placeholder={t.namePlaceholder}
                 required
               />
@@ -115,6 +120,7 @@ export default async function NewServicePage(props: {
               <Label htmlFor="description">{t.description}</Label>
               <Textarea
                 id="description"
+                name="description"
                 placeholder={t.descriptionPlaceholder}
                 rows={4}
               />
@@ -126,9 +132,11 @@ export default async function NewServicePage(props: {
                 <Label htmlFor="duration">{t.duration}</Label>
                 <Input
                   id="duration"
+                  name="duration"
                   type="number"
                   placeholder={t.durationPlaceholder}
                   min="1"
+                  defaultValue="30"
                   required
                 />
               </div>
@@ -137,6 +145,7 @@ export default async function NewServicePage(props: {
                 <Label htmlFor="price">{t.price}</Label>
                 <Input
                   id="price"
+                  name="price"
                   type="number"
                   placeholder={t.pricePlaceholder}
                   min="0"
@@ -151,6 +160,7 @@ export default async function NewServicePage(props: {
               <div className="flex gap-2">
                 <Input
                   id="color"
+                  name="color"
                   type="color"
                   className="w-12 h-10 p-1"
                   defaultValue="#0ea5e9"
@@ -158,6 +168,7 @@ export default async function NewServicePage(props: {
                 <Input
                   placeholder="#0ea5e9"
                   defaultValue="#0ea5e9"
+                  disabled
                 />
               </div>
             </div>

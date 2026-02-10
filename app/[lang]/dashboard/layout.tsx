@@ -73,7 +73,7 @@ export default async function DashboardLayout(props: {
   ]
 
   // Add admin-only menu items if user has access
-  if (session.user?.role === "ADMIN") {
+  if (session.user?.role === "ADMIN" || session.user?.role === "STAFF") {
     menuItems.push({ title: dict.admin.sidebar.services, href: `/${lang}/services`, icon: Settings })
   }
 

@@ -12,6 +12,7 @@ import { redirect } from "next/navigation"
 import { getDictionary } from "@/get-dictionary"
 import { i18nConfig, type Locale } from "@/i18n-config"
 import Link from "next/link"
+import { deleteServiceAction } from "@/app/actions/services"
 import { Plus, Clock, DollarSign, Edit, Trash2, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -174,9 +175,14 @@ export default async function ServicesPage(props: {
                       {t.edit}
                     </Button>
                   </Link>
-                  <Button variant="outline" size="sm" className="text-destructive">
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+                  <form action={async () => {
+                    "use server"
+                    await deleteServiceAction(service.id, locale)
+                  }}>
+                    <Button type="submit" variant="outline" size="sm" className="text-destructive">
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </form>
                 </div>
               </CardContent>
             </Card>

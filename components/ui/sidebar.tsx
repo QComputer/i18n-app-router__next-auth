@@ -197,7 +197,7 @@ const DesktopSidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
       >
         <div className="p-3 border-b flex items-center">
           {state !== "collapsed" && (
-            <h1 className="text-l font-semibold">Collaps</h1>
+            <h1 className="text-l font-semibold">Collapse</h1>
           )}
           
           <Button

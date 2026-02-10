@@ -11,6 +11,7 @@ import { redirect } from "next/navigation"
 import { getDictionary } from "@/get-dictionary"
 import { i18nConfig, type Locale } from "@/i18n-config"
 import Link from "next/link"
+import { updateServiceAction } from "@/app/actions/services"
 import { ArrowRight, Save } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -105,12 +106,9 @@ export default async function EditServicePage(props: {
           <CardDescription>{t.description}</CardDescription>
         </CardHeader>
         <CardContent>
-          <form action={async () => {
+          <form action={async (formData: FormData) => {
             "use server"
-
-            // This would handle form submission
-            // For now, we'll just redirect back to the service detail page
-            redirect(`/${locale}/services/${serviceId}`)
+            await updateServiceAction(serviceId, formData, locale)
           }} className="space-y-6">
             {/* Service Name */}
             <div className="space-y-2">

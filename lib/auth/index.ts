@@ -44,17 +44,13 @@ declare module "next-auth" {
     }
   }
 
-  interface Staff {
-    id: string
-    userId: string
-    hierarchy?: string
-    organizationId?: string
-  }
-
   interface JWT {
     id: string
     role: string
     username: string
+    staffId?: string | null
+    hierarchy?: string | null
+    organizationId?: string | null
   }
 }
 
@@ -186,15 +182,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.id = user.id;
         token.role = user.role;
         token.username = user.username;
-      }
-      return token;
-    },
-    
-    /**
-     * Session callback - called whenever a session is checked
-     * Maps token data to session user object
-     */
-    async session({ session, token }) {
+
+
       const userId:string = token.id as string;
       let staffId: string|null = null;
       let hierarchy: string|null = null;
@@ -206,14 +195,31 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           ({staffId, hierarchy,  organizationId } = staffData);
         }
       }
+        token.staffId = staffId  || null;
+        token.hierarchy = hierarchy  || null;
+        token.organizationId = organizationId || null;
+      }
+      console.log('------>token:', token);
+
+      return token;
+    },
+    
+    /**
+     * Session callback - called whenever a session is checked
+     * Maps token data to session user object
+     */
+    async session({ session, token }) {
+      
       if (token && session.user) {
-        session.user.id = userId;
+        session.user.id = token.id as string;
         session.user.username = token.username as string;
         session.user.role = token.role as string;
-        session.user.staffId = staffId  || null;
-        session.user.hierarchy = hierarchy  || null;
-        session.user.organizationId = organizationId || null;
+        session.user.staffId = token.staffId as string || null;
+        session.user.hierarchy = token.hierarchy as string || null;
+        session.user.organizationId = token.organizationId as string || null;
       }
+      console.log('------>session:', session);
+      
       return session;
     },
     
