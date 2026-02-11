@@ -160,6 +160,9 @@
     "username": "اسم المستخدم",
     "password": "كلمة المرور",
     "signinButton": "تسجيل الدخول",
+    "forgotPassword": "نسيت كلمة المرور؟",
+    "noAccount": "ليس لديك حساب؟",
+    "signUp": "إنشاء حساب",
     "error": "حدث خطأ"
   },
   "signout": {

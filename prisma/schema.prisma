@@ -72,21 +72,26 @@ enum Role {
   CLIENT
   STAFF
   ADMIN
+  OWNER
+  MANAGER
+  MERCHANT
   OTHER
 }
 
 model User {
-  id            String    @id @default(cuid())
-  username      String    @unique
-  email         String?   @unique
-  name          String?
-  phone         String?
-  image         String?
-  emailVerified DateTime?
-  password      String? // For credentials auth
-  role          String    @default("CLIENT")
-  locale        String    @default("fa")
-  themeMode     ThemeMode @default(SYSTEM)
+  id                String    @id @default(cuid())
+  username          String    @unique
+  email             String?   @unique
+  name              String?
+  phone             String?
+  image             String?
+  emailVerified     DateTime?
+  password          String? // For credentials auth
+  role              String    @default("CLIENT")
+  locale            String    @default("fa")
+  themeMode         ThemeMode @default(SYSTEM)
+  resetToken        String? // Password reset token
+  resetTokenExpires DateTime? // Reset token expiration time
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -105,14 +110,16 @@ enum Hierarchy {
   OWNER
   MANAGER
   MERCHANT
+  STAFF
 }
 
 model Staff {
-  id        String  @id @default(cuid())
-  hierarchy String  @default("MERCHANT")
-  bio       String?
-  isActive  Boolean @default(true)
-  isDefault Boolean @default(false) // Default staff for new bookings
+  id         String  @id @default(cuid())
+  hierarchy  String  @default("MERCHANT")
+  bio        String?
+  isActive   Boolean @default(true)
+  isDefault  Boolean @default(false) // Default staff for new bookings
+  bufferTime Int     @default(0) // Buffer time in minutes between appointments
 
   userId String @unique
   user   User   @relation(fields: [userId], references: [id])
@@ -120,6 +127,8 @@ model Staff {
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
+  // Relations
+  availability StaffAvailability[]
   appointments Appointment[] // Staff's appointments
 
   createdAt DateTime @default(now())
@@ -127,6 +136,24 @@ model Staff {
 
   @@index([userId])
   @@index([organizationId])
+}
+
+// ============================================
+// Staff-Specific Availability
+// ============================================
+
+model StaffAvailability {
+  id        String  @id @default(cuid())
+  dayOfWeek Int // 0 = Sunday, 6 = Saturday
+  startTime String // "09:00"
+  endTime   String // "17:00"
+  isActive  Boolean @default(true)
+
+  staffId String
+  staff   Staff  @relation(fields: [staffId], references: [id], onDelete: Cascade)
+
+  @@unique([staffId, dayOfWeek])
+  @@index([staffId])
 }
 
 // NextAuth Models
@@ -183,6 +210,7 @@ model Service {
   color        String? // For calendar display
   isActive     Boolean @default(true)
   slotInterval Int     @default(30) // minutes between slots
+  bufferTime   Int     @default(0) // Buffer time in minutes after this service
 
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
@@ -217,6 +245,13 @@ model Appointment {
   clientPhone        String?
   cancellationReason String?
 
+  // Recurring appointment fields
+  isRecurring   Boolean       @default(false)
+  recurringRule String? // iCal RRULE format
+  parentId      String? // Parent appointment for recurring series
+  parent        Appointment?  @relation("RecurringSeries", fields: [parentId], references: [id])
+  children      Appointment[] @relation("RecurringSeries")
+
   // Foreign Keys
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
@@ -236,6 +271,7 @@ model Appointment {
   @@index([serviceId])
   @@index([clientId])
   @@index([staffId])
+  @@index([parentId])
 }
 
 // ============================================

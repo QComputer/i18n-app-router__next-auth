@@ -157,6 +157,15 @@ interface CreatedUser {
   name: string | null
 }
 
+interface CreatedStaff {
+  id: string
+  userId: string | null
+  organizationId: string | null
+  hierarchy: string
+  name: string | null
+  bio: string | null
+}
+
 interface CreatedService {
   id: string
   name: string
@@ -269,8 +278,8 @@ async function createClientUsers(): Promise<CreatedUser[]> {
   return clientUsers
 }
 
-async function convertClientsToStaff(clientUsers: CreatedUser[]): Promise<CreatedUser[]> {
-  console.log("Converting some CLIENT users to STAFF...")
+async function convertClientsToStaff(clientUsers: CreatedUser[], organizations: CreatedOrg[]): Promise<CreatedUser[]> {
+  console.log("Converting some CLIENT users to STAFF and creating Staff records...")
   
   const staffUsers: CreatedUser[] = []
   
@@ -279,10 +288,37 @@ async function convertClientsToStaff(clientUsers: CreatedUser[]): Promise<Create
   const shuffled = [...clientUsers].sort(() => Math.random() - 0.5)
   const selectedClients = shuffled.slice(0, staffCount)
   
-  for (const client of selectedClients) {
+  for (let i = 0; i < selectedClients.length; i++) {
+    const client = selectedClients[i]
+    const orgIndex = i % organizations.length
+    const organization = organizations[orgIndex]
+    
+    // Determine hierarchy based on index
+    const hierarchy = i === 0 ? Hierarchy.OWNER as string : 
+                     i <= 2 ? Hierarchy.MANAGER as string : 
+                     Hierarchy.MERCHANT as string
+    
+    // Update user's role to STAFF
     const updatedUser = await prisma.user.update({
       where: { id: client.id },
       data: { role: "STAFF" },
+    })
+    
+    // Create Staff record linked to User and Organization
+    await prisma.staff.upsert({
+      where: { userId: client.id },
+      update: {
+        organizationId: organization.id,
+        hierarchy,
+      },
+      create: {
+        userId: client.id,
+        organizationId: organization.id,
+        hierarchy,
+        isActive: true,
+        isDefault: i === 0,
+        bio: `${client.name} is a staff member at ${organization.name}`,
+      },
     })
     
     staffUsers.push({ 
@@ -292,7 +328,7 @@ async function convertClientsToStaff(clientUsers: CreatedUser[]): Promise<Create
       role: updatedUser.role 
     })
     
-    console.log(`Converted client ${client.username} to STAFF`)
+    console.log(`Converted client ${client.username} to STAFF with hierarchy ${hierarchy} for ${organization.name}`)
   }
   
   console.log(`Converted ${staffUsers.length} clients to staff`)
@@ -590,14 +626,14 @@ export default async function main() {
     // Step 1.5: Create test users
     const testUsers = await createTestUsers()
     
-    // Step 2: Create client users
+    // Step 2: Create organizations (needed for staff creation)
+    const organizations = await createOrganizations()
+    
+    // Step 3: Create client users
     const clientUsers = await createClientUsers()
     
-    // Step 3: Convert some clients to staff
-    const staffUsers = await convertClientsToStaff(clientUsers)
-    
-    // Step 4: Create organizations
-    const organizations = await createOrganizations()
+    // Step 4: Convert some clients to staff and create Staff records
+    const staffUsers = await convertClientsToStaff(clientUsers, organizations)
     
     // Step 5: Create services
     await createServices(organizations)
@@ -608,7 +644,7 @@ export default async function main() {
     // Step 7: Create holidays
     await createHolidays(organizations)
     
-    // Step 8: Create staff members from converted staff users
+    // Step 8: Create staff members (sync with existing staff users)
     await createStaffMembers(staffUsers, organizations)
     
     // Step 8.5: Create staff for test users (first organization)

@@ -18,6 +18,9 @@ interface SigninFormProps {
       username: string
       password: string
       signinButton: string
+      forgotPassword: string
+      noAccount: string
+      signUp: string
     }
     common: {
       loading: string
@@ -117,14 +120,24 @@ export function SigninForm({ dictionary, lang }: SigninFormProps) {
             {isPending ? dictionary.common.loading : dictionary.signin.signinButton}
           </Button>
           
+          {/* Forgot Password Link */}
+          <div className="w-full flex justify-between items-center">
+            <Link
+              href={`/${lang}/auth/forgot-password`}
+              className="text-sm font-medium text-muted-foreground hover:text-primary underline-offset-4 hover:underline"
+            >
+              {dictionary.signin.forgotPassword || "Forgot password?"}
+            </Link>
+          </div>
+          
           {/* Sign Up Link */}
           <p className="text-center text-sm text-muted-foreground">
-            Do not have an account?{" "}
+            {dictionary.signin.noAccount || "Do not have an account?"}{" "}
             <Link
               href={`/${lang}/auth/signup`}
               className="font-medium text-primary underline-offset-4 hover:underline"
             >
-              Sign up
+              {dictionary.signin.signUp || "Sign up"}
             </Link>
           </p>
         </CardFooter>

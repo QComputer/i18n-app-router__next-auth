@@ -240,8 +240,8 @@ export async function createAppointmentAction(formData: FormData, locale: string
  */
 export async function updateAppointmentAction(
   id: string,
-  formData: FormData,
-  locale: string
+  locale: string,
+  formData: FormData
 ) {
   const session = await auth()
   
@@ -356,6 +356,61 @@ export async function updateAppointmentStatus(
     where: { id },
     data: updateData,
   })
+}
+
+/**
+ * Cancel appointment action
+ */
+export async function cancelAppointmentAction(
+  id: string,
+  locale: string,
+  formData: FormData
+) {
+  const session = await auth()
+  
+  if (!session?.user || !session.user.organizationId) {
+    redirect(`/${locale}/auth/signin`)
+  }
+
+  const reason = formData.get("reason") as string
+  const confirm = formData.get("confirm")
+
+  // Validate confirmation checkbox
+  if (!confirm || confirm !== "true") {
+    throw new Error("Confirmation is required to cancel the appointment")
+  }
+
+  const appointment = await prisma.appointment.findUnique({
+    where: { id },
+  })
+
+  if (!appointment || appointment.organizationId !== session.user.organizationId) {
+    throw new Error("Appointment not found")
+  }
+
+  // For STAFF users (MERCHANT hierarchy), check if appointment is assigned to them
+  if (session.user.role === "STAFF" && session.user.hierarchy === "MERCHANT" && session.user.staffId) {
+    if (appointment.staffId !== session.user.staffId) {
+      throw new Error("Not authorized to cancel this appointment")
+    }
+  }
+
+  // Check if appointment can be cancelled
+  if (appointment.status === "CANCELLED" || appointment.status === "COMPLETED") {
+    throw new Error("This appointment cannot be cancelled")
+  }
+
+  await prisma.appointment.update({
+    where: { id },
+    data: {
+      status: "CANCELLED",
+      cancellationReason: reason,
+    },
+  })
+
+  revalidatePath(`/${locale}/appointments`)
+  revalidatePath(`/${locale}/appointments/${id}`)
+  redirect(`/${locale}/appointments/${id}`)
 }
 
 /**

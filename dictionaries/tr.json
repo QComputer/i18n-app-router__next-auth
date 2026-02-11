@@ -161,6 +161,9 @@
     "username": "Kullanıcı Adı",
     "password": "Şifre",
     "signinButton": "Giriş Yap",
+    "forgotPassword": "Şifremi Unuttum?",
+    "noAccount": "Hesabınız yok mu?",
+    "signUp": "Kayıt Ol",
     "error": "Bir hata oluştu"
   },
   "signout": {
