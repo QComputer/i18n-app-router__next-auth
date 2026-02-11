@@ -8,6 +8,7 @@
  * - A Staff record is created and linked to the User
  * - The User's role is updated to STAFF
  * - Each Staff belongs to an Organization
+ * - Events are emitted for the sync system
  * 
  * @module app/actions/user-to-staff
  */
@@ -16,6 +17,7 @@ import prisma from "@/lib/db/prisma";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { emitRoleChanged } from "@/lib/sync/user-staff-sync";
 
 /**
  * Type definition for the form state returned by server actions
@@ -38,7 +40,7 @@ interface ActionState {
  * 1. Validates the current user has permission (ADMIN or OWNER)
  * 2. Creates a Staff record linked to the User
  * 3. Updates the User's role to STAFF
- * 4. Syncs the hierarchy between User and Staff
+ * 4. Emits event for the sync system
  * 
  * @param prevState - Previous form state
  * @param formData - Form data containing userId, organizationId, and hierarchy
@@ -128,6 +130,9 @@ export async function convertUserToStaffAction(
       };
     }
 
+    const oldRole = user.role;
+    const newRole = hierarchy === "OWNER" ? "OWNER" : hierarchy === "MANAGER" ? "MANAGER" : "STAFF";
+
     // Create Staff record and update User role in a transaction
     await prisma.$transaction([
       // Create the Staff record
@@ -140,16 +145,19 @@ export async function convertUserToStaffAction(
           isDefault: false,
         },
       }),
-      // Update the user's role to STAFF
+      // Update the user's role
       prisma.user.update({
         where: { id: userId },
         data: {
-          role: "STAFF",
+          role: newRole,
         },
       }),
     ]);
 
-    console.log(`[UserToStaff] User ${userId} converted to staff in organization ${organizationId}`);
+    // Emit event for the sync system
+    await emitRoleChanged(userId, oldRole, newRole);
+
+    console.log(`[UserToStaff] User ${userId} converted to ${newRole} in organization ${organizationId}`);
 
     revalidatePath("/admin/users");
     revalidatePath("/admin/staff");
@@ -236,6 +244,10 @@ export async function updateStaffHierarchyAction(
       data: { hierarchy },
     });
 
+    // Emit event for the sync system (syncs user role with hierarchy)
+    const newRole = hierarchy;
+    if (staff.user.role !== newRole) await emitRoleChanged(staff.userId, staff.user.role, newRole);
+
     console.log(`[StaffHierarchy] Staff ${staffId} hierarchy updated to ${hierarchy}`);
 
     revalidatePath("/admin/staff");
@@ -259,6 +271,7 @@ export async function updateStaffHierarchyAction(
  * This function:
  * 1. Deletes the Staff record
  * 2. Updates the User's role back to CLIENT
+ * 3. Emits event for the sync system
  * 
  * @param prevState - Previous form state
  * @param formData - Form data containing staffId
@@ -306,6 +319,9 @@ export async function removeStaffStatusAction(
     // Prevent removing OWNER's staff status if they're the organization owner
     // (This is a business logic check - could be enhanced)
 
+    const oldRole = staff.user.role;
+    const newRole = "CLIENT";
+
     // Delete staff record and update user role in a transaction
     await prisma.$transaction([
       // Delete the Staff record
@@ -316,10 +332,13 @@ export async function removeStaffStatusAction(
       prisma.user.update({
         where: { id: staff.userId },
         data: {
-          role: "CLIENT",
+          role: newRole,
         },
       }),
     ]);
+
+    // Emit event for the sync system
+    await emitRoleChanged(staff.userId, oldRole, newRole);
 
     console.log(`[StaffRemove] Staff status removed for user ${staff.userId}`);
 

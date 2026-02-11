@@ -141,7 +141,7 @@ export default async function AppointmentDetailPage(props: {
   const dictionary = await getDictionary(locale)
   
   // Fetch appointment details
-  const appointment = await getAppointmentWithDetails(appointmentId)
+  const {appointment, staff} = await getAppointmentWithDetails(appointmentId)
   
   // If appointment not found, redirect to appointments list
   if (!appointment) {
@@ -161,7 +161,10 @@ export default async function AppointmentDetailPage(props: {
     notes: dict.appointment?.notes || "Notes",
     statusLabel: "Status",
     clientInfo: dict.appointment?.clientInfo || "Client Information",
+    organizationInfo: dict.appointment?.organizationInfo || "Organization Information",
+    staffInfo: dict.appointment?.staffInfo || "Staff Information",
     clientName: dict.appointment?.fullName || "Full Name",
+    staffName: dict.appointment?.fullName || "Full Name",
     phoneNumber: dict.appointment?.phoneNumber || "Phone",
     email: dict.appointment?.email || "Email",
     cancelAppointment: dict.appointment?.cancelAppointment || "Cancel Appointment",
@@ -283,7 +286,7 @@ export default async function AppointmentDetailPage(props: {
                 <InfoRow
                   icon={User}
                   label={t.staff}
-                  value={appointment.staff.userId}
+                  value={staff?.user.name}
                 />
               )}
               
@@ -340,7 +343,7 @@ export default async function AppointmentDetailPage(props: {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-lg">
                   <MapPin className="h-5 w-5" />
-                  {locale === "fa" ? "اطلاعات تماس" : "Contact Information"}
+                {t.organizationInfo}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -376,6 +379,41 @@ export default async function AppointmentDetailPage(props: {
               </CardContent>
             </Card>
           )}
+
+          {/* Staff Information Card */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <User className="h-5 w-5" />
+                {t.staffInfo}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div>
+                  <p className="text-sm text-muted-foreground">{t.staffName}</p>
+                  <p className="font-medium">{staff?.user.name}</p>
+                </div>
+
+                {staff?.user.phone && (
+                  <div>
+                    <p className="text-sm text-muted-foreground">{t.phoneNumber}</p>
+                    <p className="font-medium">
+                      {locale === "fa"
+                        ? toPersianDigits(staff?.user.phone)
+                        : staff?.user.phone
+                      }
+                    </p>
+                  </div>
+                )}
+
+                <div>
+                  <p className="text-sm text-muted-foreground">{t.email}</p>
+                  <p className="font-medium">{staff?.user.email}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
           
           {/* Timestamps Card */}
           <Card>

@@ -1,10 +1,10 @@
 /**
- * Security Settings Page
+ * Theme Settings Page
  * 
- * Page component that allows users to manage their security settings.
- * Users can change their password.
+ * Page component that allows users to manage their theme preferences.
+ * Users can select light, dark, or system theme.
  * 
- * Route: /[lang]/settings/security
+ * Route: /[lang]/settings/theme
  */
 
 import { auth } from "@/lib/auth";
@@ -13,8 +13,8 @@ import { getDictionary } from "@/get-dictionary";
 import { i18nConfig, type Locale } from "@/i18n-config";
 import prisma from "@/lib/db/prisma";
 import Link from "next/link";
-import { ArrowRight, Shield, Lock, Key } from "lucide-react";
-import { SecurityForm } from "./security-form";
+import { ArrowRight, Palette, Sun, Moon, Monitor } from "lucide-react";
+import { ThemeForm } from "./theme-form";
 
 /**
  * Generate static params for all supported locales
@@ -40,9 +40,9 @@ function getTranslation(dictionary: Dictionary, key: string, fallback: string): 
 }
 
 /**
- * Main security settings page component
+ * Main theme settings page component
  */
-export default async function SecuritySettingsPage(props: {
+export default async function ThemeSettingsPage(props: {
   params: Promise<{ lang: string }>;
 }) {
   const params = await props.params;
@@ -62,6 +62,8 @@ export default async function SecuritySettingsPage(props: {
       name: true,
       email: true,
       username: true,
+      themeMode: true,
+      locale: true,
     },
   });
 
@@ -85,14 +87,14 @@ export default async function SecuritySettingsPage(props: {
 
       {/* Page Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold">Security</h1>
+        <h1 className="text-3xl font-bold">Theme</h1>
         <p className="text-muted-foreground mt-1">
-          Manage your password and security settings
+          Customize the appearance of the application
         </p>
       </div>
 
-      {/* Security Form */}
-      <SecurityForm 
+      {/* Theme Form */}
+      <ThemeForm 
         locale={locale} 
         user={user} 
         dictionary={dictionary} 

@@ -20,6 +20,8 @@ const publicRoutes = [
   "/",
   "/auth/signin",
   "/auth/signup",
+  "/auth/forgot-password",
+  "/auth/reset-password",
   "/auth/error",
   "/api/auth",
 ] as const
@@ -33,15 +35,27 @@ const protectedRoutes = [
   "/settings",
   "/admin",
   "/calendar",
-  "/services"
+  "/services",
+  "/staff"
 ] as const
 
 /**
- * Routes that require admin privileges
+ * Routes that require admin privileges (full access)
  */
 const adminRoutes = [
   "/admin",
-  "/settings",
+] as const
+
+/**
+ * Routes that allow authenticated users but may have limited features
+ */
+const userFeatureRoutes = [
+  "/settings/profile",
+  "/settings/security",
+  "/appointments",
+  "/calendar",
+  "/services",
+  "/staff",
 ] as const
 
 /**
@@ -53,6 +67,7 @@ const roleHierarchy: Record<string, number> = {
   OWNER: 70,
   MANAGER: 60,
   MERCHANT: 50,
+  STAFF: 40,
   CLIENT: 20,
   GUEST: 10,
 }
@@ -61,9 +76,13 @@ const roleHierarchy: Record<string, number> = {
  * Check if a route is public (doesn't require authentication)
  */
 function isPublicRoute(path: string): boolean {
-  // Remove locale prefix for comparison
   const pathWithoutLocale = path.replace(/^\/[a-z]{2}/, '') || path
-  return publicRoutes.some(route => path === route || path.startsWith(`${route}/`) || pathWithoutLocale === route || pathWithoutLocale.startsWith(`${route}/`))
+  return publicRoutes.some(route => 
+    path === route || 
+    path.startsWith(`${route}/`) || 
+    pathWithoutLocale === route || 
+    pathWithoutLocale.startsWith(`${route}/`)
+  )
 }
 
 /**
@@ -71,15 +90,32 @@ function isPublicRoute(path: string): boolean {
  */
 function isProtectedRoute(path: string): boolean {
   const pathWithoutLocale = path.replace(/^\/[a-z]{2}/, '') || path
-  return protectedRoutes.some(route => path === `/${pathWithoutLocale}` || path.startsWith(`/${pathWithoutLocale}/`))
+  return protectedRoutes.some(route => 
+    path === `/${pathWithoutLocale}` || 
+    path.startsWith(`/${pathWithoutLocale}/`)
+  )
 }
 
 /**
- * Check if a route requires admin privileges
+ * Check if a route requires full admin privileges
  */
 function isAdminRoute(path: string): boolean {
   const pathWithoutLocale = path.replace(/^\/[a-z]{2}/, '') || path
-  return adminRoutes.some(route => path === `/${pathWithoutLocale}` || path.startsWith(`/${pathWithoutLocale}/`))
+  return adminRoutes.some(route => 
+    path === `/${pathWithoutLocale}` || 
+    path.startsWith(`/${pathWithoutLocale}/`)
+  )
+}
+
+/**
+ * Check if a route is a user feature route (requires auth but limited access)
+ */
+function isUserFeatureRoute(path: string): boolean {
+  const pathWithoutLocale = path.replace(/^\/[a-z]{2}/, '') || path
+  return userFeatureRoutes.some(route => 
+    path === `/${pathWithoutLocale}` || 
+    path.startsWith(`/${pathWithoutLocale}/`)
+  )
 }
 
 /**
@@ -163,6 +199,7 @@ export default async function proxy(request: NextRequest) {
     if (request.nextUrl.search) {
       url.search = request.nextUrl.search
     }
+    console.log(`[Middleware] Redirecting to valid locale: ${url.pathname}`)
     return NextResponse.redirect(url)
   }
   
@@ -170,8 +207,11 @@ export default async function proxy(request: NextRequest) {
   let session = null
   try {
     session = await auth()
+    if (session?.user) {
+      console.log(`[Middleware] User authenticated: ${session.user.username} (${session.user.role})`)
+    }
   } catch (error) {
-    console.error("[Proxy] Auth error:", error)
+    console.error("[Middleware] Auth error:", error)
     // On auth errors, treat as unauthenticated
     session = null
   }
@@ -185,6 +225,7 @@ export default async function proxy(request: NextRequest) {
       signinUrl.pathname = `${localePrefix}/auth/signin`
       signinUrl.searchParams.set("callbackUrl", pathname)
       
+      console.log(`[Middleware] User not authenticated, redirecting to signin: ${signinUrl.pathname}`)
       return NextResponse.redirect(signinUrl)
     }
     
@@ -201,8 +242,15 @@ export default async function proxy(request: NextRequest) {
         const dashboardUrl = request.nextUrl.clone()
         dashboardUrl.pathname = `${localePrefix}/dashboard`
         
+        console.log(`[Middleware] User ${session.user.username} (${userRole}) lacks permissions for ${pathWithoutLocale}, redirecting to dashboard`)
         return NextResponse.redirect(dashboardUrl)
       }
+    }
+    
+    // For settings routes - allow authenticated users to access their own settings
+    if (pathWithoutLocale.startsWith("/settings")) {
+      // All authenticated users can access settings
+      console.log(`[Middleware] User ${session.user.username} accessing settings`)
     }
   }
   
@@ -215,6 +263,7 @@ export default async function proxy(request: NextRequest) {
       const dashboardUrl = request.nextUrl.clone()
       dashboardUrl.pathname = `${localePrefix}/dashboard`
       
+      console.log(`[Middleware] Authenticated user trying to access ${pathWithoutLocale}, redirecting to dashboard`)
       return NextResponse.redirect(dashboardUrl)
     }
   }
@@ -232,6 +281,7 @@ export default async function proxy(request: NextRequest) {
     response.headers.set("X-Locale", validLocale)
   }
   
+  console.log(`[Middleware] Request passed: ${pathname} -> ${pathWithoutLocale}`)
   return response
 }
 

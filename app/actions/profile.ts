@@ -210,3 +210,62 @@ export async function deleteAvatarAction(userId: string): Promise<ActionState> {
     return { error: "An error occurred while deleting your avatar" };
   }
 }
+
+/**
+ * Update user theme action
+ * 
+ * Updates the authenticated user's theme preference.
+ * 
+ * @param prevState - Previous form state
+ * @param formData - Form data containing themeMode
+ * @returns ActionState with success or error message
+ */
+export async function updateThemeAction(
+  prevState: ActionState,
+  formData: FormData
+): Promise<ActionState> {
+  // Get current session
+  const session = await auth();
+  
+  // Check authentication
+  if (!session?.user) {
+    redirect("/auth/signin");
+  }
+
+  const userId = session.user.id;
+  
+  // Extract form data
+  const themeMode = formData.get("themeMode") as string;
+  
+  // Validate themeMode
+  const validThemes = ["LIGHT", "DARK", "SYSTEM"];
+  if (!themeMode || !validThemes.includes(themeMode)) {
+    return {
+      error: "Invalid theme selection",
+    };
+  }
+
+  try {
+    // Update user theme
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        themeMode: themeMode as "LIGHT" | "DARK" | "SYSTEM",
+      },
+    });
+
+    console.log(`[Profile] Theme updated successfully for user: ${userId} to ${themeMode}`);
+
+    // Revalidate relevant pages
+    revalidatePath("/dashboard");
+    revalidatePath("/settings/theme");
+
+    return {
+      success: true,
+      message: "Theme saved successfully",
+    };
+  } catch (error) {
+    console.error("[Profile] Error updating theme:", error);
+    return { error: "An error occurred while updating your theme" };
+  }
+}

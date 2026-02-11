@@ -551,7 +551,11 @@ export async function getAppointmentWithDetails(id: string) {
     where: { id },
     include: {
       service: true,
-      staff: true,
+      staff: {
+        select: {
+          id: true,
+        },
+      },
       client: {
         select: {
           id: true,
@@ -570,8 +574,23 @@ export async function getAppointmentWithDetails(id: string) {
       },
     },
   })
+  if(appointment?.staff){
+  const staff = await prisma.staff.findUnique({
+        where: { id: appointment?.staff?.id},
+    include: {
+      user: {
+        select: {
+          name: true,
+          email: true,
+          phone: true,
+        }
+      }
+    }
+  })
+  return {appointment, staff}
+}
   
-  return appointment
+  return { appointment: appointment as any, staff: null as any }
 }
 
 /**

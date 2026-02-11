@@ -136,9 +136,11 @@ export default function UserEditForm({ userData, dict, lang }: UserEditFormProps
           required
         >
           <option value="CLIENT">{dict.admin?.roles?.CLIENT || "Client"}</option>
-          <option value="STAFF">{dict.admin?.roles?.STAFF || "Staff"}</option>
           <option value="ADMIN">{dict.admin?.roles?.ADMIN || "Admin"}</option>
-          <option value="OTHER">{dict.admin?.roles?.OTHER || "Other"}</option>
+          <option value="OWNER">{dict.admin?.roles?.OWNER || "Owner"}</option>
+          <option value="MERCHANt">{dict.admin?.roles?.MERCHANT || "Merchant"}</option>
+          <option value="MANAGER">{dict.admin?.roles?.MANAGER || "Manager"}</option>
+          <option value="STAFF">{dict.admin?.roles?.STAFF || "Staff"}</option>
         </select>
       </div>
 

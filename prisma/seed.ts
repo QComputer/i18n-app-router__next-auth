@@ -13,6 +13,7 @@ import { OrganizationType, ThemeMode, Hierarchy } from "@/lib/generated/prisma/e
 import bcrypt from "bcryptjs"
 
 import { PrismaClient } from "@/lib/generated/prisma/client"
+import { syncAllUsersStaff, syncAllUsersStaffByPrisma } from "@/lib/sync/user-staff-sync"
 
 // Prevent multiple instances of Prisma Client in development
 const prisma = new PrismaClient({
@@ -646,6 +647,9 @@ export default async function main() {
     
     // Step 8: Create staff members (sync with existing staff users)
     await createStaffMembers(staffUsers, organizations)
+    await syncAllUsersStaff()
+    //await syncAllUsersStaffByPrisma(prisma)
+    
     
     // Step 8.5: Create staff for test users (first organization)
     console.log("Creating staff members from test users...")

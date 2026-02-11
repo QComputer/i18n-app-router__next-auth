@@ -10,6 +10,7 @@
 import prisma from "@/lib/db/prisma"
 import bcrypt from "bcryptjs"
 import { requireAdmin } from "@/lib/auth/admin"
+import { emitRoleChanged, emitUserCreated, emitUserDeleted } from "@/lib/sync/user-staff-sync"
 
 /**
  * Get all users with optional filtering and pagination
@@ -93,13 +94,13 @@ export async function createUser(data: {
   email?: string
   name?: string
   phone?: string
-  role: 'CLIENT' | 'STAFF' | 'ADMIN' | 'OTHER'
+  role: 'CLIENT' | 'STAFF' | 'ADMIN' | 'OWNER' | 'MANAGER' | 'MERCHANT' | 'OTHER'
   password?: string
   hierarchy?: 'OWNER' | 'MANAGER' | 'MERCHANT'
 }) {
   await requireAdmin()
 
-  const { username, email, name, phone, role, password, hierarchy } = data
+  const { username, email, name, phone, role, password } = data
 
   const normalizedUsername = username.trim().toLowerCase()
 
@@ -109,7 +110,7 @@ export async function createUser(data: {
     hashedPassword = await bcrypt.hash(password, 10)
   }
 
-  return prisma.user.create({
+  const user = await prisma.user.create({
     data: {
       username: normalizedUsername,
       email,
@@ -119,6 +120,11 @@ export async function createUser(data: {
       password: hashedPassword,
     },
   })
+
+  // Emit user created event for staff sync
+  await emitUserCreated(user.id, user.role)
+
+  return user
 }
 
 /**
@@ -129,7 +135,7 @@ export async function updateUser(id: string, data: Partial<{
   email?: string
   name?: string
   phone?: string
-  role?: 'CLIENT' | 'STAFF' | 'ADMIN' | 'OTHER'
+  role?: 'CLIENT' | 'STAFF' | 'ADMIN' | 'OWNER' | 'MANAGER' | 'MERCHANT' | 'OTHER'
   password?: string
   locale?: string
   themeMode?: 'LIGHT' | 'DARK' | 'SYSTEM'
@@ -138,6 +144,16 @@ export async function updateUser(id: string, data: Partial<{
   await requireAdmin()
 
   const updateData: Record<string, any> = { ...data }
+
+  // Get current user to track role changes
+  const currentUser = await prisma.user.findUnique({
+    where: { id },
+    select: { role: true },
+  })
+
+  if (!currentUser) {
+    throw new Error("User not found")
+  }
 
   // Hash password if provided
   if (updateData.password) {
@@ -149,28 +165,48 @@ export async function updateUser(id: string, data: Partial<{
     updateData.username = updateData.username.trim().toLowerCase()
   }
 
-  return prisma.user.update({
+  const user = await prisma.user.update({
     where: { id },
     data: updateData,
   })
+
+  // Emit role changed event if role was updated
+  if (data.role && data.role !== currentUser.role) {
+    await emitRoleChanged(id, currentUser.role, data.role)
+  }
+
+  return user
 }
 
 /**
- * Delete a user (soft delete or hard delete)
+ * Delete a user (hard delete or hard delete)
  */
 export async function deleteUser(id: string, hardDelete = false) {
   await requireAdmin()
 
+  // Get user before deletion for event
+  const user = await prisma.user.findUnique({
+    where: { id },
+    select: { role: true },
+  })
+
+  if (!user) {
+    throw new Error("User not found")
+  }
+
   if (hardDelete) {
-    return prisma.user.delete({
+    await prisma.user.delete({
+      where: { id },
+    })
+  } else {
+    // For now, we don't have a soft delete flag on User, so we'll just delete
+    await prisma.user.delete({
       where: { id },
     })
   }
 
-  // For now, we don't have a soft delete flag on User, so we'll just delete
-  return prisma.user.delete({
-    where: { id },
-  })
+  // Emit user deleted event for staff sync cleanup
+  await emitUserDeleted(id, user.role)
 }
 
 /**
@@ -182,4 +218,54 @@ export async function toggleUserStatus(id: string, isActive: boolean) {
   // Note: We don't have an isActive field on User model currently
   // This would need to be added if we want to support soft deletes
   throw new Error("User status toggling not implemented")
+}
+
+/**
+ * Convert a user to staff role with specified hierarchy
+ */
+export async function convertToStaff(id: string, hierarchy: 'OWNER' | 'MANAGER' | 'MERCHANT') {
+  await requireAdmin()
+
+  const user = await prisma.user.findUnique({
+    where: { id },
+    select: { role: true },
+  })
+
+  if (!user) {
+    throw new Error("User not found")
+  }
+
+  const newRole = hierarchy === 'OWNER' ? 'OWNER' : hierarchy === 'MANAGER' ? 'MANAGER' : 'MERCHANT'
+
+  await prisma.user.update({
+    where: { id },
+    data: { role: newRole },
+  })
+
+  // Emit role changed event
+  await emitRoleChanged(id, user.role, newRole)
+}
+
+/**
+ * Remove staff status from a user (convert to CLIENT)
+ */
+export async function removeStaffStatus(id: string) {
+  await requireAdmin()
+
+  const user = await prisma.user.findUnique({
+    where: { id },
+    select: { role: true },
+  })
+
+  if (!user) {
+    throw new Error("User not found")
+  }
+
+  await prisma.user.update({
+    where: { id },
+    data: { role: 'CLIENT' },
+  })
+
+  // Emit role changed event
+  await emitRoleChanged(id, user.role, 'CLIENT')
 }

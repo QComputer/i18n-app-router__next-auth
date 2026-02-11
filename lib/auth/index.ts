@@ -213,7 +213,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         session.user.hierarchy = token.hierarchy as string || null;
         session.user.organizationId = token.organizationId as string || null;
       }
-      console.log('------>session:', session);
+      console.log('[Auth] session.user.username:', session.user.username, '\trole:', session.user.role, '\tstaffId:', session.user.staffId,  '\torganizationId:', session.user.organizationId, '\thierarchy:', session.user.hierarchy);
       
       return session;
     },
