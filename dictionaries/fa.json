@@ -182,6 +182,9 @@
       "noShow": "حضور نداشت"
     }
   },
+  "calendar": {
+    "title": "تقویم"
+  },
   "service": {
     "title": "خدمات",
     "listDescription": "خدمات خود را مدیریت کنید",
@@ -277,16 +280,29 @@
   },
   "settings": {
     "title": "تنظیمات",
+    "description": "حساب کاربری و تنظیمات برنامه خود را مدیریت کنید",
     "profile": "پروفایل",
+    "profileDesc": "اطلاعات شخصی خود را به‌روز کنید",
     "profileDescription": "اطلاعات شخصی خود را مدیریت کنید",
+    "security": "امنیت",
+    "securityDesc": "رمز عبور و تنظیمات امنیتی خود را مدیریت کنید",
+    "securityDescription": "رمز عبور و تنظیمات امنیتی خود را مدیریت کنید",
+    "theme": "ظاهر",
+    "themeDesc": "ظاهر برنامه را سفارشی کنید",
+    "organization": "سازمان",
+    "organizationDesc": "تنظیمات سازمان خود را مدیریت کنید",
+    "team": "تیم و کارکنان",
+    "teamDesc": "اعضای تیم و سطوح دسترسی آن‌ها را مدیریت کنید",
+    "notifications": "اعلان‌ها",
+    "notificationsDesc": "نحوه دریافت اعلان‌ها را تنظیم کنید",
+    "integrations": "یکپارچه‌سازی",
+    "integrationsDesc": "سرویس‌های شخص ثالث را متصل کنید",
+    "privacy": "حریم خصوصی",
+    "privacyDesc": "داده‌ها و حریم خصوصی خود را کنترل کنید",
     "account": "حساب کاربری",
     "business": "کسب و کار",
-    "notifications": "اعلان‌ها",
     "language": "زبان",
-    "theme": "تم",
     "saveSuccess": "تنظیمات با موفقیت ذخیره شد",
-    "security": "امنیت",
-    "securityDescription": "رمز عبور و تنظیمات امنیتی خود را مدیریت کنید",
     "changePassword": "تغییر رمز عبور",
     "currentPassword": "رمز عبور فعلی",
     "newPassword": "رمز عبور جدید",
@@ -301,7 +317,33 @@
     "passwordTips": "نکات رمز عبور",
     "passwordTip1": "حداقل 8 کاراکتر استفاده کنید",
     "passwordTip2": "از اعداد و کاراکترهای خاص استفاده کنید",
-    "passwordTip3": "از اطلاعات شخصی استفاده نکنید"
+    "passwordTip3": "از اطلاعات شخصی استفاده نکنید",
+    "staff": {
+      "title": "مدیریت کارکنان",
+      "description": "اعضای تیم و سطوح دسترسی آن‌ها را مدیریت کنید",
+      "search": "جستجوی کارکنان...",
+      "filterBy": "فیلتر بر اساس",
+      "hierarchy": "سطح دسترسی",
+      "status": "وضعیت",
+      "all": "همه",
+      "active": "فعال",
+      "inactive": "غیرفعال",
+      "addStaff": "افزودن کارمند",
+      "name": "نام",
+      "email": "ایمیل",
+      "role": "نقش",
+      "contact": "تماس",
+      "joined": "تاریخ پیوستن",
+      "actions": "عملیات",
+      "noStaff": "کارمندی یافت نشد"
+    },
+    "pagination": {
+      "previous": "قبلی",
+      "next": "بعدی",
+      "showing": "نمایش",
+      "of": "از",
+      "results": "نتیجه"
+    }
   },
 
   "signin": {
