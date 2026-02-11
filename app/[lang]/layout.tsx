@@ -59,7 +59,7 @@ export default async function LangLayout(props: {
             <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
               <nav className="container flex h-16 items-center justify-between px-4">
                 {/* Logo / Brand */}
-                <div className="flex items-center gap-6">
+                <div className="flex items-center gap-6 px-20">
                   <Link 
                     href={`/${locale}`} 
                     className="flex items-center space-x-2 font-bold text-xl"
