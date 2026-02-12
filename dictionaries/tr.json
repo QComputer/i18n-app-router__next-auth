@@ -365,5 +365,20 @@
       "SALON": "Kuaför",
       "OTHER": "Diğer"
     }
+  },
+  "lawfirm": {
+    "tagline": "Deneyim. Dürüstlük. Sonuç.",
+    "heroTitle": "Haklarınızı Savunuyor, Geleceğinizi Koruyoruz",
+    "heroSubtitle": "Deneyimli avukatlarımız çıkarlarınızı korumak ve hak ettiğiniz adaleti sağlamak için yorulmadan çalışıyor. 25 yılı aşkın ortak deneyimimizle, birçok hukuki alanda binlerce davayı başarıyla sonuçlandırdık.",
+    "ctaText": "Ücretsiz Danışmanlık Alın",
+    "navigation": {
+      "practiceAreas": "Hukuki Alanlar",
+      "attorneys": "Avukatlar",
+      "about": "Hakkımızda",
+      "contact": "İletişim"
+    },
+    "cta": {
+      "freeConsultation": "Ücretsiz Danışmanlık Alın"
+    }
   }
 }

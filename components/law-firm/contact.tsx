@@ -1,241 +1,347 @@
 "use client";
 
 import { useState } from "react";
-import { Phone, Mail, MapPin, Clock, AlertCircle, Send, CheckCircle2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import Link from "next/link";
+import { Phone, Mail, MapPin, Clock, Shield, ChevronDown } from "lucide-react";
 
 interface ContactProps {
   locale: string;
+  dictionary?: Record<string, unknown>;
 }
 
-export function LawFirmContact({ locale }: ContactProps) {
-  const [formStatus, setFormStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+// Helper to get nested value from dictionary
+function getDictValue(dict: Record<string, unknown> | undefined, path: string, fallback: string): string {
+  if (!dict) return fallback;
+  const keys = path.split(".");
+  let value: unknown = dict;
+  for (const k of keys) {
+    value = (value as Record<string, unknown>)?.[k];
+    if (value === undefined) return fallback;
+  }
+  return value as string || fallback;
+}
+
+// Helper to get nested object from dictionary
+function getDictObject<T>(dict: Record<string, unknown> | undefined, path: string, defaultValue: T): T {
+  if (!dict) return defaultValue;
+  const keys = path.split(".");
+  let value: unknown = dict;
+  for (const k of keys) {
+    value = (value as Record<string, unknown>)?.[k];
+    if (value === undefined) return defaultValue;
+  }
+  return value as T;
+}
+
+export function LawFirmContact({ locale, dictionary }: ContactProps) {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    practiceArea: "",
+    message: "",
+    consent: false,
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const isRTL = locale === "ar" || locale === "fa";
+
+  const dict = dictionary || {};
+  const lawfirmDict = (dict.lawfirm || dict) as Record<string, unknown>;
+  const lawfirmDataDict = (dict.lawfirmData || dict.lawfirm || dict) as Record<string, unknown>;
+  const contactDict = (lawfirmDict.contact || lawfirmDict) as Record<string, unknown>;
+
+  const title = getDictValue(contactDict, "title", "Contact Us");
+  const subtitle = getDictValue(contactDict, "subtitle", "Ready to discuss your case? Contact us today for a free and confidential consultation. We are available 24/7 for emergencies.");
+
+  const phoneDict = getDictObject<{title?: string; subtitle?: string; number?: string}>(lawfirmDataDict, "contact.phone", { title: "Phone", subtitle: "Call for emergencies 24/7", number: "021-1234-5678" });
+  const emailDict = getDictObject<{title?: string; subtitle?: string; address?: string}>(lawfirmDataDict, "contact.email", { title: "Email", subtitle: "General inquiries", address: "info@justicelaw.ir" });
+  const addressDict = getDictObject<{title?: string; fullAddress?: string}>(lawfirmDataDict, "contact.address", { title: "Main Office", fullAddress: "1234 Main Street, Suite 500, City, State 12345" });
+  const hoursDict = getDictObject<{title?: string; weekday?: string; saturday?: string; sunday?: string}>(lawfirmDataDict, "contact.hours", { title: "Business Hours", weekday: "Mon-Thu: 8AM - 6PM", saturday: "Fri: 8AM - 1PM", sunday: "Sat: Closed" });
+  const emergencyDict = getDictObject<{title?: string; subtitle?: string; cta?: string}>(lawfirmDataDict, "contact.emergency", { title: "24/7 Emergency Line", subtitle: "For urgent legal matters outside business hours", cta: "Call Now" });
+  
+  const formDict = getDictObject<{
+    title?: string;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    phone?: string;
+    practiceArea?: string;
+    message?: string;
+    consent?: string;
+    submit?: string;
+    sending?: string;
+    placeholders?: Record<string, string>;
+  }>(lawfirmDataDict, "contact.form", {
+    title: "Send a Message",
+    firstName: "First Name",
+    lastName: "Last Name",
+    email: "Email",
+    phone: "Phone",
+    practiceArea: "Practice Area",
+    message: "Message",
+    consent: "I understand that submitting this form does not create an attorney-client relationship and I agree to the privacy policy.",
+    submit: "Send Message",
+    sending: "Sending...",
+    placeholders: {
+      firstName: "John",
+      lastName: "Doe",
+      email: "john@example.com",
+      phone: "+1 (555) 123-4567",
+      practiceArea: "Select a practice area",
+      message: "Please describe your legal matter in detail...",
+    },
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setFormStatus("submitting");
+    setIsSubmitting(true);
     // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setFormStatus("success");
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    setIsSubmitting(false);
+    setIsSuccess(true);
   };
 
   return (
-    <section id="contact" className="py-20 bg-slate-900">
+    <section className="py-20 bg-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-            Contact Us
+          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
+            {title}
           </h2>
-          <p className="text-lg text-slate-300 max-w-3xl mx-auto">
-            Ready to discuss your case? Contact us today for a free, confidential consultation.
-            We're available 24/7 for emergencies.
+          <p className="text-lg text-slate-600 max-w-3xl mx-auto">
+            {subtitle}
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-12">
-          {/* Contact Info */}
-          <div className="space-y-8">
+        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Contact Information */}
+          <div className="lg:col-span-1 space-y-6">
             {/* Phone */}
-            <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-              <div className="flex items-start space-x-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-amber-500 rounded-xl flex items-center justify-center">
-                  <Phone className="w-6 h-6 text-slate-900" />
+            <div className="bg-white rounded-xl p-6 shadow-sm">
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center">
+                  <Phone className="w-6 h-6 text-amber-600" />
                 </div>
                 <div>
-                  <h3 className="text-white font-semibold text-lg mb-2">Phone</h3>
-                  <p className="text-slate-300 mb-2">Call us 24/7 for emergencies</p>
-                  <a href="tel:1-800-JUSTICE" className="text-amber-400 font-bold text-xl">
-                    1-800-JUSTICE
-                  </a>
+                  <h3 className="font-bold text-slate-900">{phoneDict.title}</h3>
+                  <p className="text-sm text-slate-500">{phoneDict.subtitle}</p>
+                  <p className="text-amber-600 font-semibold">{phoneDict.number}</p>
                 </div>
               </div>
             </div>
 
             {/* Email */}
-            <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-              <div className="flex items-start space-x-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-amber-500 rounded-xl flex items-center justify-center">
-                  <Mail className="w-6 h-6 text-slate-900" />
+            <div className="bg-white rounded-xl p-6 shadow-sm">
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <Mail className="w-6 h-6 text-blue-600" />
                 </div>
                 <div>
-                  <h3 className="text-white font-semibold text-lg mb-2">Email</h3>
-                  <p className="text-slate-300 mb-1">General inquiries</p>
-                  <a href="mailto:info@justicelaw.com" className="text-amber-400">
-                    info@justicelaw.com
-                  </a>
+                  <h3 className="font-bold text-slate-900">{emailDict.title}</h3>
+                  <p className="text-sm text-slate-500">{emailDict.subtitle}</p>
+                  <p className="text-slate-700">{emailDict.address}</p>
                 </div>
               </div>
             </div>
 
             {/* Address */}
-            <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-              <div className="flex items-start space-x-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-amber-500 rounded-xl flex items-center justify-center">
-                  <MapPin className="w-6 h-6 text-slate-900" />
+            <div className="bg-white rounded-xl p-6 shadow-sm">
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                  <MapPin className="w-6 h-6 text-green-600" />
                 </div>
                 <div>
-                  <h3 className="text-white font-semibold text-lg mb-2">Main Office</h3>
-                  <p className="text-slate-300">
-                    123 Justice Avenue, Suite 500
-                    <br />
-                    Los Angeles, CA 90001
-                  </p>
+                  <h3 className="font-bold text-slate-900">{addressDict.title}</h3>
+                  <p className="text-sm text-slate-500">{addressDict.fullAddress}</p>
                 </div>
               </div>
             </div>
 
             {/* Hours */}
-            <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-              <div className="flex items-start space-x-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-amber-500 rounded-xl flex items-center justify-center">
-                  <Clock className="w-6 h-6 text-slate-900" />
+            <div className="bg-white rounded-xl p-6 shadow-sm">
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                  <Clock className="w-6 h-6 text-purple-600" />
                 </div>
                 <div>
-                  <h3 className="text-white font-semibold text-lg mb-2">Office Hours</h3>
-                  <div className="space-y-1 text-slate-300">
-                    <p>Monday - Friday: 8:00 AM - 6:00 PM</p>
-                    <p>Saturday: 9:00 AM - 1:00 PM</p>
-                    <p className="text-amber-400">Sunday: Closed (Emergency calls accepted)</p>
-                  </div>
+                  <h3 className="font-bold text-slate-900">{hoursDict.title}</h3>
+                  <p className="text-sm text-slate-500">{hoursDict.weekday}</p>
+                  <p className="text-sm text-slate-500">{hoursDict.saturday}</p>
+                  <p className="text-sm text-slate-500">{hoursDict.sunday}</p>
                 </div>
               </div>
             </div>
 
             {/* Emergency */}
-            <div className="bg-amber-500/20 rounded-2xl p-6 border border-amber-500/30">
-              <div className="flex items-start space-x-4">
-                <AlertCircle className="w-6 h-6 text-amber-400 flex-shrink-0 mt-0.5" />
+            <div className="bg-red-50 border border-red-200 rounded-xl p-6">
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                  <Shield className="w-6 h-6 text-red-600" />
+                </div>
                 <div>
-                  <h3 className="text-white font-semibold text-lg mb-2">
-                    24/7 Emergency Line
-                  </h3>
-                  <p className="text-slate-300 mb-2">
-                    For urgent legal matters outside business hours
-                  </p>
-                  <a href="tel:1-800-JUSTICE" className="text-amber-400 font-bold">
-                    1-800-JUSTICE
-                  </a>
+                  <h3 className="font-bold text-red-800">{emergencyDict.title}</h3>
+                  <p className="text-sm text-red-600">{emergencyDict.subtitle}</p>
+                  <button className="mt-2 bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-red-700 transition-colors">
+                    {emergencyDict.cta}
+                  </button>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Contact Form */}
-          <div className="bg-white rounded-2xl p-8">
-            <h3 className="text-2xl font-bold text-slate-900 mb-6">
-              Send Us a Message
-            </h3>
-
-            {formStatus === "success" ? (
-              <div className="text-center py-12">
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <CheckCircle2 className="w-8 h-8 text-green-600" />
-                </div>
-                <h4 className="text-xl font-bold text-slate-900 mb-2">
-                  Message Sent Successfully
-                </h4>
-                <p className="text-slate-600 mb-6">
-                  Thank you for contacting us. We will review your message and get back
-                  to you within 24 hours.
-                </p>
-                <Button onClick={() => setFormStatus("idle")}>
-                  Send Another Message
-                </Button>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid sm:grid-cols-2 gap-6">
-                  <div>
-                    <Label htmlFor="firstName">First Name *</Label>
-                    <Input id="firstName" required placeholder="John" />
+          <div className="lg:col-span-2">
+            <div className="bg-white rounded-2xl p-8 shadow-sm">
+              {isSuccess ? (
+                <div className="text-center py-12">
+                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <Shield className="w-8 h-8 text-green-600" />
                   </div>
-                  <div>
-                    <Label htmlFor="lastName">Last Name *</Label>
-                    <Input id="lastName" required placeholder="Doe" />
+                  <h3 className="text-2xl font-bold text-slate-900 mb-4">Message Sent Successfully!</h3>
+                  <p className="text-slate-600 mb-8">
+                    Thank you for contacting us. We will review your message and get back to you within 24 hours.
+                  </p>
+                  <button
+                    onClick={() => setIsSuccess(false)}
+                    className="bg-slate-900 text-white px-8 py-3 rounded-lg font-semibold hover:bg-slate-800 transition-colors"
+                  >
+                    Send Another Message
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <h3 className="text-xl font-bold text-slate-900 mb-6">{formDict.title}</h3>
+
+                  <div className="grid md:grid-cols-2 gap-6">
+                    {/* First Name */}
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-2">
+                        {formDict.firstName}
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.firstName}
+                        onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                        className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                        placeholder={formDict.placeholders?.firstName}
+                        required
+                      />
+                    </div>
+
+                    {/* Last Name */}
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-2">
+                        {formDict.lastName}
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.lastName}
+                        onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                        className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                        placeholder={formDict.placeholders?.lastName}
+                        required
+                      />
+                    </div>
                   </div>
-                </div>
 
-                <div className="grid sm:grid-cols-2 gap-6">
-                  <div>
-                    <Label htmlFor="email">Email *</Label>
-                    <Input id="email" type="email" required placeholder="john@example.com" />
+                  <div className="grid md:grid-cols-2 gap-6">
+                    {/* Email */}
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-2">
+                        {formDict.email}
+                      </label>
+                      <input
+                        type="email"
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                        placeholder={formDict.placeholders?.email}
+                        required
+                      />
+                    </div>
+
+                    {/* Phone */}
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-2">
+                        {formDict.phone}
+                      </label>
+                      <input
+                        type="tel"
+                        value={formData.phone}
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                        placeholder={formDict.placeholders?.phone}
+                      />
+                    </div>
                   </div>
+
+                  {/* Practice Area */}
                   <div>
-                    <Label htmlFor="phone">Phone *</Label>
-                    <Input id="phone" type="tel" required placeholder="(555) 123-4567" />
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      {formDict.practiceArea}
+                    </label>
+                    <div className="relative">
+                      <select
+                        value={formData.practiceArea}
+                        onChange={(e) => setFormData({ ...formData, practiceArea: e.target.value })}
+                        className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent appearance-none bg-white"
+                        required
+                      >
+                        <option value="">{formDict.placeholders?.practiceArea}</option>
+                        <option value="criminal">Criminal Defense</option>
+                        <option value="family">Family Law</option>
+                        <option value="personal">Personal Injury</option>
+                        <option value="corporate">Corporate Law</option>
+                        <option value="immigration">Immigration</option>
+                        <option value="realestate">Real Estate</option>
+                        <option value="bankruptcy">Bankruptcy</option>
+                        <option value="other">Other</option>
+                      </select>
+                      <ChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
+                    </div>
                   </div>
-                </div>
 
-                <div>
-                  <Label htmlFor="practiceArea">Practice Area *</Label>
-                  <Select required>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a practice area" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="criminal-defense">Criminal Defense</SelectItem>
-                      <SelectItem value="family-law">Family Law</SelectItem>
-                      <SelectItem value="personal-injury">Personal Injury</SelectItem>
-                      <SelectItem value="corporate-law">Corporate Law</SelectItem>
-                      <SelectItem value="immigration">Immigration</SelectItem>
-                      <SelectItem value="real-estate">Real Estate</SelectItem>
-                      <SelectItem value="bankruptcy">Bankruptcy</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+                  {/* Message */}
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      {formDict.message}
+                    </label>
+                    <textarea
+                      value={formData.message}
+                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                      rows={4}
+                      className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent resize-none"
+                      placeholder={formDict.placeholders?.message}
+                      required
+                    />
+                  </div>
 
-                <div>
-                  <Label htmlFor="message">Message *</Label>
-                  <Textarea
-                    id="message"
-                    required
-                    placeholder="Please describe your legal issue in detail..."
-                    rows={5}
-                  />
-                </div>
+                  {/* Consent */}
+                  <div className="flex items-start space-x-3">
+                    <input
+                      type="checkbox"
+                      checked={formData.consent}
+                      onChange={(e) => setFormData({ ...formData, consent: e.target.checked })}
+                      className="mt-1 w-5 h-5 text-amber-600 border-slate-300 rounded focus:ring-amber-500"
+                      required
+                    />
+                    <p className="text-sm text-slate-600">{formDict.consent}</p>
+                  </div>
 
-                <div className="flex items-start space-x-3">
-                  <input
-                    type="checkbox"
-                    id="consent"
-                    required
-                    className="mt-1 w-4 h-4 rounded border-slate-300 text-amber-500 focus:ring-amber-500"
-                  />
-                  <label htmlFor="consent" className="text-sm text-slate-600">
-                    I understand that submitting this form does not create an attorney-client
-                    relationship and agree to the privacy policy.
-                  </label>
-                </div>
-
-                <Button
-                  type="submit"
-                  className="w-full bg-slate-900 hover:bg-slate-800 text-white py-6"
-                  disabled={formStatus === "submitting"}
-                >
-                  {formStatus === "submitting" ? (
-                    "Sending..."
-                  ) : (
-                    <>
-                      <Send className="w-5 h-5 mr-2" />
-                      Send Message
-                    </>
-                  )}
-                </Button>
-              </form>
-            )}
+                  {/* Submit Button */}
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full bg-slate-900 text-white py-4 rounded-lg font-semibold hover:bg-slate-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isSubmitting ? formDict.sending : formDict.submit}
+                  </button>
+                </form>
+              )}
+            </div>
           </div>
         </div>
       </div>

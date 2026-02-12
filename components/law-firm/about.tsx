@@ -4,9 +4,11 @@ import { CheckCircle2, Award, Users, Clock } from "lucide-react";
 
 interface AboutProps {
   locale: string;
+  dictionary?: Record<string, unknown>;
 }
 
-const values = [
+// Default English values
+const defaultValues = [
   {
     icon: CheckCircle2,
     title: "Integrity",
@@ -29,8 +31,70 @@ const values = [
   },
 ];
 
-export function LawFirmAbout({ locale }: AboutProps) {
+// Helper to get nested value from dictionary
+function getDictValue(dict: Record<string, unknown> | undefined, path: string, fallback: string): string {
+  if (!dict) return fallback;
+  const keys = path.split(".");
+  let value: unknown = dict;
+  for (const k of keys) {
+    value = (value as Record<string, unknown>)?.[k];
+    if (value === undefined) return fallback;
+  }
+  return value as string || fallback;
+}
+
+// Helper to get array from dictionary
+function getDictArray<T>(dict: Record<string, unknown> | undefined, path: string, defaultValue: T[]): T[] {
+  if (!dict) return defaultValue;
+  const keys = path.split(".");
+  let value: unknown = dict;
+  for (const k of keys) {
+    value = (value as Record<string, unknown>)?.[k];
+    if (value === undefined) return defaultValue;
+  }
+  return value as T[];
+}
+
+export function LawFirmAbout({ locale, dictionary }: AboutProps) {
   const isRTL = locale === "ar" || locale === "fa";
+  
+  const dict = dictionary || {};
+  
+  // Get translations from lawfirm.about section
+  const lawfirmDict = (dict.lawfirm || dict) as Record<string, unknown>;
+  const aboutDict = (lawfirmDict.about || lawfirmDict) as Record<string, unknown>;
+  
+  // Get data from lawfirmData.about section
+  const lawfirmDataDict = (dict.lawfirmData || dict.lawfirm || dict) as Record<string, unknown>;
+  const aboutDataDict = (lawfirmDataDict.about || lawfirmDataDict) as Record<string, unknown>;
+
+  const title = getDictValue(aboutDict, "title", "About Our Firm");
+  const subtitle = getDictValue(aboutDict, "subtitle", "For over 25 years, Justice Law & Associates has been a trusted advocate for clients facing legal challenges. Our commitment to excellence and personalized attention has earned us a reputation as one of the premier law firms in the country.");
+  const historyTitle = getDictValue(aboutDict, "historyTitle", "Our History");
+  const history1 = getDictValue(aboutDict, "history1", "Founded in 1998 by John Mitchell, our firm began with a simple mission: to provide exceptional legal representation with integrity and compassion. What started as a small practice has grown into a multi-office firm with over 50 attorneys nationwide.");
+  const history2 = getDictValue(aboutDict, "history2", "Throughout our history, we have handled thousands of cases across multiple practice areas, recovering billions of dollars for our clients and establishing precedents that have shaped legal landscapes.");
+  const history3 = getDictValue(aboutDict, "history3", "Today, we continue to build on this legacy, combining traditional values with modern innovation to deliver the best possible outcomes for our clients.");
+  const valuesTitle = getDictValue(aboutDict, "valuesTitle", "Our Core Values");
+  const yearsExperience = getDictValue(aboutDict, "yearsExperience", "Years of Experience");
+  const casesResolved = getDictValue(aboutDict, "casesResolved", "Cases Resolved");
+  const yearsValue = getDictValue(aboutDataDict, "yearsValue", "25+");
+  const casesValue = getDictValue(aboutDataDict, "casesValue", "10K+");
+
+  interface ValueItem {
+    title?: string;
+    description?: string;
+  }
+
+  const valuesData = getDictArray<ValueItem>(aboutDataDict, "values", defaultValues.map(v => ({
+    title: v.title,
+    description: v.description,
+  })));
+
+  const values = valuesData.map((v, i) => ({
+    ...defaultValues[i],
+    title: v.title || defaultValues[i].title,
+    description: v.description || defaultValues[i].description,
+  }));
 
   return (
     <section id="about" className="py-20 bg-white">
@@ -38,13 +102,10 @@ export function LawFirmAbout({ locale }: AboutProps) {
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
-            About Our Firm
+            {title}
           </h2>
           <p className="text-lg text-slate-600 max-w-3xl mx-auto">
-            For over 25 years, Justice Law & Associates has been a trusted advocate
-            for clients facing legal challenges. Our commitment to excellence and
-            personalized attention has earned us a reputation as one of the premier
-            law firms in the country.
+            {subtitle}
           </p>
         </div>
 
@@ -52,36 +113,23 @@ export function LawFirmAbout({ locale }: AboutProps) {
           {/* Content */}
           <div>
             <h3 className="text-2xl font-bold text-slate-900 mb-6">
-              Our History
+              {historyTitle}
             </h3>
             <div className="space-y-4 text-slate-600">
-              <p>
-                Founded in 1998 by John Mitchell, our firm began with a simple mission:
-                to provide exceptional legal representation with integrity and compassion.
-                What started as a small practice has grown into a multi-office firm with
-                over 50 attorneys nationwide.
-              </p>
-              <p>
-                Throughout our history, we have handled thousands of cases across
-                multiple practice areas, recovering billions of dollars for our clients
-                and establishing precedents that have shaped legal landscapes.
-              </p>
-              <p>
-                Today, we continue to build on this legacy, combining traditional
-                values with modern innovation to deliver the best possible outcomes
-                for our clients.
-              </p>
+              <p>{history1}</p>
+              <p>{history2}</p>
+              <p>{history3}</p>
             </div>
 
             {/* Stats */}
             <div className="grid grid-cols-2 gap-6 mt-8">
               <div className="bg-slate-50 rounded-xl p-6 text-center">
-                <div className="text-3xl font-bold text-amber-500 mb-1">25+</div>
-                <div className="text-sm text-slate-600">Years of Experience</div>
+                <div className="text-3xl font-bold text-amber-500 mb-1">{yearsValue}</div>
+                <div className="text-sm text-slate-600">{yearsExperience}</div>
               </div>
               <div className="bg-slate-50 rounded-xl p-6 text-center">
-                <div className="text-3xl font-bold text-amber-500 mb-1">10K+</div>
-                <div className="text-sm text-slate-600">Cases Resolved</div>
+                <div className="text-3xl font-bold text-amber-500 mb-1">{casesValue}</div>
+                <div className="text-sm text-slate-600">{casesResolved}</div>
               </div>
             </div>
           </div>
@@ -89,7 +137,7 @@ export function LawFirmAbout({ locale }: AboutProps) {
           {/* Values */}
           <div>
             <h3 className="text-2xl font-bold text-slate-900 mb-6">
-              Our Core Values
+              {valuesTitle}
             </h3>
             <div className="grid sm:grid-cols-2 gap-6">
               {values.map((value, index) => (

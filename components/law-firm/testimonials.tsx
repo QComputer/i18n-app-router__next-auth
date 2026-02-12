@@ -5,9 +5,11 @@ import { Star, Quote, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface TestimonialsProps {
   locale: string;
+  dictionary?: Record<string, unknown>;
 }
 
-const testimonials = [
+// Default English values
+const defaultTestimonials = [
   {
     id: 1,
     name: "Robert Thompson",
@@ -58,16 +60,70 @@ const testimonials = [
   },
 ];
 
-const platforms = [
+const defaultPlatforms = [
   { name: "Google Reviews", icon: "⭐" },
   { name: "Avvo", icon: "⚖️" },
   { name: "Martindale-Hubbell", icon: "🏆" },
   { name: "Facebook", icon: "👍" },
 ];
 
-export function LawFirmTestimonials({ locale }: TestimonialsProps) {
+// Helper to get nested value from dictionary
+function getDictValue(dict: Record<string, unknown> | undefined, path: string, fallback: string): string {
+  if (!dict) return fallback;
+  const keys = path.split(".");
+  let value: unknown = dict;
+  for (const k of keys) {
+    if (value && typeof value === "object" && k in value) {
+      value = (value as Record<string, unknown>)[k];
+    } else {
+      return fallback;
+    }
+  }
+  return typeof value === "string" ? value : fallback;
+}
+
+// Safely get testimonials array from dictionary
+function getTestimonialsData(
+  dict: Record<string, unknown> | undefined
+): typeof defaultTestimonials {
+  if (!dict) return defaultTestimonials;
+  
+  const lawfirmData = dict.lawfirmData as Record<string, unknown> | undefined;
+  if (lawfirmData && Array.isArray(lawfirmData.testimonials)) {
+    return (lawfirmData.testimonials as Array<{
+      name?: string;
+      case?: string;
+      rating?: number;
+      text?: string;
+      date?: string;
+    }>).map((t, index) => ({
+      ...defaultTestimonials[index],
+      name: t.name || defaultTestimonials[index]?.name,
+      case: t.case || defaultTestimonials[index]?.case,
+      rating: t.rating ?? defaultTestimonials[index]?.rating,
+      text: t.text || defaultTestimonials[index]?.text,
+      date: t.date || defaultTestimonials[index]?.date,
+    }));
+  }
+  
+  return defaultTestimonials;
+}
+
+export function LawFirmTestimonials({ locale, dictionary }: TestimonialsProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const isRTL = locale === "ar" || locale === "fa";
+
+  const dict = dictionary || {};
+  const lawfirm = dict.lawfirm as Record<string, unknown> | undefined;
+
+  const title = getDictValue(lawfirm, "title", "What Our Clients Say");
+  const subtitle = getDictValue(lawfirm, "subtitle", "Don't just take our word for it. Hear from the clients whose lives we've changed and cases we've won.");
+  const reviewUs = getDictValue(lawfirm, "reviewUs", "Review us on:");
+  const caseLabel = getDictValue(lawfirm, "case", "Case");
+
+  const testimonials = getTestimonialsData(dict);
+
+  const platforms = defaultPlatforms;
 
   const nextTestimonial = () => {
     setActiveIndex((prev) => (prev + 1) % testimonials.length);
@@ -83,11 +139,10 @@ export function LawFirmTestimonials({ locale }: TestimonialsProps) {
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-            What Our Clients Say
+            {title}
           </h2>
           <p className="text-lg text-slate-300 max-w-3xl mx-auto">
-            Don't just take our word for it. Hear from the clients whose lives we've
-            changed and cases we've won.
+            {subtitle}
           </p>
         </div>
 
@@ -116,7 +171,7 @@ export function LawFirmTestimonials({ locale }: TestimonialsProps) {
                   {testimonials[activeIndex].name}
                 </p>
                 <p className="text-slate-500">
-                  {testimonials[activeIndex].case} Case • {testimonials[activeIndex].date}
+                  {testimonials[activeIndex].case} {caseLabel} • {testimonials[activeIndex].date}
                 </p>
               </div>
             </div>
@@ -173,7 +228,7 @@ export function LawFirmTestimonials({ locale }: TestimonialsProps) {
 
         {/* Review Platforms */}
         <div className="text-center mt-12">
-          <p className="text-slate-400 mb-6">Review us on:</p>
+          <p className="text-slate-400 mb-6">{reviewUs}</p>
           <div className="flex flex-wrap justify-center gap-6">
             {platforms.map((platform, idx) => (
               <div

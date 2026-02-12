@@ -90,31 +90,31 @@ export default async function LawFirmPage(props: {
       />
 
       {/* About Section */}
-      <LawFirmAbout locale={locale} />
+      <LawFirmAbout locale={locale} dictionary={dictionary as Record<string, unknown>} />
 
       {/* Practice Areas */}
-      <LawFirmPracticeAreas locale={locale} />
+      <LawFirmPracticeAreas locale={locale} dictionary={dictionary as Record<string, unknown>} />
 
       {/* Attorneys */}
-      <LawFirmAttorneys locale={locale} />
+      <LawFirmAttorneys locale={locale} dictionary={dictionary as Record<string, unknown>} />
 
       {/* Testimonials */}
-      <LawFirmTestimonials locale={locale} />
+      <LawFirmTestimonials locale={locale} dictionary={dictionary as Record<string, unknown>} />
 
       {/* Case Results */}
-      <LawFirmCaseResults locale={locale} />
+      <LawFirmCaseResults locale={locale} dictionary={dictionary as Record<string, unknown>} />
 
       {/* Awards */}
-      <LawFirmAwards locale={locale} />
+      <LawFirmAwards locale={locale} dictionary={dictionary as Record<string, unknown>} />
 
       {/* FAQ */}
-      <LawFirmFAQ locale={locale} />
+      <LawFirmFAQ locale={locale} dictionary={dictionary as Record<string, unknown>} />
 
       {/* Contact */}
-      <LawFirmContact locale={locale} />
+      <LawFirmContact locale={locale} dictionary={dictionary as Record<string, unknown>} />
 
       {/* Footer */}
-      <LawFirmFooter locale={locale} />
+      <LawFirmFooter locale={locale} dictionary={dictionary as Record<string, unknown>} />
     </div>
   )
 }

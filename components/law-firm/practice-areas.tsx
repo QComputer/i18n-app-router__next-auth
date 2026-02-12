@@ -17,9 +17,11 @@ import {
 
 interface PracticeAreasProps {
   locale: string;
+  dictionary?: Record<string, unknown>;
 }
 
-const practiceAreas = [
+// Default English values
+const defaultPracticeAreas = [
   {
     icon: Shield,
     name: "Criminal Defense",
@@ -85,8 +87,64 @@ const practiceAreas = [
   },
 ];
 
-export function LawFirmPracticeAreas({ locale }: PracticeAreasProps) {
+// Helper to get nested value from dictionary
+function getDictValue(dict: Record<string, unknown> | undefined, path: string, fallback: string): string {
+  if (!dict) return fallback;
+  const keys = path.split(".");
+  let value: unknown = dict;
+  for (const k of keys) {
+    if (value && typeof value === "object" && k in value) {
+      value = (value as Record<string, unknown>)[k];
+    } else {
+      return fallback;
+    }
+  }
+  return typeof value === "string" ? value : fallback;
+}
+
+// Safely get practice areas array from dictionary
+function getPracticeAreasData(
+  dict: Record<string, unknown> | undefined
+): typeof defaultPracticeAreas {
+  if (!dict) return defaultPracticeAreas;
+  
+  // Try lawfirmData.practiceAreas first
+  const lawfirmData = dict.lawfirmData as Record<string, unknown> | undefined;
+  if (lawfirmData && Array.isArray(lawfirmData.practiceAreas)) {
+    return (lawfirmData.practiceAreas as Array<{
+      name?: string;
+      description?: string;
+      featured?: boolean;
+      href?: string;
+    }>).map((area, index) => ({
+      ...defaultPracticeAreas[index],
+      name: area.name || defaultPracticeAreas[index]?.name,
+      description: area.description || defaultPracticeAreas[index]?.description,
+      featured: area.featured ?? defaultPracticeAreas[index]?.featured,
+      href: area.href || defaultPracticeAreas[index]?.href,
+      icon: defaultPracticeAreas[index]?.icon,
+    }));
+  }
+  
+  return defaultPracticeAreas;
+}
+
+export function LawFirmPracticeAreas({ locale, dictionary }: PracticeAreasProps) {
   const isRTL = locale === "ar" || locale === "fa";
+  
+  const dict = dictionary || {};
+  
+  // Get translations from lawfirm section
+  const lawfirm = dict.lawfirm as Record<string, unknown> | undefined;
+  const lawfirmPracticeAreas = lawfirm?.practiceAreas as Record<string, unknown> | undefined;
+  
+  const title = getDictValue(lawfirm, "title", "Practice Areas");
+  const subtitle = getDictValue(lawfirm, "subtitle", "Our experienced attorneys specialize in a wide range of legal practice areas, providing comprehensive solutions for all your legal needs.");
+  const learnMore = getDictValue(lawfirm, "learnMore", "Learn More");
+  const viewAll = getDictValue(lawfirm, "viewAll", "View All Practice Areas");
+  
+  // Get practice areas data
+  const practiceAreas = getPracticeAreasData(dict);
 
   return (
     <section className="py-20 bg-slate-50">
@@ -94,11 +152,10 @@ export function LawFirmPracticeAreas({ locale }: PracticeAreasProps) {
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
-            Practice Areas
+            {title}
           </h2>
           <p className="text-lg text-slate-600 max-w-3xl mx-auto">
-            Our experienced attorneys specialize in a wide range of legal practice areas,
-            providing comprehensive solutions for all your legal needs.
+            {subtitle}
           </p>
         </div>
 
@@ -119,10 +176,10 @@ export function LawFirmPracticeAreas({ locale }: PracticeAreasProps) {
                 </h3>
                 <p className="text-slate-600 mb-6">{area.description}</p>
                 <Link
-                  href={area.href}
+                  href={area.href || "#"}
                   className="inline-flex items-center text-amber-600 font-semibold hover:text-amber-700"
                 >
-                  Learn More
+                  {learnMore}
                   <Star className="w-4 h-4 ml-2" />
                 </Link>
               </div>
@@ -134,7 +191,7 @@ export function LawFirmPracticeAreas({ locale }: PracticeAreasProps) {
           {practiceAreas.map((area, index) => (
             <Link
               key={index}
-              href={area.href}
+              href={area.href || "#"}
               className="bg-white rounded-xl p-6 border border-slate-200 hover:border-amber-300 hover:shadow-md transition-all block"
             >
               <div className="flex items-start space-x-4">
@@ -156,7 +213,7 @@ export function LawFirmPracticeAreas({ locale }: PracticeAreasProps) {
             href="/law-firm/practice-areas"
             className="inline-flex items-center bg-slate-900 text-white px-8 py-4 rounded-lg font-semibold hover:bg-slate-800 transition-colors"
           >
-            View All Practice Areas
+            {viewAll}
             <Star className="w-5 h-5 ml-2" />
           </Link>
         </div>
