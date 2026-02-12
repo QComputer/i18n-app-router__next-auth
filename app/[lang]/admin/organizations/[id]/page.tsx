@@ -39,12 +39,27 @@ export default async function OrganizationDetailsPage({
           {dict.admin?.organizations?.organizationDetails || "Organization Details"}
         </h1>
 
-        <a
-          href={`/${lang}/admin/organizations/${id}/edit`}
-          className="bg-primary text-primary-foreground px-4 py-2 rounded-lg hover:bg-primary/90"
-        >
-          {dict.admin?.common?.edit || "Edit"}
-        </a>
+        <div className="flex gap-2">
+          <a
+            href={`/${lang}/admin/organizations/${id}/edit`}
+            className="bg-primary text-primary-foreground px-4 py-2 rounded-lg hover:bg-primary/90"
+          >
+            {dict.admin?.common?.edit || "Edit"}
+          </a>
+          <a
+            href={`/${lang}/admin/organizations/${id}/public-page`}
+            className="bg-secondary text-secondary-foreground px-4 py-2 rounded-lg hover:bg-secondary/90"
+          >
+            {dict.admin?.organizations?.publicPageConfig || "Public Page Config"}
+          </a>
+          <a
+            href={`/${lang}/law-firm/${orgData.slug}`}
+            target="_blank"
+            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+          >
+            {dict.admin?.organizations?.viewPublicPage || "View Public Page"}
+          </a>
+        </div>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">

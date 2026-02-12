@@ -491,6 +491,12 @@
     },
     "cta": {
       "freeConsultation": "Schedule Free Consultation"
+    },
+    "appointment": {
+      "title": "Book Your Appointment",
+      "subtitle": "Schedule a free consultation with our experienced attorneys. We'll review your case and provide expert legal advice.",
+      "freeConsultation": "Free Consultation",
+      "duration": "Duration"
     }
   }
 }

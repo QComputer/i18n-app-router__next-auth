@@ -184,7 +184,7 @@ export default async function DashboardPage(props: {
     })
 
     // Administration (for OWNER, MANAGER, ADMIN)
-    if (["OWNER", "MANAGER", "ADMIN"].includes(userRole)) {
+    if (["ADMIN"].includes(userRole)) {
       categories.push({
         title: t.admin,
         items: [

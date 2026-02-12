@@ -21,6 +21,40 @@
  *   primaryColor   String           @default("#0ea5e9")
  *   secondaryColor String           @default("#64748b")
  *   isActive       Boolean          @default(true)
+ *   
+ *   // Public Page Configuration
+ *   heroTitle              String?
+ *   heroSubtitle           String?
+ *   heroBackgroundImage    String?
+ *   aboutEnabled           Boolean         @default(true)
+ *   aboutContent           String?         @db.Text
+ *   aboutImage             String?
+ *   practiceAreasEnabled   Boolean         @default(true)
+ *   attorneysEnabled       Boolean         @default(true)
+ *   testimonialsEnabled    Boolean         @default(true)
+ *   caseResultsEnabled     Boolean         @default(true)
+ *   awardsEnabled          Boolean         @default(true)
+ *   faqEnabled             Boolean         @default(true)
+ *   contactEnabled         Boolean         @default(true)
+ *   appointmentEnabled     Boolean         @default(true)
+ *   
+ *   // SEO Configuration
+ *   seoTitle               String?
+ *   seoDescription          String?
+ *   seoKeywords            String?
+ *   
+ *   // Contact Info
+ *   mapUrl                 String?
+ *   workingHours           String?
+ *   emergencyPhone         String?
+ *   
+ *   // Social Links
+ *   facebookUrl           String?
+ *   twitterUrl            String?
+ *   instagramUrl          String?
+ *   linkedinUrl           String?
+ *   telegramUrl           String?
+ *   
  *   createdAt DateTime @default(now())
  *   updatedAt DateTime @updatedAt
  * }
@@ -42,40 +76,59 @@
  */
 
 import prisma from "@/lib/db/prisma"
+import type { Organization as PrismaOrganization } from "@/lib/generated/prisma/client"
+import { OrganizationType, ThemeMode } from "@/lib/generated/prisma/enums"
 
 /**
  * Organization type definition - matches Prisma Organization model
  */
-export type Organization = {
-  id: string
-  name: string
-  slug: string
-  type: OrganizationType
-  logo: string | null
-  description: string | null
-  website: string | null
-  phone: string | null
-  email: string | null
-  address: string | null
-  timezone: string
-  locale: string
-  themeMode: ThemeMode
-  primaryColor: string
-  secondaryColor: string
-  isActive: boolean
-  createdAt: Date
-  updatedAt: Date
-}
+export type Organization = PrismaOrganization
 
 /**
- * Organization type enum
+ * Public page configuration type
  */
-export type OrganizationType = "LAWYER" | "DOCTOR" | "SUPERMARKET" | "RESTAURANT" | "SALON" | "OTHER"
+export type PublicPageConfig = Pick<Organization, 
+  | 'heroTitle' 
+  | 'heroSubtitle' 
+  | 'heroBackgroundImage' 
+  | 'aboutEnabled' 
+  | 'aboutContent' 
+  | 'aboutImage' 
+  | 'practiceAreasEnabled' 
+  | 'attorneysEnabled' 
+  | 'testimonialsEnabled' 
+  | 'caseResultsEnabled' 
+  | 'awardsEnabled' 
+  | 'faqEnabled' 
+  | 'contactEnabled' 
+  | 'appointmentEnabled'
+  | 'seoTitle'
+  | 'seoDescription'
+  | 'seoKeywords'
+>
 
 /**
- * Theme mode enum
+ * Social links configuration type
  */
-export type ThemeMode = "LIGHT" | "DARK" | "SYSTEM"
+export type SocialLinksConfig = Pick<Organization,
+  | 'facebookUrl'
+  | 'twitterUrl'
+  | 'instagramUrl'
+  | 'linkedinUrl'
+  | 'telegramUrl'
+>
+
+/**
+ * Contact info configuration type
+ */
+export type ContactInfoConfig = Pick<Organization,
+  | 'mapUrl'
+  | 'workingHours'
+  | 'emergencyPhone'
+  | 'address'
+  | 'phone'
+  | 'email'
+>
 
 /**
  * Create a new organization
@@ -86,7 +139,7 @@ export type ThemeMode = "LIGHT" | "DARK" | "SYSTEM"
 export async function createOrganization(data: {
   name: string
   slug: string
-  type: OrganizationType
+  type: typeof OrganizationType[keyof typeof OrganizationType]
   description?: string
   logo?: string
   website?: string
@@ -129,14 +182,39 @@ export async function getOrganizationById(id: string): Promise<Organization | nu
   })
 }
 
-
 /**
- * Get an organization by slug
+ * Get an organization by slug with services and staff
  * 
  * @param slug - Organization slug
  * @returns Organization or null if not found
  */
 export async function getOrganizationBySlug(slug: string): Promise<Organization | null> {
+  return prisma.organization.findUnique({
+    where: { slug },
+    include: {
+      services: {
+        where: { isActive: true },
+        orderBy: { name: 'asc' }
+      },
+      staffs: {
+        where: { isActive: true },
+        include: {
+          user: true
+        },
+        orderBy: { user: { name: 'asc' } }
+      },
+      businessHours: true,
+    },
+  })
+}
+
+/**
+ * Get an organization by slug (simple version)
+ * 
+ * @param slug - Organization slug
+ * @returns Organization or null if not found
+ */
+export async function getOrganizationSimpleBySlug(slug: string): Promise<Organization | null> {
   return prisma.organization.findUnique({
     where: { slug },
   })
@@ -154,7 +232,7 @@ export async function updateOrganization(
   data: {
     name?: string
     slug?: string
-    type?: OrganizationType
+    type?: typeof OrganizationType[keyof typeof OrganizationType]
     description?: string
     logo?: string
     website?: string
@@ -163,11 +241,62 @@ export async function updateOrganization(
     address?: string
     timezone?: string
     locale?: string
-    themeMode?: ThemeMode
+    themeMode?: typeof ThemeMode[keyof typeof ThemeMode]
     primaryColor?: string
     secondaryColor?: string
     isActive?: boolean
   }
+): Promise<Organization> {
+  return prisma.organization.update({
+    where: { id },
+    data,
+  })
+}
+
+/**
+ * Update organization public page configuration
+ * 
+ * @param id - Organization ID
+ * @param data - Public page configuration data
+ * @returns Updated organization
+ */
+export async function updateOrganizationPublicPageConfig(
+  id: string,
+  data: Partial<PublicPageConfig>
+): Promise<Organization> {
+  return prisma.organization.update({
+    where: { id },
+    data,
+  })
+}
+
+/**
+ * Update organization social links
+ * 
+ * @param id - Organization ID
+ * @param data - Social links data
+ * @returns Updated organization
+ */
+export async function updateOrganizationSocialLinks(
+  id: string,
+  data: Partial<SocialLinksConfig>
+): Promise<Organization> {
+  return prisma.organization.update({
+    where: { id },
+    data,
+  })
+}
+
+/**
+ * Update organization contact info
+ * 
+ * @param id - Organization ID
+ * @param data - Contact info data
+ * @returns Updated organization
+ */
+export async function updateOrganizationContactInfo(
+  id: string,
+  data: Partial<ContactInfoConfig>
 ): Promise<Organization> {
   return prisma.organization.update({
     where: { id },
@@ -206,7 +335,7 @@ export async function hardDeleteOrganization(id: string): Promise<void> {
  * @param type - Organization type
  * @returns Array of organizations
  */
-export async function getOrganizationsByType(type: OrganizationType): Promise<Organization[]> {
+export async function getOrganizationsByType(type: typeof OrganizationType[keyof typeof OrganizationType]): Promise<Organization[]> {
   return prisma.organization.findMany({
     where: {
       type,
@@ -250,4 +379,65 @@ export async function isSlugAvailable(slug: string, excludeId?: string): Promise
   
   const count = await prisma.organization.count({ where })
   return count === 0
+}
+
+/**
+ * Get all active organizations
+ * 
+ * @returns Array of active organizations
+ */
+export async function getAllActiveOrganizations(): Promise<Organization[]> {
+  return prisma.organization.findMany({
+    where: { isActive: true },
+    orderBy: { name: "asc" },
+  })
+}
+
+/**
+ * Get organization services
+ * 
+ * @param organizationId - Organization ID
+ * @returns Array of services
+ */
+export async function getOrganizationServices(organizationId: string) {
+  return prisma.service.findMany({
+    where: {
+      organizationId,
+      isActive: true,
+    },
+    orderBy: { name: "asc" },
+  })
+}
+
+/**
+ * Get organization staff with availability
+ * 
+ * @param organizationId - Organization ID
+ * @returns Array of staff with user data
+ */
+export async function getOrganizationStaff(organizationId: string) {
+  return prisma.staff.findMany({
+    where: {
+      organizationId,
+      isActive: true,
+    },
+    include: {
+      user: true,
+      availability: true,
+    },
+    orderBy: { user: { name: "asc" } },
+  })
+}
+
+/**
+ * Get organization business hours
+ * 
+ * @param organizationId - Organization ID
+ * @returns Array of business hours
+ */
+export async function getOrganizationBusinessHours(organizationId: string) {
+  return prisma.businessHours.findMany({
+    where: { organizationId },
+    orderBy: { dayOfWeek: "asc" },
+  })
 }

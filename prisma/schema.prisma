@@ -35,7 +35,40 @@ model Organization {
   primaryColor   String           @default("#0ea5e9")
   secondaryColor String           @default("#64748b")
   isActive       Boolean          @default(true)
-
+  
+  // Public Page Configuration
+  heroTitle              String?
+  heroSubtitle           String?
+  heroBackgroundImage    String?
+  aboutEnabled           Boolean         @default(true)
+  aboutContent           String?         @db.Text
+  aboutImage             String?
+  practiceAreasEnabled   Boolean         @default(true)
+  attorneysEnabled       Boolean         @default(true)
+  testimonialsEnabled    Boolean         @default(true)
+  caseResultsEnabled     Boolean         @default(true)
+  awardsEnabled          Boolean         @default(true)
+  faqEnabled             Boolean         @default(true)
+  contactEnabled         Boolean         @default(true)
+  appointmentEnabled     Boolean         @default(true)
+  
+  // SEO Configuration
+  seoTitle               String?
+  seoDescription          String?
+  seoKeywords            String?
+  
+  // Contact Info
+  mapUrl                 String?
+  workingHours           String?
+  emergencyPhone         String?
+  
+  // Social Links
+  facebookUrl           String?
+  twitterUrl            String?
+  instagramUrl          String?
+  linkedinUrl           String?
+  telegramUrl           String?
+  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

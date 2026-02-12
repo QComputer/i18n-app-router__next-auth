@@ -225,3 +225,70 @@ export async function toggleOrganizationStatus(id: string, isActive: boolean) {
     data: { isActive },
   })
 }
+
+/**
+ * Update organization public page configuration
+ */
+export async function updateOrganizationPublicPageConfig(id: string, data: {
+  heroTitle?: string | null
+  heroSubtitle?: string | null
+  heroBackgroundImage?: string | null
+  aboutEnabled?: boolean
+  aboutContent?: string | null
+  aboutImage?: string | null
+  practiceAreasEnabled?: boolean
+  attorneysEnabled?: boolean
+  testimonialsEnabled?: boolean
+  caseResultsEnabled?: boolean
+  awardsEnabled?: boolean
+  faqEnabled?: boolean
+  contactEnabled?: boolean
+  appointmentEnabled?: boolean
+  seoTitle?: string | null
+  seoDescription?: string | null
+  seoKeywords?: string | null
+}) {
+  await requireAdmin()
+
+  return prisma.organization.update({
+    where: { id },
+    data,
+  })
+}
+
+/**
+ * Update organization social links
+ */
+export async function updateOrganizationSocialLinks(id: string, data: {
+  facebookUrl?: string | null
+  twitterUrl?: string | null
+  instagramUrl?: string | null
+  linkedinUrl?: string | null
+  telegramUrl?: string | null
+}) {
+  await requireAdmin()
+
+  return prisma.organization.update({
+    where: { id },
+    data,
+  })
+}
+
+/**
+ * Update organization contact info
+ */
+export async function updateOrganizationContactInfo(id: string, data: {
+  mapUrl?: string | null
+  workingHours?: string | null
+  emergencyPhone?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+}) {
+  await requireAdmin()
+
+  return prisma.organization.update({
+    where: { id },
+    data,
+  })
+}

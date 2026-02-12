@@ -363,6 +363,37 @@ async function createOrganizations(): Promise<CreatedOrg[]> {
         primaryColor: randomElement(["#0ea5e9", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6"]),
         secondaryColor: randomElement(["#64748b", "#475569", "#334155"]),
         isActive: true,
+        // Public Page Configuration
+        heroTitle: orgData.type === OrganizationType.LAWYER 
+          ? "تجربه. صداقت. نتیجه."
+          : "Professional Services, Excellent Results",
+        heroSubtitle: orgData.type === OrganizationType.LAWYER
+          ? "وکلای مجرب ما با تلاش بی‌وقفه از منافع شما دفاع می‌کنند"
+          : "Experience our premium services and dedicated team",
+        aboutEnabled: true,
+        aboutContent: orgData.description,
+        practiceAreasEnabled: true,
+        attorneysEnabled: true,
+        testimonialsEnabled: true,
+        caseResultsEnabled: true,
+        awardsEnabled: true,
+        faqEnabled: true,
+        contactEnabled: true,
+        appointmentEnabled: true,
+        // SEO Configuration
+        seoTitle: `${orgData.name} - Professional Services`,
+        seoDescription: orgData.description,
+        seoKeywords: `${orgData.type.toLowerCase()}, services, professional`,
+        // Contact Info
+        mapUrl: "https://maps.google.com",
+        workingHours: "شنبه تا چهارشنبه: 8:00 صبح - 6:00 عصر",
+        emergencyPhone: generatePhone(),
+        // Social Links
+        facebookUrl: `https://facebook.com/${slug}`,
+        twitterUrl: `https://twitter.com/${slug}`,
+        instagramUrl: `https://instagram.com/${slug}`,
+        linkedinUrl: `https://linkedin.com/company/${slug}`,
+        telegramUrl: `https://t.me/${slug}`,
       },
     })
     

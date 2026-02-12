@@ -24,6 +24,7 @@ const publicRoutes = [
   "/auth/reset-password",
   "/auth/error",
   "/api/auth",
+  "/law-firm",
 ] as const
 
 /**
