@@ -477,5 +477,20 @@
       "SALON": "Salon",
       "OTHER": "Other"
     }
+  },
+  "lawfirm": {
+    "tagline": "Experience. Integrity. Results.",
+    "heroTitle": "Defending Your Rights, Protecting Your Future",
+    "heroSubtitle": "Our experienced attorneys fight tirelessly to protect your interests and deliver the justice you deserve. With over 25 years of combined experience, we've successfully handled thousands of cases across multiple practice areas.",
+    "ctaText": "Schedule Free Consultation",
+    "navigation": {
+      "practiceAreas": "Practice Areas",
+      "attorneys": "Attorneys",
+      "about": "About Us",
+      "contact": "Contact"
+    },
+    "cta": {
+      "freeConsultation": "Schedule Free Consultation"
+    }
   }
 }
