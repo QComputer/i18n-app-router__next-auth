@@ -145,18 +145,18 @@ export default async function SettingsPage(props: {
       roles: ["CLIENT", "STAFF", "MERCHANT", "MANAGER", "OWNER", "ADMIN"],
       items: [
         { title: t.profile, description: t.profileDesc, href: `/${locale}/settings/profile`, key: "profile" },
-        { title: "Account", description: "Manage your account details", href: `/${locale}/settings/profile", key: "account" },
+        { title: "Account", description: "Manage your account details", href: `/${locale}/settings/profile`, key: "account" },
       ],
     },
     {
       title: t.security,
       description: "Security & Privacy",
       icon: Shield,
-      href: `/${locale}/settings/security`,
+      href: "/" + locale + "/settings/security",
       roles: ["CLIENT", "STAFF", "MERCHANT", "MANAGER", "OWNER", "ADMIN"],
       items: [
-        { title: t.security, description: t.securityDesc, href: `/${locale}/settings/security`, key: "security" },
-        { title: t.privacy, description: t.privacyDesc, href: `/${locale}/settings/security`, key: "privacy" },
+        { title: t.security, description: t.securityDesc, href: "/" + locale + "/settings/security", key: "security" },
+        { title: t.privacy, description: t.privacyDesc, href: "/" + locale + "/settings/security", key: "privacy" },
       ],
     },
     {
@@ -176,9 +176,9 @@ export default async function SettingsPage(props: {
       href: `/${locale}/settings/staff`,
       roles: ["MANAGER", "OWNER", "ADMIN"],
       items: [
-        { title: "Staff Members", description: "View and manage staff", href: `/${locale}/settings/staff` },
-        { title: "Roles & Permissions", description: "Configure access levels", href: `/${locale}/settings/staff` },
-        { title: "Invite Members", description: "Add new team members", href: `/${locale}/settings/staff`, badge: "Pro" },
+        { title: "Staff Members", description: "View and manage staff", href: `/${locale}/settings/staff`, key: "staff-members" },
+        { title: "Roles & Permissions", description: "Configure access levels", href: `/${locale}/settings/staff`, key: "roles-permissions" },
+        { title: "Invite Members", description: "Add new team members", href: `/${locale}/settings/staff`, badge: "Pro", key: "invite-members" },
       ],
     },
     {
