@@ -35,49 +35,49 @@ model Organization {
   primaryColor   String           @default("#0ea5e9")
   secondaryColor String           @default("#64748b")
   isActive       Boolean          @default(true)
-  
+
   // Public Page Configuration
-  heroTitle              String?
-  heroSubtitle           String?
-  heroBackgroundImage    String?
-  aboutEnabled           Boolean         @default(true)
-  aboutContent           String?         @db.Text
-  aboutImage             String?
-  practiceAreasEnabled   Boolean         @default(true)
-  attorneysEnabled       Boolean         @default(true)
-  testimonialsEnabled    Boolean         @default(true)
-  caseResultsEnabled     Boolean         @default(true)
-  awardsEnabled          Boolean         @default(true)
-  faqEnabled             Boolean         @default(true)
-  contactEnabled         Boolean         @default(true)
-  appointmentEnabled     Boolean         @default(true)
-  
+  heroTitle            String?
+  heroSubtitle         String?
+  heroBackgroundImage  String?
+  aboutEnabled         Boolean @default(true)
+  aboutContent         String? @db.Text
+  aboutImage           String?
+  practiceAreasEnabled Boolean @default(true)
+  attorneysEnabled     Boolean @default(true)
+  testimonialsEnabled  Boolean @default(true)
+  caseResultsEnabled   Boolean @default(true)
+  awardsEnabled        Boolean @default(true)
+  faqEnabled           Boolean @default(true)
+  contactEnabled       Boolean @default(true)
+  appointmentEnabled   Boolean @default(true)
+
   // SEO Configuration
-  seoTitle               String?
-  seoDescription          String?
-  seoKeywords            String?
-  
+  seoTitle       String?
+  seoDescription String?
+  seoKeywords    String?
+
   // Contact Info
-  mapUrl                 String?
-  workingHours           String?
-  emergencyPhone         String?
-  
+  mapUrl         String?
+  workingHours   String?
+  emergencyPhone String?
+
   // Social Links
-  facebookUrl           String?
-  twitterUrl            String?
-  instagramUrl          String?
-  linkedinUrl           String?
-  telegramUrl           String?
-  
+  facebookUrl  String?
+  twitterUrl   String?
+  instagramUrl String?
+  linkedinUrl  String?
+  telegramUrl  String?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   // Relations
-  services      Service[]
-  appointments  Appointment[]
-  businessHours BusinessHours[]
-  holidays      Holiday[]
-  staffs        Staff[]
+  serviceCategories ServiceCategory[]
+  appointments      Appointment[]
+  businessHours     BusinessHours[]
+  holidays          Holiday[]
+  staffs            Staff[]
 
   @@index([slug])
   @@index([type])
@@ -145,6 +145,7 @@ enum Hierarchy {
   MANAGER
   MERCHANT
   STAFF
+  CLIENT
 }
 
 model Staff {
@@ -164,6 +165,7 @@ model Staff {
   // Relations
   availability StaffAvailability[]
   appointments Appointment[] // Staff's appointments
+  services     Service[] // Staff's services
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -233,6 +235,16 @@ model VerificationToken {
 // ============================================
 // Services & Staff
 // ============================================
+model ServiceCategory {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  services Service[]
+}
 
 model Service {
   id           String  @id @default(cuid())
@@ -246,15 +258,19 @@ model Service {
   slotInterval Int     @default(30) // minutes between slots
   bufferTime   Int     @default(0) // Buffer time in minutes after this service
 
-  organizationId String
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  // Foreign Keys
+  staffId String
+  staff   Staff  @relation(fields: [staffId], references: [id], onDelete: Cascade)
+
+  serviceCategoryId String
+  serviceCategory   ServiceCategory @relation(fields: [serviceCategoryId], references: [id])
 
   appointments Appointment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([organizationId])
+  @@index([staffId])
 }
 
 // ============================================
@@ -291,10 +307,10 @@ model Appointment {
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   serviceId      String
   service        Service      @relation(fields: [serviceId], references: [id])
-  clientId       String?
-  client         User?        @relation(fields: [clientId], references: [id])
   staffId        String?
   staff          Staff?       @relation(fields: [staffId], references: [id])
+  clientId       String?
+  client         User?        @relation(fields: [clientId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

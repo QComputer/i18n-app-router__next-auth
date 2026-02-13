@@ -24,7 +24,8 @@ import {
   Bell, 
   Globe,
   ChevronRight,
-  Check
+  Check,
+  Folder
 } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -113,6 +114,16 @@ export default async function SettingsPage(props: {
   // Get user role
   const userRole = user.role;
 
+  // Get user's staff record to check hierarchy
+  const staff = await prisma.staff.findUnique({
+    where: { userId: user.id },
+    select: {
+      id: true,
+      hierarchy: true,
+      organizationId: true,
+    },
+  });
+
   // Define all settings categories
   const t = {
     title: getTranslation(dictionary, "settings.title", "Settings"),
@@ -133,24 +144,57 @@ export default async function SettingsPage(props: {
     integrationsDesc: getTranslation(dictionary, "settings.integrationsDesc", "Connect third-party services"),
     privacy: getTranslation(dictionary, "settings.privacy", "Privacy"),
     privacyDesc: getTranslation(dictionary, "settings.privacyDesc", "Control your data and privacy settings"),
+    account: getTranslation(dictionary, "settings.account", "Account"),
+    // Additional translated strings
+    profileAndAccount: getTranslation(dictionary, "settings.profileAndAccount", locale === 'fa' ? 'پروفایل و حساب کاربری' : 'Profile & Account'),
+    accountDetails: getTranslation(dictionary, "settings.accountDetails", locale === 'fa' ? 'اطلاعات حساب کاربری را مدیریت کنید' : 'Manage your account details'),
+    securityAndPrivacy: getTranslation(dictionary, "settings.securityAndPrivacy", locale === 'fa' ? 'امنیت و حریم خصوصی' : 'Security & Privacy'),
+    appearanceAndTheme: getTranslation(dictionary, "settings.appearanceAndTheme", locale === 'fa' ? 'ظاهر و تم' : 'Appearance & Theme'),
+    teamAndStaffManagement: getTranslation(dictionary, "settings.teamAndStaffManagement", locale === 'fa' ? 'مدیریت تیم و کارکنان' : 'Team & Staff Management'),
+    staffMembers: getTranslation(dictionary, "settings.staffMembers", locale === 'fa' ? 'اعضای کارکنان' : 'Staff Members'),
+    viewAndManageStaff: getTranslation(dictionary, "settings.viewAndManageStaff", locale === 'fa' ? 'مشاهده و مدیریت کارکنان' : 'View and manage staff'),
+    rolesAndPermissions: getTranslation(dictionary, "settings.rolesAndPermissions", locale === 'fa' ? 'نقش‌ها و دسترسی‌ها' : 'Roles & Permissions'),
+    configureAccessLevels: getTranslation(dictionary, "settings.configureAccessLevels", locale === 'fa' ? 'سطوح دسترسی را تنظیم کنید' : 'Configure access levels'),
+    inviteMembers: getTranslation(dictionary, "settings.inviteMembers", locale === 'fa' ? 'دعوت اعضای جدید' : 'Invite Members'),
+    organizationSettings: getTranslation(dictionary, "settings.organizationSettings", locale === 'fa' ? 'تنظیمات سازمان' : 'Organization Settings'),
+    publicPage: getTranslation(dictionary, "settings.publicPage", locale === 'fa' ? 'صفحه عمومی' : 'Public Page'),
+    customizeLandingPage: getTranslation(dictionary, "settings.customizeLandingPage", locale === 'fa' ? 'صفحه ورود خود را سفارشی کنید' : 'Customize your landing page'),
+    businessHours: getTranslation(dictionary, "settings.businessHours", locale === 'fa' ? 'ساعات کاری' : 'Business Hours'),
+    setOperatingHours: getTranslation(dictionary, "settings.setOperatingHours", locale === 'fa' ? 'ساعات کاری را تنظیم کنید' : 'Set operating hours'),
+    holidays: getTranslation(dictionary, "settings.holidays", locale === 'fa' ? 'تعطیلات' : 'Holidays'),
+    configureTimeOff: getTranslation(dictionary, "settings.configureTimeOff", locale === 'fa' ? 'زمان استراحت را تنظیم کنید' : 'Configure time off'),
+    quickAccess: getTranslation(dictionary, "settings.quickAccess", locale === 'fa' ? 'دسترسی سریع' : 'Quick access'),
+    dashboard: getTranslation(dictionary, "settings.dashboard", locale === 'fa' ? 'داشبورد' : 'Dashboard'),
+    calendar: getTranslation(dictionary, "settings.calendar", locale === 'fa' ? 'تقویم' : 'Calendar'),
+    returnToMainDashboard: getTranslation(dictionary, "settings.returnToMainDashboard", locale === 'fa' ? 'بازگشت به داشبورد اصلی' : 'Return to main dashboard'),
+    viewYourAppointments: getTranslation(dictionary, "settings.viewYourAppointments", locale === 'fa' ? 'نوبت‌های خود را مشاهده کنید' : 'View your appointments'),
+    viewCalendar: getTranslation(dictionary, "settings.viewCalendar", locale === 'fa' ? 'مشاهده تقویم' : 'View calendar'),
+    browseServices: getTranslation(dictionary, "settings.browseServices", locale === 'fa' ? 'خدمات را مرور کنید' : 'Browse services'),
+    pro: locale === 'fa' ? 'حرفه‌ای' : 'Pro',
+    services: getTranslation(dictionary, "service.title", locale === 'fa' ? 'خدمات' : 'Services'),
+    serviceCategories: locale === 'fa' ? 'دسته‌بندی خدمات' : 'Service Categories',
+    manageCategories: locale === 'fa' ? 'مدیریت دسته‌بندی خدمات' : 'Manage service categories',
+    myServices: locale === 'fa' ? 'خدمات من' : 'My Services',
+    manageMyServices: locale === 'fa' ? 'مدیریت خدمات من' : 'Manage my services',
+    appointments: getTranslation(dictionary, "appointment.title", locale === 'fa' ? 'نوبت‌ها' : 'Appointments'),
   };
 
   // Define settings categories
   const categories: SettingsCategory[] = [
     {
       title: t.profile,
-      description: "Profile & Account",
+      description: t.profileAndAccount,
       icon: User,
       href: `/${locale}/settings/profile`,
       roles: ["CLIENT", "STAFF", "MERCHANT", "MANAGER", "OWNER", "ADMIN"],
       items: [
         { title: t.profile, description: t.profileDesc, href: `/${locale}/settings/profile`, key: "profile" },
-        { title: "Account", description: "Manage your account details", href: `/${locale}/settings/profile`, key: "account" },
+        { title: t.account, description: t.accountDetails, href: `/${locale}/settings/profile`, key: "account" },
       ],
     },
     {
       title: t.security,
-      description: "Security & Privacy",
+      description: t.securityAndPrivacy,
       icon: Shield,
       href: "/" + locale + "/settings/security",
       roles: ["CLIENT", "STAFF", "MERCHANT", "MANAGER", "OWNER", "ADMIN"],
@@ -161,7 +205,7 @@ export default async function SettingsPage(props: {
     },
     {
       title: t.theme,
-      description: "Appearance & Theme",
+      description: t.appearanceAndTheme,
       icon: Palette,
       href: `/${locale}/settings/theme`,
       roles: ["CLIENT", "STAFF", "MERCHANT", "MANAGER", "OWNER", "ADMIN"],
@@ -171,7 +215,7 @@ export default async function SettingsPage(props: {
     },
     {
       title: t.team,
-      description: "Team & Staff Management",
+      description: t.teamAndStaffManagement,
       icon: Users,
       href: `/${locale}/settings/staff`,
       roles: ["MANAGER", "OWNER", "ADMIN"],
@@ -183,18 +227,48 @@ export default async function SettingsPage(props: {
     },
     {
       title: t.organization,
-      description: "Organization Settings",
+      description: t.organizationSettings,
       icon: Building2,
       href: `/${locale}/settings/organization`,
       roles: ["OWNER", "ADMIN"],
       items: [
         { title: t.organization, description: t.organizationDesc, href: `/${locale}/settings/organization`, key: "org-basic" },
-        { title: "Public Page", description: "Customize your landing page", href: `/${locale}/settings/organization/public-page`, key: "org-public-page" },
-        { title: "Business Hours", description: "Set operating hours", href: `/${locale}/settings/organization`, key: "org-hours" },
-        { title: "Holidays", description: "Configure time off", href: `/${locale}/settings/organization`, key: "org-holidays" },
+        { title: t.publicPage, description: t.customizeLandingPage, href: `/${locale}/settings/organization/public-page", key: "org-public-page"` },
+        { title: t.businessHours, description: t.setOperatingHours, href: `/${locale}/settings/organization`, key: "org-hours" },
+        { title: t.holidays, description: t.configureTimeOff, href: `/${locale}/settings/organization`, key: "org-holidays" },
       ],
     },
   ];
+
+  // Add service category based on staff hierarchy
+  if (staff) {
+    // For OWNER hierarchy, add service categories management
+    if (staff.hierarchy === "OWNER") {
+      categories.push({
+        title: t.serviceCategories,
+        description: t.manageCategories,
+        icon: Folder,
+        href: `/${locale}/settings/organization/categories`,
+        roles: ["OWNER", "ADMIN"],
+        items: [
+          { title: t.serviceCategories, description: t.manageCategories, href: `/${locale}/settings/organization/categories`, key: "service-categories" },
+        ],
+      });
+    }
+    // For Staffs add my services
+    if (staff.hierarchy === "MERCHANT" || staff.hierarchy === "OWNER" || staff.hierarchy === "MANAGER") {
+      categories.push({
+        title: t.myServices,
+        description: t.manageMyServices,
+        icon: Building2,
+        href: `/${locale}/settings/my-services`,
+        roles: ["OWNER", "MANAGER", "MERCHANT"],
+        items: [
+          { title: t.myServices, description: t.manageMyServices, href: `/${locale}/settings/my-services`, key: "my-services" },
+        ],
+      });
+    }
+  }
 
   // Filter categories based on user role
   const accessibleCategories = categories.filter(cat => 

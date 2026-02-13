@@ -12,16 +12,9 @@ import "dotenv/config"
 import { OrganizationType, ThemeMode, Hierarchy } from "@/lib/generated/prisma/enums"
 import bcrypt from "bcryptjs"
 
-import { PrismaClient } from "@/lib/generated/prisma/client"
 import { syncAllUsersStaff, syncAllUsersStaffByPrisma } from "@/lib/sync/user-staff-sync"
+import prisma from "@/lib/db/prisma"
 
-// Prevent multiple instances of Prisma Client in development
-const prisma = new PrismaClient({
-
-  log: process.env.NODE_ENV === "development" 
-    ? ["query", "error", "warn"] 
-    : ["error"],
-})
 
 // ============================================
 // Helper Functions
@@ -59,7 +52,7 @@ interface OrgData {
   name: string
   type: OrganizationType
   description: string
-  services: Array<{ name: string; duration: number; price: number; color: string }>
+  categories: Array<{ name: string; description: string; services: Array<{ name: string; duration: number; price: number; color: string }> }>
 }
 
 const ORGANIZATION_DATA: OrgData[] = [
@@ -67,61 +60,145 @@ const ORGANIZATION_DATA: OrgData[] = [
     name: "Dr. Karimi Dental Clinic",
     type: OrganizationType.DOCTOR,
     description: "Professional dental care services including whitening, implants, and orthodontics.",
-    services: [
-      { name: "Dental Consultation", duration: 30, price: 500000, color: "#3b82f6" },
-      { name: "Teeth Whitening", duration: 60, price: 1500000, color: "#10b981" },
-      { name: "Dental Implant", duration: 120, price: 8000000, color: "#f59e0b" },
-      { name: "Orthodontic Consultation", duration: 45, price: 750000, color: "#8b5cf6" },
+    categories: [
+      {
+        name: "Consultations",
+        description: "Initial consultations and checkups",
+        services: [
+          { name: "Dental Consultation", duration: 30, price: 500000, color: "#3b82f6" },
+          { name: "Orthodontic Consultation", duration: 45, price: 750000, color: "#8b5cf6" },
+        ],
+      },
+      {
+        name: "Cosmetic Dentistry",
+        description: "Aesthetic dental treatments",
+        services: [
+          { name: "Teeth Whitening", duration: 60, price: 1500000, color: "#10b981" },
+        ],
+      },
+      {
+        name: "Surgical Procedures",
+        description: "Surgical dental treatments",
+        services: [
+          { name: "Dental Implant", duration: 120, price: 8000000, color: "#f59e0b" },
+        ],
+      },
     ],
   },
   {
     name: "Elite Beauty Salon",
     type: OrganizationType.SALON,
     description: "Premium hair and beauty services for all occasions.",
-    services: [
-      { name: "Haircut & Styling", duration: 45, price: 350000, color: "#ec4899" },
-      { name: "Hair Coloring", duration: 120, price: 1200000, color: "#f97316" },
-      { name: "Manicure & Pedicure", duration: 60, price: 450000, color: "#06b6d4" },
-      { name: "Makeup Application", duration: 60, price: 800000, color: "#a855f7" },
+    categories: [
+      {
+        name: "Hair Services",
+        description: "Hair styling and coloring",
+        services: [
+          { name: "Haircut & Styling", duration: 45, price: 350000, color: "#ec4899" },
+          { name: "Hair Coloring", duration: 120, price: 1200000, color: "#f97316" },
+        ],
+      },
+      {
+        name: "Nail Services",
+        description: "Manicure and pedicure treatments",
+        services: [
+          { name: "Manicure & Pedicure", duration: 60, price: 450000, color: "#06b6d4" },
+        ],
+      },
+      {
+        name: "Makeup Services",
+        description: "Professional makeup application",
+        services: [
+          { name: "Makeup Application", duration: 60, price: 800000, color: "#a855f7" },
+        ],
+      },
     ],
   },
   {
     name: "Iran Legal Associates",
     type: OrganizationType.LAWYER,
     description: "Comprehensive legal services for individuals and businesses.",
-    services: [
-      { name: "Initial Consultation", duration: 60, price: 1000000, color: "#1e40af" },
-      { name: "Contract Review", duration: 90, price: 2000000, color: "#3b82f6" },
-      { name: "Court Representation", duration: 240, price: 5000000, color: "#1e3a8a" },
+    categories: [
+      {
+        name: "Consultations",
+        description: "Legal consultation services",
+        services: [
+          { name: "Initial Consultation", duration: 60, price: 1000000, color: "#1e40af" },
+        ],
+      },
+      {
+        name: "Contract Services",
+        description: "Contract review and drafting",
+        services: [
+          { name: "Contract Review", duration: 90, price: 2000000, color: "#3b82f6" },
+        ],
+      },
+      {
+        name: "Court Representation",
+        description: "Legal representation in court",
+        services: [
+          { name: "Court Representation", duration: 240, price: 5000000, color: "#1e3a8a" },
+        ],
+      },
     ],
   },
   {
     name: "Fresh Foods Supermarket",
     type: OrganizationType.SUPERMARKET,
     description: "Quality groceries and fresh produce.",
-    services: [
-      { name: "Online Order Pickup", duration: 30, price: 0, color: "#22c55e" },
-      { name: "Home Delivery", duration: 60, price: 150000, color: "#16a34a" },
+    categories: [
+      {
+        name: "Order Services",
+        description: "Online ordering and pickup",
+        services: [
+          { name: "Online Order Pickup", duration: 30, price: 0, color: "#22c55e" },
+          { name: "Home Delivery", duration: 60, price: 150000, color: "#16a34a" },
+        ],
+      },
     ],
   },
   {
     name: "Tehran Garden Restaurant",
     type: OrganizationType.RESTAURANT,
     description: "Traditional Persian cuisine in an elegant setting.",
-    services: [
-      { name: "Table Reservation", duration: 15, price: 0, color: "#b45309" },
-      { name: "Private Dining", duration: 120, price: 5000000, color: "#92400e" },
-      { name: "Catering Service", duration: 240, price: 15000000, color: "#78350f" },
+    categories: [
+      {
+        name: "Reservations",
+        description: "Table booking services",
+        services: [
+          { name: "Table Reservation", duration: 15, price: 0, color: "#b45309" },
+        ],
+      },
+      {
+        name: "Special Events",
+        description: "Private dining and catering",
+        services: [
+          { name: "Private Dining", duration: 120, price: 5000000, color: "#92400e" },
+          { name: "Catering Service", duration: 240, price: 15000000, color: "#78350f" },
+        ],
+      },
     ],
   },
   {
     name: "TechCare IT Solutions",
     type: OrganizationType.OTHER,
     description: "IT consulting and technical support services.",
-    services: [
-      { name: "IT Consultation", duration: 60, price: 1500000, color: "#6366f1" },
-      { name: "Network Setup", duration: 180, price: 5000000, color: "#4f46e5" },
-      { name: "System Maintenance", duration: 120, price: 2000000, color: "#4338ca" },
+    categories: [
+      {
+        name: "Consulting",
+        description: "IT consultation services",
+        services: [
+          { name: "IT Consultation", duration: 60, price: 1500000, color: "#6366f1" },
+        ],
+      },
+      {
+        name: "Technical Services",
+        description: "Technical setup and maintenance",
+        services: [
+          { name: "Network Setup", duration: 180, price: 5000000, color: "#4f46e5" },
+          { name: "System Maintenance", duration: 120, price: 2000000, color: "#4338ca" },
+        ],
+      },
     ],
   },
 ]
@@ -411,37 +488,66 @@ async function createOrganizations(): Promise<CreatedOrg[]> {
 }
 
 async function createServices(organizations: CreatedOrg[]) {
-  console.log("Creating services...")
+  console.log("Creating service categories and services...")
   
   for (const orgData of ORGANIZATION_DATA) {
     const org = organizations.find((o) => o.slug === generateSlug(orgData.name))
     if (!org) continue
     
-    for (const serviceData of orgData.services) {
-      const service = await prisma.service.create({
+    // Get staff members for this organization
+    const staffMembers = await prisma.staff.findMany({
+      where: { organizationId: org.id },
+    })
+    
+    if (staffMembers.length === 0) {
+      console.log(`No staff found for ${org.name}, skipping services...`)
+      continue
+    }
+    
+    // Create service categories and services
+    for (const categoryData of orgData.categories) {
+      // Create the service category
+      const category = await prisma.serviceCategory.create({
         data: {
-          name: serviceData.name,
-          description: `Professional ${serviceData.name.toLowerCase()} service`,
-          duration: serviceData.duration,
-          price: serviceData.price,
-          currency: "IRR",
-          color: serviceData.color,
-          slotInterval: randomElement([15, 30, 45, 60]),
-          isActive: true,
+          name: categoryData.name,
+          description: categoryData.description,
           organizationId: org.id,
         },
       })
       
-      const orgIndex = organizations.findIndex((o) => o.id === org.id)
-      organizations[orgIndex].services.push({
-        id: service.id,
-        name: service.name,
-        duration: service.duration,
-      })
+      // Create services under this category
+      for (const serviceData of categoryData.services) {
+        // Assign service to a random staff member (each service is provided by one staff)
+        const assignedStaff = staffMembers[randomBetween(0, staffMembers.length - 1)]
+        
+        const service = await prisma.service.create({
+          data: {
+            name: serviceData.name,
+            description: `Professional ${serviceData.name.toLowerCase()} service`,
+            duration: serviceData.duration,
+            price: serviceData.price,
+            currency: "IRR",
+            color: serviceData.color,
+            slotInterval: randomElement([15, 30, 45, 60]),
+            isActive: true,
+            // Link through staff (organization is derived from staff.organizationId)
+            staffId: assignedStaff.id,
+            // Link through category (organization is derived from category.organizationId)
+            serviceCategoryId: category.id,
+          },
+        })
+        
+        const orgIndex = organizations.findIndex((o) => o.id === org.id)
+        organizations[orgIndex].services.push({
+          id: service.id,
+          name: service.name,
+          duration: service.duration,
+        })
+      }
     }
   }
   
-  console.log("Services created")
+  console.log("Service categories and services created")
 }
 
 async function createBusinessHours(organizations: CreatedOrg[]) {
@@ -644,6 +750,7 @@ export default async function main() {
     await prisma.holiday.deleteMany()
     await prisma.businessHours.deleteMany()
     await prisma.service.deleteMany()
+    await prisma.serviceCategory.deleteMany()
     await prisma.staff.deleteMany()
     await prisma.organization.deleteMany()
     await prisma.session.deleteMany()

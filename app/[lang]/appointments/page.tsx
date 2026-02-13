@@ -127,7 +127,7 @@ export default async function AppointmentsPage(props: {
   // Get dictionary for translations
   const dictionary = await getDictionary(locale)
   
-  // Get user's organization ID (or first organization for now)
+  // Get user's organization ID 
   const organizationId = session.user.organizationId || null
   
   // Fetch appointments
