@@ -74,10 +74,14 @@
     "settings": "تنظیمات",
     "reports": "گزارش‌ها",
     "logout": "خروج",
-    "role":"نقش"
+    "role": "نقش",
+    "contact": "تماس",
+    "privacy": "حریم خصوصی",
+    "terms": "شرایط و ضوابط"
   },
   "dashboard": {
     "title": "داشبورد",
+    "welcome": "خوش آمدید",
     "stats": {
       "totalAppointments": "کل نوبت‌ها",
       "pendingAppointments": "نوبت‌های در انتظار",
@@ -95,13 +99,16 @@
       "addStaffDesc": "افزودن کارمند جدید"
     },
     "recentAppointments": "نوبت‌های اخیر",
+    "viewAll": "مشاهده همه",
     "table": {
       "date": "تاریخ",
       "client": "مشتری",
       "service": "خدمت",
       "status": "وضعیت"
     },
-    "noAppointments": "هیچ نوبتی یافت نشد"
+    "noAppointments": "هیچ نوبتی یافت نشد",
+    "appointmentsAndScheduling": "نوبت‌ها و برنامه‌ریزی",
+    "servicesAndStaff": "خدمات و کارکنان"
   },
   "calendar": {
     "title": "تقویم",
@@ -135,6 +142,10 @@
     "listDescription": "نوبت‌های خود را مدیریت کنید",
     "appointmentDetails": "جزئیات نوبت",
     "clientInfo": "اطلاعات مشتری",
+    "clientName": "نام مشتری",
+    "organizationInfo": "اطلاعات سازمان",
+    "staffInfo": "اطلاعات کارمند",
+    "fullName": "نام کامل",
     "appointmentDate": "تاریخ",
     "appointmentTime": "زمان",
     "duration": "مدت زمان",
@@ -299,6 +310,8 @@
     "integrationsDesc": "سرویس‌های شخص ثالث را متصل کنید",
     "privacy": "حریم خصوصی",
     "privacyDesc": "داده‌ها و حریم خصوصی خود را کنترل کنید",
+    "terms": "شرایط و ضوابط",
+    "termsDesc": "شرایط استفاده از خدمات",
     "account": "حساب کاربری",
     "business": "کسب و کار",
     "language": "زبان",
@@ -343,7 +356,31 @@
       "showing": "نمایش",
       "of": "از",
       "results": "نتیجه"
-    }
+    },
+    "quickAccess": "دسترسی سریع",
+    "dashboard": "داشبورد",
+    "calendar": "تقویم",
+    "profileAndAccount": "پروفایل و حساب کاربری",
+    "accountDetails": "اطلاعات حساب کاربری را مدیریت کنید",
+    "securityAndPrivacy": "امنیت و حریم خصوصی",
+    "appearanceAndTheme": "ظاهر و تم",
+    "teamAndStaffManagement": "مدیریت تیم و کارکنان",
+    "staffMembers": "اعضای کارکنان",
+    "viewAndManageStaff": "مشاهده و مدیریت کارکنان",
+    "rolesAndPermissions": "نقش‌ها و دسترسی‌ها",
+    "configureAccessLevels": "سطوح دسترسی را تنظیم کنید",
+    "inviteMembers": "دعوت اعضای جدید",
+    "organizationSettings": "تنظیمات سازمان",
+    "publicPage": "صفحه عمومی",
+    "customizeLandingPage": "صفحه ورود خود را سفارشی کنید",
+    "businessHours": "ساعات کاری",
+    "setOperatingHours": "ساعات کاری را تنظیم کنید",
+    "holidays": "تعطیلات",
+    "configureTimeOff": "زمان استراحت را تنظیم کنید",
+    "returnToMainDashboard": "بازگشت به داشبورد اصلی",
+    "viewYourAppointments": "نوبت‌های خود را مشاهده کنید",
+    "viewCalendar": "مشاهده تقویم",
+    "browseServices": "خدمات را مرور کنید"
   },
 
   "signin": {

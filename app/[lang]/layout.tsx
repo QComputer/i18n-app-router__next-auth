@@ -20,10 +20,20 @@ import { getDictionary } from "@/get-dictionary";
 import { DirectionProvider } from "@/components/ui/direction";
 
 
-export const metadata = {
-  title: "Appointment Booking",
-  description: "Build your appointment booking system",
-};
+export async function generateMetadata(props: {
+  params: Promise<{ lang: string }>;
+}) {
+  const params = await props.params;
+  const locale = params.lang as Locale;
+  const dictionary = await getDictionary(locale);
+  
+  return {
+    title: dictionary.common?.appName || (locale === 'fa' ? 'رزرو نوبت' : 'Appointment Booking'),
+    description: locale === 'fa' 
+      ? 'سیستم رزرو نوبت خود را بسازید' 
+      : 'Build your appointment booking system',
+  };
+}
 
 
 export async function generateStaticParams() {
@@ -107,17 +117,17 @@ export default async function LangLayout(props: {
             <footer className="border-t py-6 md:py-0">
               <div className="container flex flex-col items-center justify-between gap-4 md:h-16 md:flex-row px-4">
                 <p className="text-center text-sm text-muted-foreground md:text-left">
-                  © {new Date().getFullYear()} Appointment Booking. All rights reserved.
+                  © {new Date().getFullYear()} {dictionary.common?.appName || 'Appointment Booking'}. {locale === 'fa' ? 'تمامی حقوق محفوظ است.' : 'All rights reserved.'}
                 </p>
                 <div className="flex items-center gap-4 text-sm text-muted-foreground">
                   <Link href={`/${locale}/privacy`} className="hover:text-primary">
-                    Privacy
+                    {dictionary.settings?.privacy || (locale === 'fa' ? 'حریم خصوصی' : 'Privacy')}
                   </Link>
                   <Link href={`/${locale}/terms`} className="hover:text-primary">
-                    Terms
+                    {dictionary.settings?.terms || (locale === 'fa' ? 'شرایط' : 'Terms')}
                   </Link>
                   <Link href={`/${locale}/contact`} className="hover:text-primary">
-                    Contact
+                    {dictionary.navigation?.contact || (locale === 'fa' ? 'تماس' : 'Contact')}
                   </Link>
                 </div>
               </div>
