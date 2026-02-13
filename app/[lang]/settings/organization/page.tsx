@@ -54,6 +54,12 @@ export default async function OrganizationSettingsPage(props: {
     redirect(`/${locale}/dashboard`)
   }
 
+  // Check user role - only OWNER and ADMIN can access organization settings
+  const userRole = session.user.role
+  if (!['OWNER', 'ADMIN'].includes(userRole || '')) {
+    redirect(`/${locale}/settings`)
+  }
+
   // Get dictionary for translations
   const dictionary = await getDictionary(locale)
 

@@ -15,18 +15,48 @@ import {
 
 interface AttorneysProps {
   locale: string;
+  /**
+   * Optional staff members from the organization.
+   * If provided, these will be displayed instead of the default hardcoded attorneys.
+   * Each staff member should include their user data.
+   */
+  staff?: Array<{
+    id: string
+    bio: string | null
+    hierarchy: string
+    isActive: boolean
+    isDefault: boolean
+    user: {
+      id: string
+      name: string | null
+      email: string | null
+      phone: string | null
+      image: string | null
+    }
+  }>
   dictionary?: Record<string, unknown>;
 }
 
-// Default English values
-const defaultAttorneys = [
+// Type definition for attorney data
+type AttorneyData = {
+  name: string;
+  title: string;
+  specializations: string[];
+  bio: string;
+  admissions: string[];
+  image: string | null;  // URL to image or null for initials placeholder
+  featured: boolean;
+};
+
+// Default English values - used as fallback when no staff data is provided
+const defaultAttorneys: AttorneyData[] = [
   {
     name: "John Mitchell",
     title: "Senior Partner",
     specializations: ["Criminal Defense"],
     bio: "Over 20 years of experience in criminal defense, John Mitchell has successfully defended thousands of clients in high-profile cases. His track record includes numerous acquittals and reduced sentences.",
     admissions: ["Supreme Court", "Federal Court", "State Bar"],
-    image: "/images/attorney-john.jpg",
+    image: null,  // Uses initials placeholder
     featured: true,
   },
   {
@@ -35,7 +65,7 @@ const defaultAttorneys = [
     specializations: ["Family Law"],
     bio: "Sarah Chen brings compassion and expertise to every family law case. She specializes in divorce, child custody, and adoption, helping families navigate difficult transitions with care.",
     admissions: ["Supreme Court", "State Bar"],
-    image: "/images/attorney-sarah.jpg",
+    image: null,
     featured: true,
   },
   {
@@ -44,7 +74,7 @@ const defaultAttorneys = [
     specializations: ["Personal Injury"],
     bio: "Michael Rodriguez has recovered millions for injury victims. His aggressive approach with insurance companies ensures clients receive the maximum compensation they deserve.",
     admissions: ["Federal Court", "State Bar"],
-    image: "/images/attorney-michael.jpg",
+    image: null,
     featured: true,
   },
   {
@@ -53,7 +83,7 @@ const defaultAttorneys = [
     specializations: ["Corporate Law"],
     bio: "Emily Thompson advises businesses on complex legal matters including mergers, acquisitions, and corporate governance. She helps companies navigate the legal landscape with strategic counsel.",
     admissions: ["Supreme Court", "Federal Court", "State Bar"],
-    image: "/images/attorney-emily.jpg",
+    image: null,
     featured: false,
   },
   {
@@ -62,7 +92,7 @@ const defaultAttorneys = [
     specializations: ["Immigration"],
     bio: "David Park has helped thousands of families achieve their American dream. His expertise in immigration law makes him a trusted advisor for complex immigration matters.",
     admissions: ["Federal Court", "State Bar"],
-    image: "/images/attorney-david.jpg",
+    image: null,
     featured: false,
   },
   {
@@ -71,7 +101,7 @@ const defaultAttorneys = [
     specializations: ["Real Estate"],
     bio: "Jennifer Williams protects clients' interests in property transactions and disputes. Her attention to detail ensures smooth real estate deals and effective dispute resolution.",
     admissions: ["State Bar"],
-    image: "/images/attorney-jennifer.jpg",
+    image: null,
     featured: false,
   },
 ];
@@ -94,7 +124,7 @@ function getDictValue(dict: Record<string, unknown> | undefined, path: string, f
 // Safely get attorneys array from dictionary
 function getAttorneysData(
   dict: Record<string, unknown> | undefined
-): typeof defaultAttorneys {
+): AttorneyData[] {
   if (!dict) return defaultAttorneys;
   
   const lawfirmData = dict.lawfirmData as Record<string, unknown> | undefined;
@@ -114,13 +144,14 @@ function getAttorneysData(
       bio: attorney.bio || defaultAttorneys[index]?.bio,
       admissions: attorney.admissions || defaultAttorneys[index]?.admissions,
       featured: attorney.featured ?? defaultAttorneys[index]?.featured,
+      image: defaultAttorneys[index]?.image || null,
     }));
   }
   
   return defaultAttorneys;
 }
 
-export function LawFirmAttorneys({ locale, dictionary }: AttorneysProps) {
+export function LawFirmAttorneys({ locale, staff, dictionary }: AttorneysProps) {
   const [activeFilter, setActiveFilter] = useState("all");
   const isRTL = locale === "ar" || locale === "fa";
 
@@ -142,7 +173,22 @@ export function LawFirmAttorneys({ locale, dictionary }: AttorneysProps) {
   const viewProfile = getDictValue(lawfirm, "viewProfile", "View Profile");
   const viewAll = getDictValue(lawfirm, "viewAll", "View All Attorneys");
 
-  const attorneys = getAttorneysData(dict);
+  /**
+   * Build the attorneys list.
+   * If staff data is provided from the organization, use that.
+   * Otherwise, fall back to the hardcoded default attorneys.
+   */
+  const attorneys = staff && staff.length > 0 
+    ? staff.map((s) => ({
+        name: s.user.name || "Unknown Staff",
+        title: s.hierarchy || "Staff",
+        specializations: ["General"],  // Could be extended to use service categories
+        bio: s.bio || "",
+        admissions: [],
+        image: s.user.image || null,
+        featured: s.isDefault || false,
+      }))
+    : getAttorneysData(dict);
 
   const filters = [
     { key: "all", label: filterAll },
@@ -207,13 +253,21 @@ export function LawFirmAttorneys({ locale, dictionary }: AttorneysProps) {
               key={index}
               className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all border border-slate-100"
             >
-              {/* Avatar Placeholder */}
-              <div className="h-64 bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center">
-                <div className="w-24 h-24 bg-slate-300 rounded-full flex items-center justify-center">
-                  <span className="text-3xl font-bold text-slate-500">
-                    {attorney.name.split(" ").map(n => n[0]).join("")}
-                  </span>
-                </div>
+              {/* Avatar - Use dynamic image if available, otherwise show initials */}
+              <div className="h-64 bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center overflow-hidden">
+                {attorney.image ? (
+                  <img 
+                    src={attorney.image} 
+                    alt={attorney.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-24 h-24 bg-slate-300 rounded-full flex items-center justify-center">
+                    <span className="text-3xl font-bold text-slate-500">
+                      {attorney.name.split(" ").map(n => n[0]).join("")}
+                    </span>
+                  </div>
+                )}
               </div>
 
               <div className="p-6">

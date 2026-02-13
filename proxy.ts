@@ -48,6 +48,20 @@ const adminRoutes = [
 ] as const
 
 /**
+ * Routes that require OWNER or ADMIN role (organization settings)
+ */
+const organizationSettingsRoutes = [
+  "/settings/organization",
+] as const
+
+/**
+ * Routes that require at least MANAGER role (team settings)
+ */
+const teamSettingsRoutes = [
+  "/settings/staff",
+] as const
+
+/**
  * Routes that allow authenticated users but may have limited features
  */
 const userFeatureRoutes = [
@@ -114,6 +128,28 @@ function isAdminRoute(path: string): boolean {
 function isUserFeatureRoute(path: string): boolean {
   const pathWithoutLocale = path.replace(/^\/[a-z]{2}/, '') || path
   return userFeatureRoutes.some(route => 
+    path === `/${pathWithoutLocale}` || 
+    path.startsWith(`/${pathWithoutLocale}/`)
+  )
+}
+
+/**
+ * Check if a route is an organization settings route (requires OWNER or ADMIN)
+ */
+function isOrganizationSettingsRoute(path: string): boolean {
+  const pathWithoutLocale = path.replace(/^\/[a-z]{2}/, '') || path
+  return organizationSettingsRoutes.some(route => 
+    path === `/${pathWithoutLocale}` || 
+    path.startsWith(`/${pathWithoutLocale}/`)
+  )
+}
+
+/**
+ * Check if a route is a team settings route (requires MANAGER or above)
+ */
+function isTeamSettingsRoute(path: string): boolean {
+  const pathWithoutLocale = path.replace(/^\/[a-z]{2}/, '') || path
+  return teamSettingsRoutes.some(route => 
     path === `/${pathWithoutLocale}` || 
     path.startsWith(`/${pathWithoutLocale}/`)
   )
@@ -248,10 +284,34 @@ export default async function proxy(request: NextRequest) {
       }
     }
     
-    // For settings routes - allow authenticated users to access their own settings
-    if (pathWithoutLocale.startsWith("/settings")) {
-      // All authenticated users can access settings
-      console.log(`[Middleware] User ${session.user.username} accessing settings`)
+    // Check organization settings routes (require OWNER or ADMIN)
+    if (isOrganizationSettingsRoute(pathWithoutLocale)) {
+      const userRole = session.user.role || "CLIENT"
+      
+      // Only OWNER and ADMIN can access organization settings
+      if (!['OWNER', 'ADMIN'].includes(userRole)) {
+        const localePrefix = validLocale ? `/${validLocale}` : ""
+        const dashboardUrl = request.nextUrl.clone()
+        dashboardUrl.pathname = `${localePrefix}/settings`
+        
+        console.log(`[Middleware] User ${session.user.username} (${userRole}) lacks permissions for organization settings, redirecting to settings`)
+        return NextResponse.redirect(dashboardUrl)
+      }
+    }
+    
+    // Check team settings routes (require MANAGER or above)
+    if (isTeamSettingsRoute(pathWithoutLocale)) {
+      const userRole = session.user.role || "CLIENT"
+      
+      // Only MANAGER, OWNER, and ADMIN can access team settings
+      if (!['MANAGER', 'OWNER', 'ADMIN'].includes(userRole)) {
+        const localePrefix = validLocale ? `/${validLocale}` : ""
+        const dashboardUrl = request.nextUrl.clone()
+        dashboardUrl.pathname = `${localePrefix}/settings`
+        
+        console.log(`[Middleware] User ${session.user.username} (${userRole}) lacks permissions for team settings, redirecting to settings`)
+        return NextResponse.redirect(dashboardUrl)
+      }
     }
   }
   

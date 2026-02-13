@@ -19,11 +19,34 @@ export default async function LawFirmPageRoute({ params }: PageProps) {
   const validLanguages: ValidLocale[] = ["en", "fa", "ar", "tr"]
   const validLang = validLanguages.includes(lang as ValidLocale) 
     ? (lang as ValidLocale) 
-    : "en"
+    : "fa"
   
-  // Look up organization by slug
+  // Look up organization by slug with services and staff
   const organization = await prisma.organization.findUnique({
-    where: { slug }
+    where: { slug },
+    include: {
+      // Include active staff members with their user data for the attorneys section
+      staffs: {
+        where: { isActive: true },
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              phone: true,
+              image: true,
+            }
+          }
+        },
+        orderBy: { user: { name: 'asc' } }
+      },
+      // Include active services for the practice areas section
+      services: {
+        where: { isActive: true },
+        orderBy: { name: 'asc' }
+      },
+    },
   })
   
   // If organization not found, show 404

@@ -71,6 +71,7 @@ interface SettingsItem {
   description: string;
   href: string;
   badge?: string;
+  key?: string;
 }
 
 /**
@@ -143,8 +144,8 @@ export default async function SettingsPage(props: {
       href: `/${locale}/settings/profile`,
       roles: ["CLIENT", "STAFF", "MERCHANT", "MANAGER", "OWNER", "ADMIN"],
       items: [
-        { title: t.profile, description: t.profileDesc, href: `/${locale}/settings/profile` },
-        { title: "Account", description: "Manage your account details", href: `/${locale}/settings/profile` },
+        { title: t.profile, description: t.profileDesc, href: `/${locale}/settings/profile`, key: "profile" },
+        { title: "Account", description: "Manage your account details", href: `/${locale}/settings/profile", key: "account" },
       ],
     },
     {
@@ -154,8 +155,8 @@ export default async function SettingsPage(props: {
       href: `/${locale}/settings/security`,
       roles: ["CLIENT", "STAFF", "MERCHANT", "MANAGER", "OWNER", "ADMIN"],
       items: [
-        { title: t.security, description: t.securityDesc, href: `/${locale}/settings/security` },
-        { title: t.privacy, description: t.privacyDesc, href: `/${locale}/settings/security` },
+        { title: t.security, description: t.securityDesc, href: `/${locale}/settings/security`, key: "security" },
+        { title: t.privacy, description: t.privacyDesc, href: `/${locale}/settings/security`, key: "privacy" },
       ],
     },
     {
@@ -187,9 +188,10 @@ export default async function SettingsPage(props: {
       href: `/${locale}/settings/organization`,
       roles: ["OWNER", "ADMIN"],
       items: [
-        { title: t.organization, description: t.organizationDesc, href: `/${locale}/settings/organization` },
-        { title: "Business Hours", description: "Set operating hours", href: `/${locale}/settings/organization` },
-        { title: "Holidays", description: "Configure time off", href: `/${locale}/settings/organization` },
+        { title: t.organization, description: t.organizationDesc, href: `/${locale}/settings/organization`, key: "org-basic" },
+        { title: "Public Page", description: "Customize your landing page", href: `/${locale}/settings/organization/public-page`, key: "org-public-page" },
+        { title: "Business Hours", description: "Set operating hours", href: `/${locale}/settings/organization`, key: "org-hours" },
+        { title: "Holidays", description: "Configure time off", href: `/${locale}/settings/organization`, key: "org-holidays" },
       ],
     },
   ];
@@ -252,7 +254,7 @@ export default async function SettingsPage(props: {
                 <CardContent>
                   <ul className="space-y-2">
                     {category.items.slice(0, 2).map((item) => (
-                      <li key={item.href} className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <li key={item.key || item.href} className="flex items-center gap-2 text-sm text-muted-foreground">
                         <Check className="h-4 w-4 text-primary/60" />
                         {item.title}
                         {item.badge && (

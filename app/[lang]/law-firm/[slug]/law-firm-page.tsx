@@ -1,6 +1,6 @@
 "use client"
 
-import type { Organization } from "@/lib/generated/prisma/client"
+import type { Organization, Staff } from "@/lib/generated/prisma/client"
 import { 
   LawFirmHeader, 
   LawFirmHero, 
@@ -20,7 +20,35 @@ import { AppointmentBooking } from "@/components/law-firm/appointment-booking"
 type Dictionary = any
 
 interface LawFirmPageProps {
-  organization: Organization
+  organization: Organization & {
+    /**
+     * Staff members to display in the attorneys section.
+     * This data is fetched from the database and passed to the component.
+     * Each staff member includes their user data (name, email, image, etc.)
+     */
+    staffs?: Array<{
+      id: string
+      bio: string | null
+      hierarchy: string
+      isActive: boolean
+      isDefault: boolean
+      user: {
+        id: string
+        name: string | null
+        email: string | null
+        phone: string | null
+        image: string | null
+      }
+    }>
+    /**
+     * Services to display in the practice areas section.
+     */
+    services?: Array<{
+      id: string
+      name: string
+      description: string | null
+    }>
+  }
   dictionary: Dictionary
   lang: string
 }
@@ -129,6 +157,11 @@ export function LawFirmPage({ organization, dictionary, lang }: LawFirmPageProps
           <LawFirmAttorneys 
             locale={lang}
             dictionary={dictionary}
+            /**
+             * Pass staff members from the organization to display in the attorneys section.
+             * This enables dynamic staff display based on the organization's actual staff.
+             */
+            staff={organization.staffs || []}
           />
         )}
         
