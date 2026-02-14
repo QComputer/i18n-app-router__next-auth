@@ -177,6 +177,11 @@ export default async function SettingsPage(props: {
     myServices: locale === 'fa' ? 'خدمات من' : 'My Services',
     manageMyServices: locale === 'fa' ? 'مدیریت خدمات من' : 'Manage my services',
     appointments: getTranslation(dictionary, "appointment.title", locale === 'fa' ? 'نوبت‌ها' : 'Appointments'),
+    // New organization settings
+    general: locale === 'fa' ? 'عمومی' : 'General',
+    generalDesc: locale === 'fa' ? 'اطلاعات و جزئیات پایه' : 'Basic information and details',
+    staffManagement: locale === 'fa' ? 'مدیریت کارکنان' : 'Staff Management',
+    staffManagementDesc: locale === 'fa' ? 'مدیریت اعضای تیم' : 'Manage team members',
   };
 
   // Define settings categories
@@ -217,12 +222,12 @@ export default async function SettingsPage(props: {
       title: t.team,
       description: t.teamAndStaffManagement,
       icon: Users,
-      href: `/${locale}/settings/staff`,
+      href: `/${locale}/settings/organization/staff`,
       roles: ["MANAGER", "OWNER", "ADMIN"],
       items: [
-        { title: "Staff Members", description: "View and manage staff", href: `/${locale}/settings/staff`, key: "staff-members" },
-        { title: "Roles & Permissions", description: "Configure access levels", href: `/${locale}/settings/staff`, key: "roles-permissions" },
-        { title: "Invite Members", description: "Add new team members", href: `/${locale}/settings/staff`, badge: "Pro", key: "invite-members" },
+        { title: t.staffManagement, description: t.staffManagementDesc, href: `/${locale}/settings/organization/staff`, key: "staff-members" },
+        { title: t.rolesAndPermissions, description: t.configureAccessLevels, href: `/${locale}/settings/organization/staff`, key: "roles-permissions" },
+        { title: t.inviteMembers, description: locale === 'fa' ? 'اعضای جدید تیم را اضافه کنید' : 'Add new team members', href: `/${locale}/settings/organization/staff`, badge: t.pro, key: "invite-members" },
       ],
     },
     {
@@ -232,10 +237,10 @@ export default async function SettingsPage(props: {
       href: `/${locale}/settings/organization`,
       roles: ["OWNER", "ADMIN"],
       items: [
-        { title: t.organization, description: t.organizationDesc, href: `/${locale}/settings/organization`, key: "org-basic" },
-        { title: t.publicPage, description: t.customizeLandingPage, href: `/${locale}/settings/organization/public-page", key: "org-public-page"` },
-        { title: t.businessHours, description: t.setOperatingHours, href: `/${locale}/settings/organization`, key: "org-hours" },
-        { title: t.holidays, description: t.configureTimeOff, href: `/${locale}/settings/organization`, key: "org-holidays" },
+        { title: t.general, description: t.generalDesc, href: `/${locale}/settings/organization/general`, key: "org-general" },
+        { title: t.staffManagement, description: t.staffManagementDesc, href: `/${locale}/settings/organization/staff`, key: "org-staff" },
+        { title: t.serviceCategories, description: t.manageCategories, href: `/${locale}/settings/organization/categories`, key: "org-categories" },
+        { title: t.publicPage, description: t.customizeLandingPage, href: `/${locale}/settings/organization/public-page`, key: "org-public-page" },
       ],
     },
   ];
@@ -348,31 +353,31 @@ export default async function SettingsPage(props: {
 
       {/* Quick Access Section */}
       <div className="mt-12">
-        <h2 className="text-xl font-semibold mb-4">Quick Access</h2>
+        <h2 className="text-xl font-semibold mb-4">{t.quickAccess}</h2>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <QuickAccessCard 
             href={`/${locale}/dashboard`}
             icon={Settings}
-            title="Dashboard"
-            description="Return to main dashboard"
+            title={t.dashboard}
+            description={t.returnToMainDashboard}
           />
           <QuickAccessCard 
             href={`/${locale}/appointments`}
             icon={Bell}
-            title="Appointments"
-            description="View your appointments"
+            title={t.appointments}
+            description={t.viewYourAppointments}
           />
           <QuickAccessCard 
             href={`/${locale}/calendar`}
             icon={Globe}
-            title="Calendar"
-            description="View calendar"
+            title={t.calendar}
+            description={t.viewCalendar}
           />
           <QuickAccessCard 
             href={`/${locale}/services`}
             icon={Building2}
-            title="Services"
-            description="Browse services"
+            title={t.services}
+            description={t.browseServices}
           />
         </div>
       </div>

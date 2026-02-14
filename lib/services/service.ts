@@ -19,9 +19,40 @@ export type Service = {
   color: string | null
   slotInterval: number
   isActive: boolean
-  organizationId: string
+  staffId: string
+  serviceCategoryId: string
   createdAt: Date
   updatedAt: Date
+}
+
+/**
+ * Service with relations type definition
+ */
+export type ServiceWithRelations = {
+  id: string
+  name: string
+  description: string | null
+  duration: number
+  price: number | null
+  currency: string
+  color: string | null
+  slotInterval: number
+  isActive: boolean
+  staffId: string
+  serviceCategoryId: string
+  createdAt: Date
+  updatedAt: Date
+  staff: {
+    id: string
+    user: {
+      name: string | null
+      email: string | null
+    }
+  } | null
+  serviceCategory: {
+    id: string
+    name: string
+  } | null
 }
 
 /**
@@ -32,7 +63,8 @@ export async function createService(data: {
   description?: string
   duration: number
   price?: number
-  organizationId: string
+  staffId: string
+  serviceCategoryId: string
 }): Promise<Service> {
   return prisma.service.create({
     data: {
@@ -40,7 +72,8 @@ export async function createService(data: {
       description: data.description || null,
       duration: data.duration,
       price: data.price || null,
-      organizationId: data.organizationId,
+      staffId: data.staffId,
+      serviceCategoryId: data.serviceCategoryId,
     },
   })
 }
@@ -51,6 +84,33 @@ export async function createService(data: {
 export async function getServiceById(id: string): Promise<Service | null> {
   return prisma.service.findUnique({
     where: { id },
+  })
+}
+
+/**
+ * Get a service by ID with relations
+ */
+export async function getServiceByIdWithRelations(id: string): Promise<ServiceWithRelations | null> {
+  return prisma.service.findUnique({
+    where: { id },
+    include: {
+      staff: {
+        include: {
+          user: {
+            select: {
+              name: true,
+              email: true,
+            },
+          },
+        },
+      },
+      serviceCategory: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
   })
 }
 
@@ -70,20 +130,241 @@ export async function getServicesByOrganization(
     return []
   }
 
-  const where: Record<string, unknown> = {
-    organizationId,
-  }
-
-  if (!options?.includeInactive) {
-    where.isActive = true
-  }
-
   return prisma.service.findMany({
-    where,
+    where: {
+      staff: {
+        organizationId,
+      },
+      ...(!options?.includeInactive && { isActive: true }),
+    },
     orderBy: { name: "asc" },
     take: options?.limit,
     skip: options?.offset,
   })
+}
+
+/**
+ * Get services by staff ID (for staff to manage their own services)
+ */
+export async function getServicesByStaffId(
+  staffId: string | null,
+  options?: {
+    includeInactive?: boolean
+    limit?: number
+    offset?: number
+  }
+): Promise<ServiceWithRelations[]> {
+  if (!staffId) {
+    return []
+  }
+
+  return prisma.service.findMany({
+    where: {
+      staffId,
+      ...(!options?.includeInactive && { isActive: true }),
+    },
+    orderBy: { name: "asc" },
+    include: {
+      staff: {
+        include: {
+          user: {
+            select: {
+              name: true,
+              email: true,
+            },
+          },
+        },
+      },
+      serviceCategory: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
+    take: options?.limit,
+    skip: options?.offset,
+  })
+}
+
+/**
+ * Get all services for an organization including all staff (for OWNER)
+ */
+export async function getAllServicesByOrganization(
+  organizationId: string | null,
+  options?: {
+    includeInactive?: boolean
+    limit?: number
+    offset?: number
+  }
+): Promise<ServiceWithRelations[]> {
+  if (!organizationId) {
+    return []
+  }
+
+  return prisma.service.findMany({
+    where: {
+      staff: {
+        organizationId,
+      },
+      ...(!options?.includeInactive && { isActive: true }),
+    },
+    orderBy: [
+      { staff: { user: { name: 'asc' } } },
+      { name: 'asc' },
+    ],
+    include: {
+      staff: {
+        include: {
+          user: {
+            select: {
+              name: true,
+              email: true,
+            },
+          },
+        },
+      },
+      serviceCategory: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
+    take: options?.limit,
+    skip: options?.offset,
+  })
+}
+
+/**
+ * Get all services across the system (for ADMIN)
+ */
+export async function getAllServices(
+  options?: {
+    includeInactive?: boolean
+    limit?: number
+    offset?: number
+  }
+): Promise<ServiceWithRelations[]> {
+  return prisma.service.findMany({
+    where: {
+      ...(!options?.includeInactive && { isActive: true }),
+    },
+    orderBy: [
+      { staff: { organization: { name: 'asc' } } },
+      { staff: { user: { name: 'asc' } } },
+      { name: 'asc' },
+    ],
+    include: {
+      staff: {
+        include: {
+          user: {
+            select: {
+              name: true,
+              email: true,
+            },
+          },
+          organization: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      },
+      serviceCategory: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
+    take: options?.limit,
+    skip: options?.offset,
+  })
+}
+
+/**
+ * Appointment type for service appointments
+ */
+export type ServiceAppointment = {
+  id: string
+  startTime: Date
+  endTime: Date
+  status: string
+  clientName: string
+  clientEmail: string | null
+  clientPhone: string | null
+  notes: string | null
+  serviceId: string
+  staffId: string | null
+  clientId: string | null
+  createdAt: Date
+  updatedAt: Date
+  staff: {
+    id: string
+    user: {
+      name: string | null
+    }
+  } | null
+}
+
+/**
+ * Get appointments for a specific service with pagination
+ */
+export async function getAppointmentsByService(
+  serviceId: string,
+  options?: {
+    page?: number
+    limit?: number
+    includeInactive?: boolean
+  }
+): Promise<{
+  appointments: ServiceAppointment[]
+  total: number
+  page: number
+  limit: number
+  totalPages: number
+}> {
+  const page = options?.page || 1
+  const limit = options?.limit || 10
+  const skip = (page - 1) * limit
+
+  const where: Record<string, unknown> = {
+    serviceId,
+  }
+
+  // Include all statuses by default (including cancelled/completed)
+  // unless explicitly filtered
+
+  const [appointments, total] = await Promise.all([
+    prisma.appointment.findMany({
+      where,
+      skip,
+      take: limit,
+      orderBy: { startTime: 'desc' },
+      include: {
+        staff: {
+          include: {
+            user: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    }),
+    prisma.appointment.count({ where }),
+  ])
+
+  return {
+    appointments,
+    total,
+    page,
+    limit,
+    totalPages: Math.ceil(total / limit),
+  }
 }
 
 /**
@@ -131,15 +412,14 @@ export async function countServices(
   organizationId: string,
   includeInactive = false
 ): Promise<number> {
-  const where: Record<string, unknown> = {
-    organizationId,
-  }
-
-  if (!includeInactive) {
-    where.isActive = true
-  }
-
-  return prisma.service.count({ where })
+  return prisma.service.count({
+    where: {
+      staff: {
+        organizationId,
+      },
+      ...(!includeInactive && { isActive: true }),
+    },
+  })
 }
 
 /**
@@ -151,7 +431,9 @@ export async function searchServices(
 ): Promise<Service[]> {
   return prisma.service.findMany({
     where: {
-      organizationId,
+      staff: {
+        organizationId,
+      },
       isActive: true,
       name: {
         contains: query,

@@ -8,7 +8,6 @@
  */
 
 import prisma from "@/lib/db/prisma"
-import { Prisma } from "@/lib/generated/prisma/client"
 import { requireAdmin } from "@/lib/auth/admin"
 
 /**
@@ -31,14 +30,17 @@ export async function getAllServices(params: {
     search = "",
   } = params
 
-  const where: Record<string, any> = {}
+  const where: Record<string, unknown> = {}
 
   if (active !== undefined) {
     where.isActive = active
   }
 
+  // Filter by organization through staff relationship
   if (organizationId) {
-    where.organizationId = organizationId
+    where.staff = {
+      organizationId,
+    }
   }
 
   if (search) {
@@ -57,13 +59,18 @@ export async function getAllServices(params: {
       take: limit,
       orderBy: { createdAt: "desc" },
       include: {
-        organization: {
-          select: {
-            id: true,
-            name: true,
-            type: true,
+        staff: {
+          include: {
+            organization: {
+              select: {
+                id: true,
+                name: true,
+                type: true,
+              },
+            },
           },
         },
+        serviceCategory: true,
       },
     }),
     prisma.service.count({ where }),
@@ -87,7 +94,12 @@ export async function getServiceById(id: string) {
   return prisma.service.findUnique({
     where: { id },
     include: {
-      organization: true,
+      staff: {
+        include: {
+          organization: true,
+        },
+      },
+      serviceCategory: true,
       appointments: {
         take: 10,
         orderBy: { createdAt: "desc" },
@@ -106,7 +118,8 @@ export async function createService(data: {
   price?: number
   currency?: string
   color?: string
-  organizationId: string
+  staffId: string
+  serviceCategoryId: string
 }) {
   await requireAdmin()
 
@@ -117,7 +130,8 @@ export async function createService(data: {
     price,
     currency = "IRR",
     color,
-    organizationId,
+    staffId,
+    serviceCategoryId,
   } = data
 
   return prisma.service.create({
@@ -128,7 +142,8 @@ export async function createService(data: {
       price: price || null,
       currency,
       color: color || null,
-      organizationId,
+      staffId,
+      serviceCategoryId,
     },
   })
 }
@@ -190,7 +205,7 @@ export async function toggleServiceStatus(id: string, isActive: boolean) {
 export async function countServices(includeInactive = false): Promise<number> {
   await requireAdmin()
 
-  const where: Record<string, any> = {}
+  const where: Record<string, unknown> = {}
 
   if (!includeInactive) {
     where.isActive = true

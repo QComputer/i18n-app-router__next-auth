@@ -196,10 +196,16 @@ export async function createAppointmentAction(formData: FormData, locale: string
   // Get service for duration
   const service = await prisma.service.findUnique({
     where: { id: serviceId },
-    select: { duration: true, organizationId: true },
+    include: {
+      staff: {
+        include: {
+          organization: true,
+        },
+      },
+    },
   })
 
-  if (!service || service.organizationId !== session.user.organizationId) {
+  if (!service || service.staff.organizationId !== session.user.organizationId) {
     throw new Error("Service not found")
   }
 
@@ -277,10 +283,16 @@ export async function updateAppointmentAction(
   // Get service for duration
   const service = await prisma.service.findUnique({
     where: { id: serviceId },
-    select: { duration: true, organizationId: true },
+    include: {
+      staff: {
+        include: {
+          organization: true,
+        },
+      },
+    },
   })
 
-  if (!service || service.organizationId !== session.user.organizationId) {
+  if (!service || service.staff.organizationId !== session.user.organizationId) {
     throw new Error("Service not found")
   }
 
@@ -459,7 +471,9 @@ export async function getServicesForUser() {
   // All users in organization can see active services
   const services = await prisma.service.findMany({
     where: {
-      organizationId: session.user.organizationId,
+      staff: {
+        organizationId: session.user.organizationId,
+      },
       isActive: true,
     },
     orderBy: { name: "asc" },

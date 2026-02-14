@@ -1,8 +1,11 @@
 /**
- * Service List Page
+ * Services Page
  * 
- * Displays a list of services for the organization.
- * Supports viewing, creating, editing, and deleting services.
+ * Role-based service management and browsing page:
+ * - CLIENT: Browse and book services
+ * - STAFF: Manage own services (read-only view)
+ * - MERCHANT/MANAGER/OWNER: Manage own services with edit/delete
+ * - ADMIN: View and manage all services across the system
  * 
  * Route: /[lang]/services
  */
@@ -13,13 +16,20 @@ import { getDictionary } from "@/get-dictionary"
 import { i18nConfig, type Locale } from "@/i18n-config"
 import Link from "next/link"
 import { deleteServiceAction } from "@/app/actions/services"
-import { Plus, Clock, DollarSign, Edit, Trash2, Search } from "lucide-react"
+import { Plus, Clock, DollarSign, Edit, Trash2, Search, User, Folder } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { toPersianDigits } from "@/lib/utils"
-import { getServicesByOrganization } from "@/lib/services/service"
+import { 
+  getServicesByOrganization, 
+  getServicesByStaffId, 
+  getAllServicesByOrganization,
+  getAllServices,
+  type ServiceWithRelations 
+} from "@/lib/services/service"
+import prisma from "@/lib/db/prisma"
 
 /**
  * Generate static params for all supported locales
@@ -36,7 +46,20 @@ function getStatusVariant(isActive: boolean): "default" | "secondary" | "success
 }
 
 /**
- * Service list page component
+ * Determine if user can manage (edit/delete) services based on role
+ */
+function canManageServices(userRole: string, staffHierarchy: string | null): boolean {
+  // ADMIN can manage all services
+  if (userRole === "ADMIN") return true
+  
+  // OWNER, MANAGER, MERCHANT can manage their own services
+  if (["OWNER", "MANAGER", "MERCHANT"].includes(staffHierarchy || "")) return true
+  
+  return false
+}
+
+/**
+ * Services page component with role-based access control
  * 
  * @param props.params - Promise resolving to { lang: string }
  */
@@ -54,42 +77,115 @@ export default async function ServicesPage(props: {
     redirect(`/${locale}/auth/signin`)
   }
 
+  // Get user's organization ID and staff info
+  const userRole = session.user.role
+  const staffId = session.user.staffId || null
+  const organizationId = session.user.organizationId || null
+
+  // Get user's staff record to check hierarchy
+  const staff = staffId ? await prisma.staff.findUnique({
+    where: { id: staffId },
+    select: {
+      id: true,
+      hierarchy: true,
+      user: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  }) : null
+
+  const staffHierarchy = staff?.hierarchy || null
+
+  // Determine if user can manage services
+  const canManage = canManageServices(userRole, staffHierarchy)
+
   // Get dictionary for translations
   const dictionary = await getDictionary(locale)
-
-  // Get user's organization ID
-    const staffId = session.user.staffId || null
-    const organizationId = session.user.organizationId || null
-
-  // Redirect to dashboard if no organization
-  if (!organizationId && !staffId) {
-    redirect(`/${locale}/dashboard`)
-  }
 
   // Translation helpers
   const dict = dictionary as unknown as Record<string, Record<string, string>>
   const t = {
     title: dict.service?.title || "Services",
-    listDescription: dict.service?.listDescription || "Manage your services",
+    listDescription: dict.service?.listDescription || "Browse and manage services",
     newService: dict.service?.newService || "Add New Service",
     name: dict.service?.name || "Name",
     description: dict.service?.description || "Description",
     duration: dict.service?.duration || "Duration",
     price: dict.service?.price || "Price",
     status: dict.service?.status || "Status",
+    category: dict.service?.category || "Category",
+    staff: dict.service?.staff || "Staff",
     active: dict.service?.active || "Active",
     inactive: dict.service?.inactive || "Inactive",
     edit: dict.common?.edit || "Edit",
     delete: dict.common?.delete || "Delete",
     search: dict.common?.search || "Search",
     noServices: dict.service?.noServices || "No services found",
-    noServicesDescription: dict.service?.noServicesDescription || "You don't have any services yet. Create your first service to get started.",
+    noServicesDescription: dict.service?.noServicesDescription || "No services available at this time.",
     minutes: locale === "fa" ? "دقیقه" : "minutes",
     rial: locale === "fa" ? "ریال" : "IRR",
+    providedBy: dict.service?.providedBy || "Provided by:",
+    bookNow: dict.service?.bookNow || "Book Now",
+    viewDetails: dict.service?.viewDetails || "View Details",
+    manageMyServices: locale === 'fa' ? 'مدیریت خدمات من' : 'Manage My Services',
+    allOrganizationServices: locale === 'fa' ? 'همه خدمات سازمان' : 'All Organization Services',
+    allSystemServices: locale === 'fa' ? 'همه خدمات سیستم' : 'All System Services',
+    browseServices: locale === 'fa' ? 'مرور خدمات' : 'Browse Services',
   }
 
-  // Fetch services from database
-  const services = await getServicesByOrganization(organizationId)
+  // Fetch services based on role
+  let services: ServiceWithRelations[] = []
+
+  if (userRole === "ADMIN") {
+    // ADMIN: View all services across the system
+    services = await getAllServices()
+  } else if (staffId && ["OWNER", "MANAGER", "MERCHANT"].includes(staffHierarchy || "")) {
+    // OWNER/MANAGER/MERCHANT: View all services in organization OR their own services
+    if (staffHierarchy === "OWNER") {
+      // OWNER: View all services in their organization
+      services = await getAllServicesByOrganization(organizationId)
+    } else {
+      // MANAGER/MERCHANT: View their own services
+      services = await getServicesByStaffId(staffId)
+    }
+  } else if (organizationId) {
+    // CLIENT or other roles: View active services for the organization
+    const basicServices = await getServicesByOrganization(organizationId)
+    // Convert to ServiceWithRelations by fetching additional data
+    services = await Promise.all(
+      basicServices.map(async (service) => {
+        const fullService = await prisma.service.findUnique({
+          where: { id: service.id },
+          include: {
+            staff: {
+              include: {
+                user: {
+                  select: {
+                    name: true,
+                    email: true,
+                  },
+                },
+              },
+            },
+            serviceCategory: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        })
+        return fullService as ServiceWithRelations
+      })
+    )
+  }
+
+  // For CLIENT role, redirect to organization's public service page if no organization context
+  if (userRole === "CLIENT" && !organizationId) {
+    redirect(`/${locale}/dashboard`)
+  }
 
   return (
     <div className="container mx-auto py-8 px-4">
@@ -97,16 +193,23 @@ export default async function ServicesPage(props: {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
         <div>
           <h1 className="text-3xl font-bold">{t.title}</h1>
-          <p className="text-muted-foreground mt-1">{t.listDescription}</p>
+          <p className="text-muted-foreground mt-1">
+            {userRole === "ADMIN" && t.allSystemServices}
+            {userRole === "OWNER" && staffHierarchy === "OWNER" && t.allOrganizationServices}
+            {["MERCHANT", "MANAGER"].includes(staffHierarchy || "") && t.manageMyServices}
+            {userRole === "CLIENT" && t.browseServices}
+          </p>
         </div>
 
-        {/* New Service Button */}
-        <Link href={`/${locale}/services/new`}>
-          <Button>
-            <Plus className="ml-2 h-4 w-4" />
-            {t.newService}
-          </Button>
-        </Link>
+        {/* New Service Button - Only for management roles */}
+        {canManage && (
+          <Link href={`/${locale}/services/new`}>
+            <Button>
+              <Plus className="ml-2 h-4 w-4" />
+              {t.newService}
+            </Button>
+          </Link>
+        )}
       </div>
 
       {/* Search Input */}
@@ -122,15 +225,17 @@ export default async function ServicesPage(props: {
       {services.length === 0 ? (
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
-            <Clock className="h-12 w-12 text-muted-foreground mb-4" />
+            <Folder className="h-12 w-12 text-muted-foreground mb-4" />
             <h3 className="text-lg font-semibold mb-2">{t.noServices}</h3>
             <p className="text-muted-foreground text-center mb-4">{t.noServicesDescription}</p>
-            <Link href={`/${locale}/services/new`}>
-              <Button>
-                <Plus className="ml-2 h-4 w-4" />
-                {t.newService}
-              </Button>
-            </Link>
+            {canManage && (
+              <Link href={`/${locale}/services/new`}>
+                <Button>
+                  <Plus className="ml-2 h-4 w-4" />
+                  {t.newService}
+                </Button>
+              </Link>
+            )}
           </CardContent>
         </Card>
       ) : (
@@ -152,11 +257,26 @@ export default async function ServicesPage(props: {
                   </p>
                 )}
 
+                {/* Category */}
+                {service.serviceCategory && (
+                  <p className="text-sm text-muted-foreground mb-2">
+                    <span className="font-medium">{t.category}:</span> {service.serviceCategory.name}
+                  </p>
+                )}
+
+                {/* Staff Name - Show for OWNER/ADMIN views */}
+                {(userRole === "ADMIN" || staffHierarchy === "OWNER") && service.staff && (
+                  <p className="text-sm text-muted-foreground mb-2">
+                    <User className="inline h-3 w-3 ml-1" />
+                    <span className="font-medium">{t.providedBy}</span> {service.staff.user.name || service.staff.user.email}
+                  </p>
+                )}
+
                 <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
                   <div className="flex items-center gap-1">
                     <Clock className="h-4 w-4" />
                     <span>
-                      {locale === "fa" ? toPersianDigits(service.duration) : service.duration} {t.minutes}
+                      {locale === "fa" ? toPersianDigits(service.duration.toString()) : service.duration} {t.minutes}
                     </span>
                   </div>
                   {service.price !== null && (
@@ -169,20 +289,32 @@ export default async function ServicesPage(props: {
                   )}
                 </div>
 
+                {/* Action Buttons */}
                 <div className="flex gap-2">
-                  <Link href={`/${locale}/services/${service.id}`}>
-                    <Button variant="outline" size="sm">
-                      {t.edit}
-                    </Button>
-                  </Link>
-                  <form action={async () => {
-                    "use server"
-                    await deleteServiceAction(service.id, locale)
-                  }}>
-                    <Button type="submit" variant="outline" size="sm" className="text-destructive">
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </form>
+                  {canManage ? (
+                    <>
+                      <Link href={`/${locale}/services/${service.id}`}>
+                        <Button variant="outline" size="sm">
+                          {t.edit}
+                        </Button>
+                      </Link>
+                      <form action={async () => {
+                        "use server"
+                        await deleteServiceAction(service.id, locale)
+                      }}>
+                        <Button type="submit" variant="outline" size="sm" className="text-destructive">
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </form>
+                    </>
+                  ) : (
+                    // For CLIENT role, show book now button
+                    <Link href={`/${locale}/appointments/new?serviceId=${service.id}`}>
+                      <Button variant="default" size="sm">
+                        {t.bookNow}
+                      </Button>
+                    </Link>
+                  )}
                 </div>
               </CardContent>
             </Card>

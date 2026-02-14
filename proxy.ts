@@ -58,7 +58,7 @@ const organizationSettingsRoutes = [
  * Routes that require at least MANAGER role (team settings)
  */
 const teamSettingsRoutes = [
-  "/settings/staff",
+  "/settings/organization/staff",
 ] as const
 
 /**
@@ -70,7 +70,6 @@ const userFeatureRoutes = [
   "/appointments",
   "/calendar",
   "/services",
-  "/staff",
 ] as const
 
 /**

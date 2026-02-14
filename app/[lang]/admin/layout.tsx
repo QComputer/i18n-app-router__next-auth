@@ -1,4 +1,3 @@
-import { auth } from "@/lib/auth"
 import { requireAdmin } from "@/lib/auth/admin"
 import { getDictionary } from "@/get-dictionary"
 import { type Locale } from "@/i18n-config"

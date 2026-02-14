@@ -8,7 +8,7 @@
  */
 
 import prisma from "@/lib/db/prisma"
-import { requireAdmin } from "@/lib/auth/admin"
+import { requireAdmin, requireOrganizationAdmin } from "@/lib/auth/admin"
 
 /**
  * Get all staff members across all organizations with optional filtering and pagination
@@ -20,7 +20,7 @@ export async function getAllStaff(params: {
   limit?: number
   search?: string
 }) {
-  await requireAdmin()
+  await requireOrganizationAdmin()
 
   const {
     active,
@@ -79,7 +79,7 @@ export async function getAllStaff(params: {
  * Get a single staff member by ID
  */
 export async function getStaffById(id: string) {
-  await requireAdmin()
+  await requireOrganizationAdmin()
 
   return prisma.staff.findUnique({
     where: { id },

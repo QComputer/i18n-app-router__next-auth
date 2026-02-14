@@ -310,6 +310,8 @@ export async function updateMyOrganizationContactInfo(data: ContactInfoConfig) {
  */
 export async function updateMyOrganization(data: {
   name?: string;
+  slug?: string;
+  type?: "LAWYER" | "DOCTOR" | "SUPERMARKET" | "RESTAURANT" | "SALON" | "OTHER";
   description?: string;
   logo?: string;
   website?: string;
@@ -338,10 +340,26 @@ export async function updateMyOrganization(data: {
     throw new Error("You don't have permission to update organization settings");
   }
   
+  // If slug is being changed, check for uniqueness
+  if (data.slug) {
+    const existingOrg = await prisma.organization.findFirst({
+      where: {
+        slug: data.slug,
+        NOT: { id: organizationId }
+      }
+    });
+    
+    if (existingOrg) {
+      throw new Error("This URL slug is already in use by another organization");
+    }
+  }
+  
   const organization = await prisma.organization.update({
     where: { id: organizationId },
     data: {
       name: data.name,
+      slug: data.slug,
+      type: data.type,
       description: data.description ?? undefined,
       logo: data.logo ?? undefined,
       website: data.website ?? undefined,
@@ -356,6 +374,7 @@ export async function updateMyOrganization(data: {
   });
   
   revalidatePath('/[lang]/settings/organization');
+  revalidatePath('/[lang]/settings/organization/general');
   
   return organization;
 }

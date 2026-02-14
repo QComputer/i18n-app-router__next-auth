@@ -171,7 +171,7 @@ export default async function DashboardPage(props: {
       title: "Services & Staff",
       items: [
         { title: t.services, href: `/${locale}/services`, icon: Briefcase },
-        { title: t.staff, href: `/${locale}/staff`, icon: Users },
+        { title: t.staff, href: `/${locale}/settings/organization/staff`, icon: Users },
       ]
     })
 

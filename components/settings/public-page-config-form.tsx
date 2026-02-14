@@ -1,7 +1,7 @@
 /**
  * Organization Public Page Configuration Form
  * 
- * A form component that allows OWNER/MANAGER users to customize their
+ * A form component that allows OWNER/MANAGER staff-users to customize their
  * organization's public landing page content, including hero section,
  * about content, section visibility, SEO settings, contact info, and social links.
  * 
