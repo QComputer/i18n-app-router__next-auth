@@ -19,8 +19,8 @@ export const ALLOWED_IMAGE_TYPES = [
 // Maximum file size in bytes (5MB)
 export const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 
-// Disk directory for uploads - using public folder for static serving
-export const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
+// Disk directory for uploads - using external storage
+export const UPLOAD_DIR = process.env.UPLOAD_DIR || path.join(process.cwd(), "disk", "uploads");
 
 /**
  * Validate image file
@@ -81,8 +81,8 @@ export async function saveImage(
   const filepath = path.join(UPLOAD_DIR, filename);
   await writeFile(filepath, buffer);
   
-  // Return the public URL path
-  return `/uploads/${filename}`;
+  // Return the API route path for serving the image
+  return `/api/uploads/${filename}`;
 }
 
 /**

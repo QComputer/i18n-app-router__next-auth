@@ -23,6 +23,8 @@ model Organization {
   name           String
   slug           String           @unique
   type           OrganizationType
+  coverImage     String?
+  avatarImage    String?
   logo           String?
   description    String?
   website        String?
@@ -167,6 +169,9 @@ model Staff {
   isDefault  Boolean @default(false) // Default staff for new bookings
   bufferTime Int     @default(0) // Buffer time in minutes between appointments
 
+  coverImage     String?
+  avatarImage    String?
+
   userId String @unique
   user   User   @relation(fields: [userId], references: [id])
 
@@ -250,6 +255,8 @@ model ServiceCategory {
   id          String  @id @default(cuid())
   name        String
   description String?
+  coverImage  String?
+  avatarImage String?
 
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)

@@ -117,9 +117,9 @@ export function ImageUploadWithCrop({
     const ctx = canvas.getContext("2d");
     if (!ctx) return null;
 
-    // Calculate scaled dimensions
-    const scaleX = image.naturalWidth / image.width;
-    const scaleY = image.naturalHeight / image.height;
+    // Calculate scaled dimensions (convert percentages to pixels)
+    const scaleX = image.naturalWidth / 100;
+    const scaleY = image.naturalHeight / 100;
 
     // Set canvas size to maxSize
     canvas.width = maxSize;
