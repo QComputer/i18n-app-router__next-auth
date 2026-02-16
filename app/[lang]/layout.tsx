@@ -124,9 +124,11 @@ export default async function LangLayout(props: {
                     {dictionary.settings?.privacy || (locale === 'fa' ? 'حریم خصوصی' : 'Privacy')}
                   </Link>
                   <Link href={`/${locale}/terms`} className="hover:text-primary">
+                    {/* @ts-expect-error - dictionary type is a union of multiple locales, not all have this property */}
                     {dictionary.settings?.terms || (locale === 'fa' ? 'شرایط' : 'Terms')}
                   </Link>
                   <Link href={`/${locale}/contact`} className="hover:text-primary">
+                    {/* @ts-expect-error - dictionary type is a union of multiple locales, not all have this property */}
                     {dictionary.navigation?.contact || (locale === 'fa' ? 'تماس' : 'Contact')}
                   </Link>
                 </div>

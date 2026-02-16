@@ -66,7 +66,7 @@ export default async function AppointmentsListPage({
                       </div>
                     </td>
                     <td className="p-3">{appointment.service?.name || "-"}</td>
-                    <td className="p-3">{appointment.organization?.name || "-"}</td>
+                    <td className="p-3">{appointment.service?.staff?.organization?.name || "-"}</td>
                     <td className="p-3">{formatDate(appointment.startTime)}</td>
                     <td className="p-3">
                       <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${

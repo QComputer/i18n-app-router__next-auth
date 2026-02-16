@@ -192,14 +192,14 @@ export async function getOrganizationBySlug(slug: string): Promise<Organization 
   return prisma.organization.findUnique({
     where: { slug },
     include: {
-      services: {
-        where: { isActive: true },
-        orderBy: { name: 'asc' }
-      },
       staffs: {
         where: { isActive: true },
         include: {
-          user: true
+          user: true,
+          services: {
+            where: { isActive: true },
+            orderBy: { name: 'asc' }
+          }
         },
         orderBy: { user: { name: 'asc' } }
       },
@@ -402,7 +402,9 @@ export async function getAllActiveOrganizations(): Promise<Organization[]> {
 export async function getOrganizationServices(organizationId: string) {
   return prisma.service.findMany({
     where: {
-      organizationId,
+      staff: {
+        organizationId,
+      },
       isActive: true,
     },
     orderBy: { name: "asc" },

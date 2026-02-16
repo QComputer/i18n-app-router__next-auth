@@ -17,6 +17,7 @@ export async function getAllAppointments(params: {
   status?: string
   organizationId?: string
   serviceId?: string
+  serviceCategoryId?: string
   clientId?: string
   staffId?: string
   startDate?: Date
@@ -31,6 +32,7 @@ export async function getAllAppointments(params: {
     status,
     organizationId,
     serviceId,
+    serviceCategoryId,
     clientId,
     staffId,
     startDate,
@@ -47,11 +49,22 @@ export async function getAllAppointments(params: {
   }
 
   if (organizationId) {
-    where.organizationId = organizationId
+    where.service = {
+      staff: {
+        organizationId,
+      },
+    }
   }
 
   if (serviceId) {
     where.serviceId = serviceId
+  }
+
+  if (serviceCategoryId) {
+    where.service = {
+      ...where.service,
+      serviceCategoryId,
+    }
   }
 
   if (clientId) {
@@ -59,7 +72,10 @@ export async function getAllAppointments(params: {
   }
 
   if (staffId) {
-    where.staffId = staffId
+    where.service = {
+      ...where.service,
+      staffId,
+    }
   }
 
   if (startDate || endDate) {
@@ -90,17 +106,24 @@ export async function getAllAppointments(params: {
       orderBy: { startTime: "desc" },
       include: {
         service: {
-          select: {
-            id: true,
-            name: true,
-            duration: true,
-          },
-        },
-        organization: {
-          select: {
-            id: true,
-            name: true,
-            type: true,
+          include: {
+            staff: {
+              include: {
+                user: {
+                  select: {
+                    name: true,
+                    username: true,
+                  },
+                },
+                organization: {
+                  select: {
+                    id: true,
+                    name: true,
+                    type: true,
+                  },
+                },
+              },
+            },
           },
         },
         client: {
@@ -109,16 +132,6 @@ export async function getAllAppointments(params: {
             name: true,
             email: true,
             phone: true,
-          },
-        },
-        staff: {
-          include: {
-            user: {
-              select: {
-                name: true,
-                username: true,
-              },
-            },
           },
         },
       },
@@ -144,14 +157,17 @@ export async function getAppointmentById(id: string) {
   return prisma.appointment.findUnique({
     where: { id },
     include: {
-      service: true,
-      organization: true,
-      client: true,
-      staff: {
+      service: {
         include: {
-          user: true,
+          staff: {
+            include: {
+              user: true,
+              organization: true,
+            },
+          },
         },
       },
+      client: true,
     },
   })
 }
@@ -197,12 +213,13 @@ export async function deleteAppointment(id: string) {
 export async function countAppointments(params: {
   status?: string
   organizationId?: string
+  serviceCategoryId?: string
   startDate?: Date
   endDate?: Date
 }): Promise<number> {
   await requireAdmin()
 
-  const { status, organizationId, startDate, endDate } = params
+  const { status, organizationId, serviceCategoryId, startDate, endDate } = params
 
   const where: Record<string, any> = {}
 
@@ -211,7 +228,18 @@ export async function countAppointments(params: {
   }
 
   if (organizationId) {
-    where.organizationId = organizationId
+    where.service = {
+      staff: {
+        organizationId,
+      },
+    }
+  }
+
+  if (serviceCategoryId) {
+    where.service = {
+      ...where.service,
+      serviceCategoryId,
+    }
   }
 
   if (startDate || endDate) {

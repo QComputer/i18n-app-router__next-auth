@@ -81,18 +81,37 @@ export async function getAllStaff(params: {
 export async function getStaffById(id: string) {
   await requireOrganizationAdmin()
 
-  return prisma.staff.findUnique({
+  const staff = await prisma.staff.findUnique({
     where: { id },
     include: {
       user: true,
       organization: true,
-      appointments: {
-        include: {
-          service: true,
-        },
-      },
+      services: true,
     },
   })
+
+  // Get appointments through services
+  if (staff) {
+    const serviceIds = staff.services.map(s => s.id)
+    const appointments = await prisma.appointment.findMany({
+      where: {
+        serviceId: {
+          in: serviceIds,
+        },
+      },
+      include: {
+        service: true,
+        client: true,
+      },
+      orderBy: {
+        startTime: 'desc',
+      },
+      take: 20,
+    })
+    return { ...staff, appointments }
+  }
+
+  return staff
 }
 
 /**

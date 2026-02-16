@@ -46,7 +46,9 @@ export default async function NewAppointmentPage(props: {
   // Fetch services
   const services = await prisma.service.findMany({
     where: {
-      organizationId,
+      staff: {
+        organizationId,
+      },
       isActive: true,
     },
     orderBy: { name: "asc" },

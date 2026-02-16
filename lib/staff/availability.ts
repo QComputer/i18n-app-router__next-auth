@@ -154,7 +154,9 @@ export async function isStaffAvailable(
 
   // Check for conflicting appointments
   const whereClause: Record<string, unknown> = {
-    staffId,
+    service: {
+      staffId,
+    },
     status: { notIn: ["CANCELLED"] },
     OR: [
       {
@@ -215,7 +217,9 @@ export async function getAvailableSlots(
 
   const existingAppointments = await prisma.appointment.findMany({
     where: {
-      staffId,
+      service: {
+        staffId,
+      },
       status: { notIn: ["CANCELLED"] },
       startTime: { gte: dayStart, lte: dayEnd },
       ...(excludeAppointmentId && { id: { not: excludeAppointmentId } }),

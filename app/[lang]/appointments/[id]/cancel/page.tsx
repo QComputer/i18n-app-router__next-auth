@@ -11,7 +11,6 @@ import { auth } from "@/lib/auth"
 import { redirect } from "next/navigation"
 import { getDictionary } from "@/get-dictionary"
 import { i18nConfig, type Locale } from "@/i18n-config"
-import prisma from "@/lib/db/prisma"
 import Link from "next/link"
 import { ArrowRight, AlertTriangle, Calendar, XCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -19,7 +18,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
-import { cancelAppointmentAction } from "@/app/actions/appointments"
+import { cancelAppointmentAction, getAppointmentForCancellation } from "@/app/actions/appointments"
 
 /**
  * Generate static params for all supported locales
@@ -57,35 +56,14 @@ export default async function CancelAppointmentPage(props: {
     redirect(`/${locale}/auth/signin`);
   }
 
-  // Get organization ID
-  const organizationId = session.user.organizationId || "default";
-  if (!organizationId) {
+  // Fetch the appointment using action
+  const result = await getAppointmentForCancellation(appointmentId);
+
+  if (!result) {
     redirect(`/${locale}/appointments`);
   }
 
-  // Fetch the appointment
-  const appointment = await prisma.appointment.findUnique({
-    where: { id: appointmentId },
-    include: {
-      service: true,
-      staff: {
-        include: {
-          user: true,
-        },
-      },
-    },
-  });
-
-  if (!appointment || appointment.organizationId !== organizationId) {
-    redirect(`/${locale}/appointments`);
-  }
-
-  // For STAFF users, check if appointment is assigned to them
-  if (session.user.role === "STAFF" && session.user.hierarchy === "MERCHANT" && session.user.staffId) {
-    if (appointment.staffId !== session.user.staffId) {
-      redirect(`/${locale}/appointments`);
-    }
-  }
+  const { appointment, organizationId } = result
 
   // Check if appointment can be cancelled
   if (appointment.status === "CANCELLED" || appointment.status === "COMPLETED") {

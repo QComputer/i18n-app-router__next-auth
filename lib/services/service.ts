@@ -43,15 +43,18 @@ export type ServiceWithRelations = {
   createdAt: Date
   updatedAt: Date
   staff: {
-    id: string
     user: {
       name: string | null
       email: string | null
     }
   } | null
   serviceCategory: {
-    id: string
     name: string
+    organization:{
+      id: string
+      name: string
+      slug: string
+    }
   } | null
 }
 
@@ -98,6 +101,7 @@ export async function getServiceByIdWithRelations(id: string): Promise<ServiceWi
         include: {
           user: {
             select: {
+              username: true,
               name: true,
               email: true,
             },
@@ -106,8 +110,14 @@ export async function getServiceByIdWithRelations(id: string): Promise<ServiceWi
       },
       serviceCategory: {
         select: {
-          id: true,
           name: true,
+          organization: {
+            select:{
+              id: true,
+              name: true,
+              slug: true,
+            }
+          },
         },
       },
     },
@@ -130,7 +140,7 @@ export async function getServicesByOrganization(
     return []
   }
 
-  return prisma.service.findMany({
+  return await prisma.service.findMany({
     where: {
       staff: {
         organizationId,
@@ -169,6 +179,7 @@ export async function getServicesByStaffId(
         include: {
           user: {
             select: {
+              username: true,
               name: true,
               email: true,
             },
@@ -177,8 +188,14 @@ export async function getServicesByStaffId(
       },
       serviceCategory: {
         select: {
-          id: true,
           name: true,
+          organization: {
+            select:{
+              id: true,
+              name: true,
+              slug: true,
+            }
+          },
         },
       },
     },
@@ -218,6 +235,7 @@ export async function getAllServicesByOrganization(
         include: {
           user: {
             select: {
+              username: true,
               name: true,
               email: true,
             },
@@ -226,8 +244,14 @@ export async function getAllServicesByOrganization(
       },
       serviceCategory: {
         select: {
-          id: true,
           name: true,
+          organization: {
+            select:{
+              id: true,
+              name: true,
+              slug: true,
+            }
+          },
         },
       },
     },
@@ -260,22 +284,23 @@ export async function getAllServices(
         include: {
           user: {
             select: {
+              username: true,
               name: true,
               email: true,
-            },
-          },
-          organization: {
-            select: {
-              id: true,
-              name: true,
             },
           },
         },
       },
       serviceCategory: {
         select: {
-          id: true,
           name: true,
+          organization: {
+            select:{
+              id: true,
+              name: true,
+              slug: true,
+            }
+          },
         },
       },
     },
@@ -287,7 +312,7 @@ export async function getAllServices(
 /**
  * Appointment type for service appointments
  */
-export type ServiceAppointment = {
+interface ServiceAppointment {
   id: string
   startTime: Date
   endTime: Date
@@ -297,10 +322,13 @@ export type ServiceAppointment = {
   clientPhone: string | null
   notes: string | null
   serviceId: string
-  staffId: string | null
   clientId: string | null
   createdAt: Date
   updatedAt: Date
+  client: {
+    username: string
+    name: string | null
+  } | null
   staff: {
     id: string
     user: {
@@ -344,11 +372,22 @@ export async function getAppointmentsByService(
       take: limit,
       orderBy: { startTime: 'desc' },
       include: {
-        staff: {
+        client: {
+          select: {
+            name: true,
+            username: true,
+          },
+        },
+        service: {
           include: {
-            user: {
+            staff: {
               select: {
-                name: true,
+                id: true,
+                user: {
+                  select: {
+                    name: true,
+                  },
+                },
               },
             },
           },
@@ -358,8 +397,26 @@ export async function getAppointmentsByService(
     prisma.appointment.count({ where }),
   ])
 
+  // Transform to match expected format
+  const transformedAppointments: ServiceAppointment[] = appointments.map(apt => ({
+    id: apt.id,
+    startTime: apt.startTime,
+    endTime: apt.endTime,
+    status: apt.status,
+    clientName: apt.clientName,
+    clientEmail: apt.clientEmail,
+    clientPhone: apt.clientPhone,
+    notes: apt.notes,
+    serviceId: apt.serviceId,
+    clientId: apt.clientId,
+    createdAt: apt.createdAt,
+    updatedAt: apt.updatedAt,
+    client: apt.client,
+    staff: apt.service.staff,
+  }))
+
   return {
-    appointments,
+    appointments: transformedAppointments,
     total,
     page,
     limit,

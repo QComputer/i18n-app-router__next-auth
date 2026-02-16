@@ -100,7 +100,7 @@ export default async function AdminDashboardPage({
           <ul className="mt-2 space-y-1">
             {serviceStats.services.slice(0, 5).map((service) => (
               <li key={service.id} className="text-sm">
-                {service.name} ({service.organization?.name})
+                {service.name} ({service.serviceCategory?.organization?.name})
               </li>
             ))}
           </ul>

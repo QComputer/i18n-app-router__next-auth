@@ -180,6 +180,11 @@ export default async function OrganizationDetailsPage({
                     <p className="text-xs text-muted-foreground">
                       {dict.admin?.hierarchy?.[staff.hierarchy] || staff.hierarchy}
                     </p>
+                    {staff.services.length > 0 && (
+                      <p className="text-xs text-muted-foreground">
+                        {staff.services.length} {dict.service?.title || "Services"}
+                      </p>
+                    )}
                   </div>
                   <a
                     href={`/${lang}/admin/staff/${staff.id}`}
@@ -199,40 +204,35 @@ export default async function OrganizationDetailsPage({
           </div>
         )}
 
-        {orgData.services.length > 0 && (
+        {orgData.serviceCategories.length > 0 && (
           <div className="md:col-span-2 p-6 bg-card rounded-lg border">
             <h3 className="text-lg font-semibold mb-4">
-              {dict.service?.title || "Services"} ({orgData.services.length})
+              {dict.serviceCategory?.title || "Service Categories"} ({orgData.serviceCategories.length})
             </h3>
 
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="bg-muted">
-                  <tr>
-                    <th className="p-3 text-left">{dict.service?.name || "Name"}</th>
-                    <th className="p-3 text-left">{dict.service?.description || "Description"}</th>
-                    <th className="p-3 text-left">{dict.service?.price || "Price"}</th>
-                    <th className="p-3 text-left">{dict.service?.status || "Status"}</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y">
-                  {orgData.services.slice(0, 10).map((service) => (
-                    <tr key={service.id} className="hover:bg-accent">
-                      <td className="p-3">{service.name}</td>
-                      <td className="p-3">{service.description || "-"}</td>
-                      <td className="p-3">{service.price || "-"}</td>
-                      <td className="p-3">
-                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                          {service.isActive ? dict.service?.active || "Active" : dict.service?.inactive || "Inactive"}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              {orgData.services.length > 10 && (
-                <p className="text-sm text-muted-foreground mt-2">
-                  {dict.common?.andMore || "And"} {orgData.services.length - 10}{" "}
+            <div className="space-y-4">
+              {orgData.serviceCategories.slice(0, 10).map((category) => (
+                <div key={category.id} className="border rounded-lg p-4">
+                  <div className="flex justify-between items-start mb-2">
+                    <h4 className="font-medium">{category.name}</h4>
+                    <span className="text-sm text-muted-foreground">
+                      {category.services.length} {dict.service?.title || "Services"}
+                    </span>
+                  </div>
+                  {category.description && (
+                    <p className="text-sm text-muted-foreground mb-2">{category.description}</p>
+                  )}
+                  {category.services.length > 0 && (
+                    <div className="text-xs text-muted-foreground">
+                      {category.services.slice(0, 3).map((service) => service.name).join(", ")}
+                      {category.services.length > 3 && `, ${dict.common?.andMore || "And"} ${category.services.length - 3} ${dict.common?.more || "more"}`}
+                    </div>
+                  )}
+                </div>
+              ))}
+              {orgData.serviceCategories.length > 10 && (
+                <p className="text-sm text-muted-foreground">
+                  {dict.common?.andMore || "And"} {orgData.serviceCategories.length - 10}{" "}
                   {dict.common?.more || "more"}
                 </p>
               )}

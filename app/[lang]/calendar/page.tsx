@@ -61,95 +61,52 @@ type CalendarPageDict = {
 }
 
 /**
- * Interface for appointment from database
- */
-interface DatabaseAppointment {
-  id: string
-  startTime: Date
-  endTime: Date
-  status: string
-  notes: string | null
-  clientName: string
-  clientEmail: string | null
-  clientPhone: string | null
-  cancellationReason: string | null
-  organizationId: string
-  serviceId: string
-  clientId: string | null
-  staffId: string | null
-  createdAt: Date
-  updatedAt: Date
-  service: {
-    id: string
-    name: string
-    duration: number
-    color: string | null
-  }
-  staff: {
-    id: string
-    bio: string | null
-    user: {
-      name: string | null
-      username: string
-    } | null
-  } | null
-  client: {
-    id: string
-    name: string | null
-    email: string | null
-  } | null
-}
-
-/**
- * Interface for holiday from database
- */
-interface DatabaseHoliday {
-  id: string
-  date: Date
-  name: string
-  isRecurring: boolean
-}
-
-/**
  * Get appointments for the calendar based on user role
  */
 async function getCalendarAppointments(
-  userId: string, 
   organizationId: string, 
   hierarchy?: string | null, 
   staffId?: string | null
 ): Promise<CalendarAppointment[]> {
-  // Build where clause based on user role
-  const whereCondition: Record<string, unknown> = {
-    organizationId,
+  // Build where clause based on user role - filter via service -> staff relation
+  const whereCondition = {
+    service: {
+      staff: {
+        organizationId,
+      },
+    },
     status: {
-      not: "CANCELLED",
+      not: "CANCELLED" as const,
     },
   }
 
   // Filter by staff for MERCHANT role
+  let serviceFilter: Record<string, unknown> | undefined
   if (hierarchy === "MERCHANT" && staffId) {
-    whereCondition.staffId = staffId
+    serviceFilter = {
+      staff: {
+        id: staffId,
+      },
+    }
   }
 
   const appointments = await prisma.appointment.findMany({
-    where: whereCondition as any,
+    where: {
+      ...whereCondition,
+      ...(serviceFilter ? { service: serviceFilter } : {}),
+    },
     orderBy: { startTime: "asc" },
     include: {
       service: {
-        select: {
-          id: true,
-          name: true,
-          duration: true,
-          color: true,
-        },
-      },
-      staff: {
         include: {
-          user: {
-            select: {
-              name: true,
-              username: true,
+          staff: {
+            include: {
+              user: {
+                select: {
+                  name: true,
+                  username: true,
+                },
+              },
             },
           },
         },
@@ -175,14 +132,23 @@ async function getCalendarAppointments(
     clientEmail: apt.clientEmail,
     clientPhone: apt.clientPhone,
     cancellationReason: apt.cancellationReason,
-    organizationId: apt.organizationId,
+    organizationId: organizationId,
     serviceId: apt.serviceId,
     clientId: apt.clientId,
-    staffId: apt.staffId,
+    staffId: apt.service.staffId || null,
     createdAt: apt.createdAt,
     updatedAt: apt.updatedAt,
-    service: apt.service,
-    staff: apt.staff as CalendarAppointment["staff"],
+    service: {
+      id: apt.service.id,
+      name: apt.service.name,
+      duration: apt.service.duration,
+      color: apt.service.color,
+    },
+    staff: apt.service.staff ? {
+      id: apt.service.staff.id,
+      bio: apt.service.staff.bio,
+      user: apt.service.staff.user,
+    } : null,
   }))
 }
 
@@ -264,7 +230,6 @@ export default async function CalendarPage({
   // Fetch data based on user role
   const [appointments, holidays] = await Promise.all([
     getCalendarAppointments(
-      user.id,
       organizationId,
       user.hierarchy,
       user.staffId

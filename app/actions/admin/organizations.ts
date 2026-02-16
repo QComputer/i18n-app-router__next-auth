@@ -60,10 +60,10 @@ export async function getOrganizations(params: {
         staffs: {
           include: {
             user: true,
+            services: true,
           },
         },
-        services: true,
-        appointments: true,
+        serviceCategories: true,
       },
     }),
     prisma.organization.count({ where }),
@@ -84,24 +84,57 @@ export async function getOrganizations(params: {
 export async function getOrganizationById(id: string) {
   await requireAdmin()
 
-  return prisma.organization.findUnique({
+  const organization = await prisma.organization.findUnique({
     where: { id },
     include: {
       staffs: {
         include: {
           user: true,
+          services: true,
         },
       },
-      services: true,
-      appointments: {
+      serviceCategories: {
         include: {
-          service: true,
+          services: {
+            include: {
+              staff: {
+                include: {
+                  user: true,
+                },
+              },
+            },
+          },
         },
       },
       businessHours: true,
       holidays: true,
     },
   })
+
+  // Get appointments through staff -> services
+  if (organization) {
+    const staffIds = organization.staffs.map(s => s.id)
+    const appointments = await prisma.appointment.findMany({
+      where: {
+        service: {
+          staffId: {
+            in: staffIds,
+          },
+        },
+      },
+      include: {
+        service: true,
+        client: true,
+      },
+      orderBy: {
+        startTime: 'desc',
+      },
+      take: 20,
+    })
+    return { ...organization, appointments }
+  }
+
+  return organization
 }
 
 /**

@@ -216,7 +216,11 @@ export async function getExistingAppointments(
   const dayEnd = endOfDay(date)
   
   const whereClause: Record<string, unknown> = {
-    organizationId,
+    service: {
+      staff: {
+        organizationId,
+      },
+    },
     startTime: {
       gte: dayStart,
       lte: dayEnd,
@@ -231,7 +235,9 @@ export async function getExistingAppointments(
   }
   
   if (staffId) {
-    whereClause.staffId = staffId
+    whereClause.service = {
+      staffId,
+    }
   }
   
   const appointments = await prisma.appointment.findMany({
@@ -520,16 +526,14 @@ export async function createAppointment(data: {
   const startTime = setMinutes(setHours(new Date(data.date), hours), minutes)
   const endTime = new Date(startTime.getTime() + service.duration * 60000)
   
-  // Create appointment
+  // Create appointment - no direct organizationId or staffId on Appointment
   const appointment = await prisma.appointment.create({
     data: {
-      organizationId: data.organizationId,
       serviceId: data.serviceId,
       clientId: data.clientId,
       clientName: data.clientName,
       clientEmail: data.clientEmail,
       clientPhone: data.clientPhone,
-      staffId: data.staffId,
       startTime,
       endTime,
       notes: data.notes,
@@ -551,11 +555,6 @@ export async function getAppointmentWithDetails(id: string) {
     where: { id },
     include: {
       service: true,
-      staff: {
-        select: {
-          id: true,
-        },
-      },
       client: {
         select: {
           id: true,
@@ -564,19 +563,12 @@ export async function getAppointmentWithDetails(id: string) {
           phone: true,
         },
       },
-      organization: {
-        select: {
-          id: true,
-          name: true,
-          phone: true,
-          address: true,
-        },
-      },
     },
   })
-  if(appointment?.staff){
+  
+  if(appointment?.service){
   const staff = await prisma.staff.findUnique({
-        where: { id: appointment?.staff?.id},
+    where: { id: appointment.service.staffId},
     include: {
       user: {
         select: {
@@ -584,11 +576,22 @@ export async function getAppointmentWithDetails(id: string) {
           email: true,
           phone: true,
         }
+      },
+      organization: {
+        select: {
+          name: true,
+          email: true,
+          phone: true,
+          address: true,
+        }
       }
     }
   })
-  return {appointment, staff}
-}
+    const client = appointment.client;
+    
+
+    return {appointment, client, staff}
+  }
   
   return { appointment: appointment as any, staff: null as any }
 }

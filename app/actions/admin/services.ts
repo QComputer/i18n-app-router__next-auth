@@ -70,7 +70,17 @@ export async function getAllServices(params: {
             },
           },
         },
-        serviceCategory: true,
+        serviceCategory: {
+          include: {
+            organization: {
+              select: {
+                id: true,
+                name: true,
+                type: true,
+              },
+            },
+          },
+        },
       },
     }),
     prisma.service.count({ where }),

@@ -173,11 +173,18 @@ export default async function ServicesPage(props: {
               select: {
                 id: true,
                 name: true,
+                organization: {
+                  select: {
+                    id: true,
+                    name: true,
+                    slug: true,
+                  },
+                },
               },
             },
           },
         })
-        return fullService as ServiceWithRelations
+        return fullService as unknown as ServiceWithRelations
       })
     )
   }

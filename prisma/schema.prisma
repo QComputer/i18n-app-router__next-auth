@@ -74,13 +74,24 @@ model Organization {
 
   // Relations
   serviceCategories ServiceCategory[]
-  appointments      Appointment[]
   businessHours     BusinessHours[]
   holidays          Holiday[]
   staffs            Staff[]
+  serviceFields     ServiceField[]
 
   @@index([slug])
   @@index([type])
+}
+
+model ServiceField {
+  id             String           @id @default(cuid())
+  name           String
+
+  // Foreign Keys
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  staffs Staff[]
 }
 
 enum OrganizationType {
@@ -164,8 +175,8 @@ model Staff {
 
   // Relations
   availability StaffAvailability[]
-  appointments Appointment[] // Staff's appointments
   services     Service[] // Staff's services
+  serviceField ServiceField[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -303,24 +314,18 @@ model Appointment {
   children      Appointment[] @relation("RecurringSeries")
 
   // Foreign Keys
-  organizationId String
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   serviceId      String
   service        Service      @relation(fields: [serviceId], references: [id])
-  staffId        String?
-  staff          Staff?       @relation(fields: [staffId], references: [id])
   clientId       String?
   client         User?        @relation(fields: [clientId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([organizationId])
   @@index([startTime])
   @@index([status])
   @@index([serviceId])
   @@index([clientId])
-  @@index([staffId])
   @@index([parentId])
 }
 

@@ -89,6 +89,8 @@ export default async function OrganizationServicesPage({ params }: PageProps) {
   
   // Get dictionary for translations
   const dictionary = await getDictionary(validLang)
+  console.log(serviceCategories);
+  
   
   return (
     <OrganizationServicesClient

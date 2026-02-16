@@ -19,6 +19,8 @@ import { revalidatePath } from "next/cache"
 export async function getAppointments(params: {
   status?: string
   serviceId?: string
+  serviceCategoryId?: string
+  clientId?: string
   startDate?: Date
   endDate?: Date
   page?: number
@@ -53,7 +55,11 @@ export async function getAppointments(params: {
   }
 
   const where: Record<string, any> = {
-    organizationId: session.user.organizationId,
+    service: {
+      staff: {
+        organizationId: session.user.organizationId,
+      },
+    },
   }
 
   // Filter by status if provided
@@ -64,6 +70,14 @@ export async function getAppointments(params: {
   // Filter by service if provided
   if (serviceId) {
     where.serviceId = serviceId
+  }
+
+  // Filter by service category if provided
+  if (params.serviceCategoryId) {
+    where.service = {
+      ...where.service,
+      serviceCategoryId: params.serviceCategoryId,
+    }
   }
 
   // Filter by date range if provided
@@ -101,21 +115,25 @@ export async function getAppointments(params: {
       orderBy: { startTime: "desc" },
       include: {
         service: {
+          include: {
+            staff: {
+              include: {
+                user: {
+                  select: {
+                    name: true,
+                    username: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+        client: {
           select: {
             id: true,
             name: true,
-            duration: true,
-            color: true,
-          },
-        },
-        staff: {
-          include: {
-            user: {
-              select: {
-                name: true,
-                username: true,
-              },
-            },
+            email: true,
+            phone: true,
           },
         },
       },
@@ -145,28 +163,192 @@ export async function getAppointmentById(id: string) {
   const appointment = await prisma.appointment.findUnique({
     where: { id },
     include: {
-      service: true,
-      staff: {
+      service: {
         include: {
-          user: true,
+          staff: {
+            include: {
+              user: true,
+            },
+          },
         },
       },
+      client: true,
     },
   })
 
   // Check if appointment belongs to user's organization
-  if (!appointment || appointment.organizationId !== session.user.organizationId) {
+  if (!appointment || appointment.service.staff.organizationId !== session.user.organizationId) {
     return null
   }
 
   // For STAFF users (MERCHANT hierarchy), check if appointment is assigned to them
   if (session.user.role === "STAFF" && session.user.hierarchy === "MERCHANT" && session.user.staffId) {
-    if (appointment.staffId !== session.user.staffId) {
+    if (appointment.service.staffId !== session.user.staffId) {
       return null
     }
   }
 
   return appointment
+}
+
+/**
+ * Get appointment for editing (with organization check via relation)
+ * Returns appointment data along with services and staff for the organization
+ */
+export async function getAppointmentForEdit(id: string) {
+  const session = await auth()
+  
+  if (!session?.user || !session.user.organizationId) {
+    redirect(`/auth/signin`)
+  }
+
+  const appointment = await prisma.appointment.findUnique({
+    where: { id },
+    include: {
+      service: {
+        include: {
+          staff: {
+            include: {
+              user: {
+                select: {
+                  name: true,
+                  username: true,
+                },
+              },
+            },
+          },
+        },
+      },
+      client: true,
+    },
+  })
+
+  if (!appointment) {
+    return null
+  }
+
+  // Check organization via staff relation
+  const organizationId = appointment.service.staff.organizationId
+  if (organizationId !== session.user.organizationId) {
+    return null
+  }
+
+  // For STAFF users, check if appointment is assigned to them
+  if (session.user.role === "STAFF" && session.user.hierarchy === "MERCHANT" && session.user.staffId) {
+    if (appointment.service.staffId !== session.user.staffId) {
+      return null
+    }
+  }
+
+  // Get all services for the organization
+  const services = await prisma.service.findMany({
+    where: {
+      staff: {
+        organizationId: session.user.organizationId,
+      },
+      isActive: true,
+    },
+    orderBy: { name: "asc" },
+  })
+
+  // Get staff members for the organization
+  let staffMembers: { id: string; user: { name: string | null; username: string } }[] = []
+  
+  if (session.user.role !== "STAFF" || session.user.hierarchy !== "MERCHANT") {
+    // For OWNER and MANAGER, show all active staff
+    staffMembers = await prisma.staff.findMany({
+      where: {
+        organizationId: session.user.organizationId,
+        isActive: true,
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+            username: true,
+          },
+        },
+      },
+      orderBy: {
+        user: {
+          name: "asc",
+        },
+      },
+    })
+  } else if (session.user.staffId) {
+    // Staff users can only see themselves
+    const staff = await prisma.staff.findUnique({
+      where: { id: session.user.staffId },
+      include: {
+        user: {
+          select: {
+            name: true,
+            username: true,
+          },
+        },
+      },
+    })
+    if (staff) {
+      staffMembers = [{
+        id: staff.id,
+        user: staff.user,
+      }]
+    }
+  }
+
+  return { 
+    appointment, 
+    services, 
+    staffMembers,
+    organizationId,
+    isClient: session.user.role === "CLIENT" && session.user.id === appointment.clientId
+  }
+}
+
+/**
+ * Get appointment for cancellation (with organization check via relation)
+ */
+export async function getAppointmentForCancellation(id: string) {
+  const session = await auth()
+  
+  if (!session?.user || !session.user.organizationId) {
+    redirect(`/auth/signin`)
+  }
+
+  const appointment = await prisma.appointment.findUnique({
+    where: { id },
+    include: {
+      service: {
+        include: {
+          staff: {
+            include: {
+              user: true,
+            },
+          },
+        },
+      },
+      client: true,
+    },
+  })
+
+  if (!appointment) {
+    return null
+  }
+
+  // Check organization via staff relation
+  const organizationId = appointment.service.staff.organizationId
+  if (organizationId !== session.user.organizationId) {
+    return null
+  }
+
+  // For STAFF users, check if appointment is assigned to them
+  if (session.user.role === "STAFF" && session.user.hierarchy === "MERCHANT" && session.user.staffId) {
+    if (appointment.service.staffId !== session.user.staffId) {
+      return null
+    }
+  }
+
+  return { appointment, organizationId }
 }
 
 /**
@@ -223,13 +405,11 @@ export async function createAppointmentAction(formData: FormData, locale: string
 
   const appointment = await prisma.appointment.create({
     data: {
-      organizationId: session.user.organizationId,
       serviceId,
       clientId: session.user.id,
       clientName,
       clientEmail,
       clientPhone,
-      staffId: assignedStaffId,
       startTime,
       endTime,
       notes,
@@ -258,15 +438,22 @@ export async function updateAppointmentAction(
   // Get existing appointment
   const existingAppointment = await prisma.appointment.findUnique({
     where: { id },
+    include: {
+      service: {
+        include: {
+          staff: true,
+        },
+      },
+    },
   })
 
-  if (!existingAppointment || existingAppointment.organizationId !== session.user.organizationId) {
+  if (!existingAppointment || existingAppointment.service.staff.organizationId !== session.user.organizationId) {
     redirect(`/${locale}/appointments`)
   }
 
   // For STAFF users (MERCHANT hierarchy), check if appointment is assigned to them
   if (session.user.role === "STAFF" && session.user.hierarchy === "MERCHANT" && session.user.staffId) {
-    if (existingAppointment.staffId !== session.user.staffId) {
+    if (existingAppointment.service.staffId !== session.user.staffId) {
       redirect(`/${locale}/appointments`)
     }
   }
@@ -315,7 +502,6 @@ export async function updateAppointmentAction(
       clientName,
       clientEmail,
       clientPhone,
-      staffId: assignedStaffId,
       startTime,
       endTime,
       notes,
@@ -343,15 +529,22 @@ export async function updateAppointmentStatus(
 
   const appointment = await prisma.appointment.findUnique({
     where: { id },
+    include: {
+      service: {
+        include: {
+          staff: true,
+        },
+      },
+    },
   })
 
-  if (!appointment || appointment.organizationId !== session.user.organizationId) {
+  if (!appointment || appointment.service.staff.organizationId !== session.user.organizationId) {
     throw new Error("Appointment not found")
   }
 
   // For STAFF users (MERCHANT hierarchy), check if appointment is assigned to them
   if (session.user.role === "STAFF" && session.user.hierarchy === "MERCHANT" && session.user.staffId) {
-    if (appointment.staffId !== session.user.staffId) {
+    if (appointment.service.staffId !== session.user.staffId) {
       throw new Error("Not authorized to update this appointment")
     }
   }
@@ -394,15 +587,22 @@ export async function cancelAppointmentAction(
 
   const appointment = await prisma.appointment.findUnique({
     where: { id },
+    include: {
+      service: {
+        include: {
+          staff: true,
+        },
+      },
+    },
   })
 
-  if (!appointment || appointment.organizationId !== session.user.organizationId) {
+  if (!appointment || appointment.service.staff.organizationId !== session.user.organizationId) {
     throw new Error("Appointment not found")
   }
 
   // For STAFF users (MERCHANT hierarchy), check if appointment is assigned to them
   if (session.user.role === "STAFF" && session.user.hierarchy === "MERCHANT" && session.user.staffId) {
-    if (appointment.staffId !== session.user.staffId) {
+    if (appointment.service.staffId !== session.user.staffId) {
       throw new Error("Not authorized to cancel this appointment")
     }
   }
@@ -437,15 +637,22 @@ export async function deleteAppointmentAction(id: string, locale: string) {
 
   const appointment = await prisma.appointment.findUnique({
     where: { id },
+    include: {
+      service: {
+        include: {
+          staff: true,
+        },
+      },
+    },
   })
 
-  if (!appointment || appointment.organizationId !== session.user.organizationId) {
+  if (!appointment || appointment.service.staff.organizationId !== session.user.organizationId) {
     redirect(`/${locale}/appointments`)
   }
 
   // For STAFF users (MERCHANT hierarchy), check if appointment is assigned to them
   if (session.user.role === "STAFF" && session.user.hierarchy === "MERCHANT" && session.user.staffId) {
-    if (appointment.staffId !== session.user.staffId) {
+    if (appointment.service.staffId !== session.user.staffId) {
       redirect(`/${locale}/appointments`)
     }
   }

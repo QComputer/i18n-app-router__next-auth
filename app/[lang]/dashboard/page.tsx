@@ -15,7 +15,7 @@ import { redirect } from "next/navigation"
 import { getDictionary } from "@/get-dictionary"
 import { type Locale } from "@/i18n-config"
 import { i18nConfig } from "@/i18n-config"
-import prisma from "@/lib/db/prisma"
+import { getAppointments } from "@/app/actions/appointments"
 import Link from "next/link"
 import { 
   LayoutDashboard, 
@@ -62,10 +62,10 @@ type NavCategory = {
 
 // Status colors for appointment cards
 const statusColors: Record<string, { bg: string; border: string; text: string }> = {
-  PENDING: { bg: "bg-yellow-50 border-yellow-200", border: "border-yellow-300", text: "text-yellow-800" },
-  CONFIRMED: { bg: "bg-green-50 border-green-200", border: "border-green-300", text: "text-green-800" },
-  COMPLETED: { bg: "bg-blue-50 border-blue-200", border: "border-blue-300", text: "text-blue-800" },
-  CANCELLED: { bg: "bg-red-50 border-red-200", border: "border-red-300", text: "text-red-800" },
+  PENDING: { bg: "dark:bg-yellow-950 bg-yellow-50 border-yellow-200", border: "border-yellow-300", text: "text-yellow-800" },
+  CONFIRMED: { bg: "dark:bg-green-950 bg-green-50  border-green-200", border: "border-green-300", text: "text-green-800" },
+  COMPLETED: { bg: "dark:bg-blue-950 bg-blue-50 border-blue-200", border: "border-blue-300", text: "text-blue-800" },
+  CANCELLED: { bg: "dark:bg-red-950 border-red-200", border: "border-red-300", text: "text-red-800" },
 }
 
 const statusLabels: Record<string, string> = {
@@ -133,24 +133,10 @@ export default async function DashboardPage(props: {
     status: getTranslation(dictionary, "appointment.status", "Status"),
   }
 
-  // Get user's appointments
-  const appointments = await prisma.appointment.findMany({
-    where: userRole === "CLIENT" 
-      ? { clientId: user.id }
-      : userRole === "STAFF"
-      ? { staff: { userId: user.id } }
-      : {},
-    include: {
-      service: { select: { name: true } },
-      staff: { 
-        include: { 
-          user: { select: { name: true } } 
-        } 
-      },
-      client: { select: { name: true, email: true } },
-    },
-    orderBy: { startTime: "desc" },
-    take: 5,
+  // Get user's appointments using the getAppointments action
+  const { appointments } = await getAppointments({
+    page: 1,
+    limit: 5,
   })
 
   // Build navigation based on user role

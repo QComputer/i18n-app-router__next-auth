@@ -622,6 +622,71 @@ async function createHolidays(organizations: CreatedOrg[]) {
   console.log("Holidays created")
 }
 
+/**
+ * Create service fields and link to staff
+ */
+async function createServiceFields(organizations: CreatedOrg[]) {
+  console.log("Creating service fields...")
+  
+  const serviceFieldsData = [
+    { name: "Consultation", description: "Initial consultations and advice" },
+    { name: "Treatment", description: "Medical and therapeutic treatments" },
+    { name: "Follow-up", description: "Follow-up appointments and care" },
+  ]
+  
+  for (const org of organizations) {
+    // Get staff members for this organization
+    const staffMembers = await prisma.staff.findMany({
+      where: { organizationId: org.id, isActive: true },
+    })
+    
+    if (staffMembers.length === 0) continue
+    
+    // Create service fields
+    const createdFields = []
+    for (const fieldData of serviceFieldsData) {
+      const field = await prisma.serviceField.upsert({
+        where: {
+          id: `${org.slug}-${fieldData.name.toLowerCase().replace(/\s+/g, '-')}`,
+        },
+        update: {},
+        create: {
+          id: `${org.slug}-${fieldData.name.toLowerCase().replace(/\s+/g, '-')}`,
+          name: fieldData.name,
+          organizationId: org.id,
+        },
+      })
+      createdFields.push(field)
+    }
+    
+    // Assign staff to service fields (distribute staff across fields)
+    for (let i = 0; i < staffMembers.length; i++) {
+      const staff = staffMembers[i]
+      // Assign to 1-2 random service fields
+      const fieldCount = randomBetween(1, 2)
+      const assignedFields = []
+      
+      for (let j = 0; j < fieldCount; j++) {
+        const fieldIndex = (i + j) % createdFields.length
+        assignedFields.push(createdFields[fieldIndex].id)
+      }
+      
+      await prisma.staff.update({
+        where: { id: staff.id },
+        data: {
+          serviceField: {
+            connect: assignedFields.map(id => ({ id })),
+          },
+        },
+      })
+    }
+    
+    console.log(`Created ${createdFields.length} service fields for ${org.name}`)
+  }
+  
+  console.log("Service fields created")
+}
+
 async function createStaffMembers(staffUsers: CreatedUser[], organizations: CreatedOrg[]) {
   console.log("Creating staff members from converted staff users...")
   
@@ -719,9 +784,7 @@ async function createStaffMembers(staffUsers: CreatedUser[], organizations: Crea
             clientEmail: `${clientNameParts[0].toLowerCase()}.${clientNameParts[1].toLowerCase()}@email.com`,
             clientPhone: generatePhone(),
             cancellationReason: status === "CANCELLED" ? "Customer requested cancellation" : null,
-            organizationId: org.id,
             serviceId: service.id,
-            staffId: staff?.id || null,
             clientId: randomBetween(0, 1) === 0 ? staffUsers[randomBetween(0, staffUsers.length - 1)]?.id : null,
           },
         })
@@ -751,6 +814,7 @@ export default async function main() {
     await prisma.businessHours.deleteMany()
     await prisma.service.deleteMany()
     await prisma.serviceCategory.deleteMany()
+    await prisma.serviceField.deleteMany()
     await prisma.staff.deleteMany()
     await prisma.organization.deleteMany()
     await prisma.session.deleteMany()
@@ -817,6 +881,9 @@ export default async function main() {
     
     // Step 9: Create appointments
     const appointmentCount = await createAppointments(staffUsers, organizations)
+
+    // Step 10: Create service fields and link to staff
+    await createServiceFields(organizations)
 
     console.log("\n========================================")
     console.log("Seed Complete!")

@@ -20,12 +20,14 @@ export async function POST(request: Request) {
     // Default to 30 minute appointment if no service selected
     const endTime = new Date(startTime.getTime() + 30 * 60000)
 
-    // Get default service if not provided
+    // Get default service if not provided - need to go through staff relation
     let finalServiceId = serviceId
     if (!finalServiceId) {
       const defaultService = await prisma.service.findFirst({
         where: { 
-          organizationId,
+          staff: {
+            organizationId,
+          },
           isActive: true
         },
         orderBy: { createdAt: 'asc' }
@@ -33,10 +35,9 @@ export async function POST(request: Request) {
       finalServiceId = defaultService?.id || null
     }
 
-    // Create appointment request
+    // Create appointment request - no organizationId or staffId on Appointment
     const appointment = await prisma.appointment.create({
       data: {
-        organizationId,
         clientName: name,
         clientPhone: phone,
         clientEmail: email || null,

@@ -53,7 +53,8 @@ export default async function ServicesListPage({
                     <td className="p-3">{service.description || "-"}</td>
                     <td className="p-3">{service.duration} min</td>
                     <td className="p-3">{service.price ? `${service.price} ${service.currency}` : "-"}</td>
-                    <td className="p-3">{service.organization?.name || "-"}</td>
+                    <td className="p-3">{service.serviceCategory.name || "- serviceCategory.name"}</td>
+                    <td className="p-3">{service.staffId || "- stafId"}</td>
                     <td className="p-3">
                       <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
                         service.isActive 

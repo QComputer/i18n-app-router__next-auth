@@ -66,11 +66,15 @@ export async function GET(
         take: limit,
         orderBy: { startTime: "desc" },
         include: {
-          staff: {
+          service: {
             include: {
-              user: {
-                select: {
-                  name: true,
+              staff: {
+                include: {
+                  user: {
+                    select: {
+                      name: true,
+                    },
+                  },
                 },
               },
             },

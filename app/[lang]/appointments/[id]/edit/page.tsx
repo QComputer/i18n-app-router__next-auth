@@ -11,7 +11,6 @@ import { auth } from "@/lib/auth"
 import { redirect } from "next/navigation"
 import { getDictionary } from "@/get-dictionary"
 import { i18nConfig, type Locale } from "@/i18n-config"
-import prisma from "@/lib/db/prisma"
 import { format } from "date-fns"
 import Link from "next/link"
 import { Calendar, Clock, User, Mail, Phone, FileText, ArrowRight, Save } from "lucide-react"
@@ -21,7 +20,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { updateAppointmentAction } from "@/app/actions/appointments"
+import { updateAppointmentAction, getAppointmentForEdit } from "@/app/actions/appointments"
 
 /**
  * Generate static params for all supported locales
@@ -59,78 +58,24 @@ export default async function EditAppointmentPage(props: {
     redirect(`/${locale}/auth/signin`);
   }
 
-  // Get organization ID
-  const organizationId = session.user.organizationId || "default";
-  if (!organizationId) {
+  // Get appointment with related data using action function
+  const result = await getAppointmentForEdit(appointmentId);
+
+  if (!result) {
     redirect(`/${locale}/appointments`);
   }
 
-  // Fetch the appointment
-  const appointment = await prisma.appointment.findUnique({
-    where: { id: appointmentId },
-  });
+  const { appointment, services, staffMembers, organizationId, isClient } = result;
 
-  if (!appointment || appointment.organizationId !== organizationId) {
-    redirect(`/${locale}/appointments`);
-  }
-
-  // For STAFF users, check if appointment is assigned to them
+  // For STAFF users, verify they can access this appointment
   if (session.user.role === "STAFF" && session.user.hierarchy === "MERCHANT" && session.user.staffId) {
-    if (appointment.staffId !== session.user.staffId) {
+    if (appointment.service.staffId !== session.user.staffId) {
       redirect(`/${locale}/appointments`);
     }
-  }
-
-  // Fetch services
-  const services = await prisma.service.findMany({
-    where: {
-      organizationId,
-      isActive: true,
-    },
-    orderBy: { name: "asc" },
-  });
-
-  // Fetch staff members
-  let staffMembers: { id: string; user: { name: string | null; username: string } }[] = [];
-  
-  if (session.user.role !== "STAFF" || session.user.hierarchy !== "MERCHANT") {
-    staffMembers = await prisma.staff.findMany({
-      where: {
-        organizationId,
-        isActive: true,
-      },
-      include: {
-        user: {
-          select: {
-            name: true,
-            username: true,
-          },
-        },
-      },
-      orderBy: {
-        user: {
-          name: "asc",
-        },
-      },
-    });
-  } else if (session.user.staffId) {
-    // Staff users can only see themselves
-    const staff = await prisma.staff.findUnique({
-      where: { id: session.user.staffId as string },
-      include: {
-        user: {
-          select: {
-            name: true,
-            username: true,
-          },
-        },
-      },
-    });
-    if (staff) {
-      staffMembers = [{
-        id: staff.id,
-        user: staff.user,
-      }];
+  } else if (session.user.role === "CLIENT") {
+    // For clients, verify they own this appointment
+    if (appointment.clientId !== session.user.id) {
+      redirect(`/${locale}/appointments`);
     }
   }
 
@@ -253,23 +198,25 @@ export default async function EditAppointmentPage(props: {
               </p>
             </div>
 
-            {/* Staff Selection */}
-            <div className="space-y-2">
-              <Label htmlFor="staffId">{t.staff}</Label>
-              <Select name="staffId" defaultValue={appointment.staffId || ""}>
-                <SelectTrigger>
-                  <SelectValue placeholder={t.selectStaff} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="">— {t.selectStaff} —</SelectItem>
-                  {staffMembers.map((staff) => (
-                    <SelectItem key={staff.id} value={staff.id}>
-                      {staff.user.name || staff.user.username}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+            {/* Staff Selection - Hide for clients */}
+            {!isClient && (
+              <div className="space-y-2">
+                <Label htmlFor="staffId">{t.staff}</Label>
+                <Select name="staffId" defaultValue={appointment.service.staffId || ""}>
+                  <SelectTrigger>
+                    <SelectValue placeholder={t.selectStaff} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="">— {t.selectStaff} —</SelectItem>
+                    {staffMembers.map((staff) => (
+                      <SelectItem key={staff.id} value={staff.id}>
+                        {staff.user.name || staff.user.username}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
 
             {/* Client Information */}
             <div className="space-y-4">

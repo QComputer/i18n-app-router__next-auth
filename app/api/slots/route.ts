@@ -139,10 +139,14 @@ async function generateSlots(
 
   const existingAppointments = await prisma.appointment.findMany({
     where: {
-      organizationId,
+      service: {
+        staff: {
+          organizationId,
+        },
+      },
       status: { notIn: ["CANCELLED"] },
       startTime: { gte: dayStart, lte: dayEnd },
-      ...(staffId && { staffId }),
+      ...(staffId && { service: { staffId } }),
     },
     orderBy: { startTime: "asc" },
   })

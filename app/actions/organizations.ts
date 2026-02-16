@@ -93,10 +93,6 @@ export async function getMyOrganization() {
   const organization = await prisma.organization.findUnique({
     where: { id: organizationId },
     include: {
-      services: {
-        where: { isActive: true },
-        orderBy: { name: 'asc' }
-      },
       staffs: {
         where: { isActive: true },
         include: {
@@ -108,9 +104,17 @@ export async function getMyOrganization() {
               phone: true,
               image: true,
             }
-          }
+          },
+          services: {
+            where: { isActive: true },
+            orderBy: { name: 'asc' }
+          },
         },
         orderBy: { user: { name: 'asc' } }
+      },
+      serviceCategories: {
+        where: { },
+        orderBy: { name: 'asc' }
       },
     },
   });
@@ -465,4 +469,80 @@ export async function verifyOrganizationAccess(): Promise<{
     hierarchy: staff.hierarchy,
     organizationId: staff.organizationId
   };
+}
+
+/**
+ * Get users for a specific organization
+ * 
+ * This function is used by organization admins (OWNER, MANAGER) to get
+ * a list of users that can be assigned as staff to their organization.
+ * 
+ * @param organizationId - The ID of the organization
+ * @returns Array of users not yet linked to this organization as staff
+ */
+export async function getOrganizationUsers(organizationId: string) {
+  const session = await auth();
+  
+  if (!session?.user) {
+    throw new Error("Authentication required");
+  }
+  
+  // Get staff members already in this organization
+  const existingStaff = await prisma.staff.findMany({
+    where: { organizationId },
+    select: { userId: true }
+  });
+  
+  const existingUserIds = existingStaff.map(s => s.userId);
+  
+  // Get users not already in this organization
+  const users = await prisma.user.findMany({
+    where: {
+      id: { notIn: existingUserIds }
+    },
+    select: {
+      id: true,
+      username: true,
+      name: true,
+      email: true,
+      role: true
+    },
+    orderBy: { name: 'asc' }
+  });
+  
+  return users;
+}
+
+/**
+ * Get a specific organization by ID
+ * 
+ * @param organizationId - The ID of the organization to retrieve
+ * @returns The organization or null if not found
+ */
+export async function getOrganization(organizationId: string) {
+  const session = await auth();
+  
+  if (!session?.user) {
+    throw new Error("Authentication required");
+  }
+  
+  // Verify the user has access to this organization
+  if (session.user.role !== 'ADMIN' && session.user.organizationId !== organizationId) {
+    throw new Error("You don't have permission to access this organization");
+  }
+  
+  const organization = await prisma.organization.findUnique({
+    where: { id: organizationId },
+    select: {
+      id: true,
+      name: true,
+      slug: true,
+      type: true,
+      description: true,
+      logo: true,
+      isActive: true
+    }
+  });
+  
+  return organization;
 }

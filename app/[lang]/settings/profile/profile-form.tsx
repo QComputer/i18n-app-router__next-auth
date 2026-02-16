@@ -13,6 +13,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { updateProfileAction } from "@/app/actions/profile";
+import { updateProfileImage } from "@/app/actions/profile-image";
+import { ImageUploadWithCrop } from "@/components/ui/image-upload";
 
 type Dictionary = Record<string, unknown>;
 
@@ -48,6 +50,9 @@ export function ProfileForm({ locale, user, dictionary }: ProfileFormProps) {
     success?: boolean;
     errors?: Record<string, string[]>;
   }>({});
+  
+  const [currentImage, setCurrentImage] = useState(user.image || "");
+  const [imageUpdating, setImageUpdating] = useState(false);
 
   const t = {
     title: getTranslation(dictionary, "settings.profile", "Profile"),
@@ -79,6 +84,21 @@ export function ProfileForm({ locale, user, dictionary }: ProfileFormProps) {
     });
   }
 
+  // Handle image upload
+  const handleImageChange = async (imageUrl: string) => {
+    setImageUpdating(true);
+    try {
+      await updateProfileImage(imageUrl);
+      setCurrentImage(imageUrl);
+      setState({ success: true, message: "Profile image updated successfully" });
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Failed to update image";
+      setState({ error: message });
+    } finally {
+      setImageUpdating(false);
+    }
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -106,17 +126,18 @@ export function ProfileForm({ locale, user, dictionary }: ProfileFormProps) {
 
           <div className="flex items-center gap-4 mb-6">
             <Avatar className="h-20 w-20">
-              <AvatarImage src={user.image || undefined} alt={user.name || "User"} />
+              <AvatarImage src={currentImage || undefined} alt={user.name || "User"} />
               <AvatarFallback className="text-2xl">
                 {user.name?.charAt(0).toUpperCase() || user.username.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
             <div>
-              <Button type="button" variant="outline" size="sm" className="mb-2">
-                <Upload className="h-4 w-4 mr-2" />
-                {t.uploadAvatar}
-              </Button>
-              <p className="text-xs text-muted-foreground">
+              <ImageUploadWithCrop
+                value={currentImage}
+                onChange={handleImageChange}
+                disabled={imageUpdating}
+              />
+              <p className="text-xs text-muted-foreground mt-2">
                 {t.avatarRequirements}
               </p>
             </div>

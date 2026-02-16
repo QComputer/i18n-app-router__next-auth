@@ -45,6 +45,7 @@ import {
   getDayName 
 } from "@/lib/appointments/slots"
 import { toPersianDigits } from "@/lib/utils"
+import { isOrganizationAdmin } from "@/lib/auth/admin"
 
 /**
  * Generate static params for all supported locales
@@ -128,7 +129,7 @@ export default async function AppointmentDetailPage(props: {
   const params = await props.params
   const locale = params.lang as Locale
   const appointmentId = params.id
-  
+
   // Get current session
   const session = await auth()
   
@@ -141,8 +142,8 @@ export default async function AppointmentDetailPage(props: {
   const dictionary = await getDictionary(locale)
   
   // Fetch appointment details
-  const {appointment, staff} = await getAppointmentWithDetails(appointmentId)
-  
+  const {appointment, client, staff} = await getAppointmentWithDetails(appointmentId)
+
   // If appointment not found, redirect to appointments list
   if (!appointment) {
     redirect(`/${locale}/appointments`)
@@ -282,7 +283,7 @@ export default async function AppointmentDetailPage(props: {
               />
               
               {/* Staff (if assigned) */}
-              {appointment.staff && (
+              {staff && (
                 <InfoRow
                   icon={User}
                   label={t.staff}
@@ -338,7 +339,7 @@ export default async function AppointmentDetailPage(props: {
           </Card>
           
           {/* Organization Card (if available) */}
-          {appointment.organization && (
+          {staff.organization && (
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-lg">
@@ -352,27 +353,27 @@ export default async function AppointmentDetailPage(props: {
                     <p className="text-sm text-muted-foreground">
                       {locale === "fa" ? "نام سازمان" : "Organization"}
                     </p>
-                    <p className="font-medium">{appointment.organization.name}</p>
+                    <p className="font-medium">{staff.organization.name}</p>
                   </div>
                   
-                  {appointment.organization.phone && (
+                  {staff.organization.phone && (
                     <div>
                       <p className="text-sm text-muted-foreground">{t.phoneNumber}</p>
                       <p className="font-medium">
                         {locale === "fa" 
-                          ? toPersianDigits(appointment.organization.phone)
-                          : appointment.organization.phone
+                          ? toPersianDigits(staff.organization.phone)
+                          : staff.organization.phone
                         }
                       </p>
                     </div>
                   )}
                   
-                  {appointment.organization.address && (
+                  {staff.organization.address && (
                     <div>
                       <p className="text-sm text-muted-foreground">
                         {locale === "fa" ? "آدرس" : "Address"}
                       </p>
-                      <p className="font-medium">{appointment.organization.address}</p>
+                      <p className="font-medium">{staff.organization.address}</p>
                     </div>
                   )}
                 </div>

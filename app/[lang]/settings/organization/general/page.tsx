@@ -75,15 +75,18 @@ export default async function OrganizationGeneralSettingsPage(props: {
         className="inline-flex items-center text-sm text-muted-foreground hover:text-primary mb-6"
       >
         <ArrowRight className="ml-2 h-4 w-4" />
+        {/* @ts-expect-error - dictionary type is a union, not all variants have back */}
         {dictionary.common?.back || "Back"}
       </Link>
 
       {/* Page Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold">
+          {/* @ts-expect-error - dictionary type is a union */}
           {dictionary.organization?.title || "Organization Settings"}
         </h1>
         <p className="text-muted-foreground mt-1">
+          {/* @ts-expect-error - dictionary type is a union */}
           {dictionary.organization?.subtitle || "Manage your organization information"}
         </p>
       </div>

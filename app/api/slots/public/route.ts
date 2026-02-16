@@ -32,14 +32,11 @@ export async function GET(request: Request) {
 
     const date = new Date(dateStr)
     
-    // Get service for duration
+    // Get service for duration - need to get organizationId via staff relation
     const service = await prisma.service.findUnique({
       where: { id: serviceId },
-      select: { 
-        duration: true, 
-        slotInterval: true,
-        staffId: true,
-        organizationId: true,
+      include: { 
+        staff: true,
       },
     })
 
@@ -50,8 +47,8 @@ export async function GET(request: Request) {
       )
     }
 
-    // Use provided organizationId or fall back to service's organizationId
-    const effectiveOrganizationId = organizationId || service.organizationId
+    // Use provided organizationId or fall back to service's staff's organizationId
+    const effectiveOrganizationId = organizationId || service.staff.organizationId
     
     const slotInterval = service.slotInterval || 30
     const duration = service.duration
@@ -138,15 +135,23 @@ async function generateSlots(
   const dayEnd = new Date(date)
   dayEnd.setHours(23, 59, 59, 999)
 
-  // Build the where clause
+  // Build the where clause - need to go through service -> staff for organizationId
   const whereClause: Record<string, unknown> = {
-    organizationId,
+    service: {
+      staff: {
+        organizationId,
+      },
+    },
     status: { notIn: ["CANCELLED"] },
     startTime: { gte: dayStart, lte: dayEnd },
   }
   
   if (staffId) {
-    whereClause.staffId = staffId
+    whereClause.service = {
+      staff: {
+        id: staffId,
+      },
+    }
   }
 
   const existingAppointments = await prisma.appointment.findMany({

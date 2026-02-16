@@ -43,7 +43,7 @@ import {
   CardTitle 
 } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { formatDatePersian, getDayName } from "@/lib/appointments/slots"
+import { formatDatePersian, getAppointmentWithDetails, getDayName } from "@/lib/appointments/slots"
 import { toPersianDigits } from "@/lib/utils"
 
 /**
@@ -128,14 +128,12 @@ export default async function AppointmentsPage(props: {
   const dictionary = await getDictionary(locale)
   
   // Get user's organization ID 
+  const staffId = session.user.staffId || null
   const organizationId = session.user.organizationId || null
-  
   // Fetch appointments
   const whereClause: Record<string, unknown> = {}
   
-  if (organizationId) {
-    whereClause.organizationId = organizationId
-  } else {
+  if (!organizationId) {
     // If user has no organization, show only their appointments
     whereClause.clientId = session.user.id
   }
@@ -143,8 +141,13 @@ export default async function AppointmentsPage(props: {
   const appointments = await prisma.appointment.findMany({
     where: whereClause,
     include: {
-      service: true,
-      staff: true,
+      service: {
+        select: {
+          name: true,
+          staff: true,
+          serviceCategory: true,
+        },
+      },
       client: {
         select: {
           name: true,
@@ -310,6 +313,10 @@ export default async function AppointmentsPage(props: {
                       <div>
                         <p className="text-sm text-muted-foreground">{t.service}</p>
                         <p className="font-medium">{appointment.service.name}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Category</p>
+                        <p className="font-medium">{appointment.service?.serviceCategory.name}</p>
                       </div>
                     </div>
                     

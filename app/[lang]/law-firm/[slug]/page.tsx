@@ -26,6 +26,7 @@ export default async function LawFirmPageRoute({ params }: PageProps) {
     where: { slug },
     include: {
       // Include active staff members with their user data for the attorneys section
+      // and include their services for the practice areas section
       staffs: {
         where: { isActive: true },
         include: {
@@ -37,14 +38,13 @@ export default async function LawFirmPageRoute({ params }: PageProps) {
               phone: true,
               image: true,
             }
-          }
+          },
+          services: {
+            where: { isActive: true },
+            orderBy: { name: 'asc' }
+          },
         },
         orderBy: { user: { name: 'asc' } }
-      },
-      // Include active services for the practice areas section
-      services: {
-        where: { isActive: true },
-        orderBy: { name: 'asc' }
       },
     },
   })
