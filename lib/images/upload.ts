@@ -19,7 +19,7 @@ export const ALLOWED_IMAGE_TYPES = [
 // Maximum file size in bytes (5MB)
 export const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 
-// Disk directory for uploads - using external storage
+// Disk directory for uploads - using local disk directory
 export const UPLOAD_DIR = process.env.UPLOAD_DIR || path.join(process.cwd(), "disk", "uploads");
 
 /**

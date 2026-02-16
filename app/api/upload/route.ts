@@ -17,6 +17,7 @@ export async function POST(request: NextRequest) {
   try {
     // Check authentication
     const session = await auth();
+    console.log("[Upload API] Session:", session?.user ? "authenticated" : "not authenticated");
     if (!session?.user) {
       return NextResponse.json(
         { error: "Unauthorized" },
@@ -27,6 +28,7 @@ export async function POST(request: NextRequest) {
     // Parse multipart form data
     const formData = await request.formData();
     const file = formData.get("file") as File | null;
+    console.log("[Upload API] File received:", file ? `${file.name} (${file.type}, ${file.size} bytes)` : "null");
 
     if (!file) {
       return NextResponse.json(
@@ -36,7 +38,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate image
+    console.log("[Upload API] Validating file type:", file.type);
     const validation = validateImage(file);
+    console.log("[Upload API] Validation result:", validation);
     if (!validation.valid) {
       return NextResponse.json(
         { error: validation.error },
@@ -47,12 +51,15 @@ export async function POST(request: NextRequest) {
     // Convert file to buffer
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
+    console.log("[Upload API] Buffer created, length:", buffer.length);
 
     // Generate unique filename
     const filename = generateImageFilename(file.name);
+    console.log("[Upload API] Generated filename:", filename);
 
     // Save to disk
     const publicUrl = await saveImage(buffer, filename);
+    console.log("[Upload API] Image saved, URL:", publicUrl);
 
     return NextResponse.json({
       success: true,
@@ -61,7 +68,7 @@ export async function POST(request: NextRequest) {
       size: buffer.length,
     });
   } catch (error) {
-    console.error("Upload error:", error);
+    console.error("[Upload API] Error:", error);
     return NextResponse.json(
       { error: "Failed to upload image" },
       { status: 500 }

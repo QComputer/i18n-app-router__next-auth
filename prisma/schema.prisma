@@ -80,14 +80,83 @@ model Organization {
   holidays          Holiday[]
   staffs            Staff[]
   serviceFields     ServiceField[]
+  products          Product[]
+  orders            Order[]
 
   @@index([slug])
   @@index([type])
 }
 
+model Product {
+  id          String  @id @default(cuid())
+  name        String
+  image       String?
+  coverImage  String?
+  avatarImage String?
+
+  price        Float?
+  currency     String  @default("IRR")
+  color        String? // For calendar display
+  isActive     Boolean @default(true)
+  slotInterval Int     @default(30) // minutes between slots
+  bufferTime   Int     @default(0) // Buffer time in minutes after this service
+
+  // Foreign Keys
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  productCategoryId String
+  productCategory   ProductCategory @relation(fields: [productCategoryId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  items     Item[]
+
+  @@index([productCategoryId])
+}
+
+model ProductCategory {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+  coverImage  String?
+  avatarImage String?
+
+  products Product[]
+}
+
+model Service {
+  id           String  @id @default(cuid())
+  name         String
+  description  String?
+  duration     Int // Duration in minutes
+  coverImage   String?
+  avatarImage  String?
+  price        Float?
+  currency     String  @default("IRR")
+  color        String? // For calendar display
+  isActive     Boolean @default(true)
+  slotInterval Int     @default(30) // minutes between slots
+  bufferTime   Int     @default(0) // Buffer time in minutes after this service
+
+  // Foreign Keys
+  staffId String
+  staff   Staff  @relation(fields: [staffId], references: [id], onDelete: Cascade)
+
+  serviceCategoryId String
+  serviceCategory   ServiceCategory @relation(fields: [serviceCategoryId], references: [id])
+
+  appointments Appointment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([staffId])
+}
+
 model ServiceField {
-  id             String           @id @default(cuid())
-  name           String
+  id   String @id @default(cuid())
+  name String
 
   // Foreign Keys
   organizationId String
@@ -99,7 +168,7 @@ model ServiceField {
 enum OrganizationType {
   LAWYER
   DOCTOR
-  SUPERMARKET
+  MARKET
   RESTAURANT
   SALON
   OTHER
@@ -125,16 +194,60 @@ enum Role {
   OTHER
 }
 
+enum FollowingTargetType {
+  ORGANIZATION
+  SERVICE
+  SERVICE_CATEGORY
+  SERVICE_FIELD
+  PRODUCT
+  PEODUCT_CATEGORY
+  STAFF
+  DRIVER
+  CLIENT
+}
+
+// Handel Folowing
+model Following {
+  id         String              @id @default(cuid())
+  TargetType FollowingTargetType @default(ORGANIZATION)
+  targetId   String
+
+  userId String
+  user   User   @relation("UserFollowings", fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, targetId, TargetType])
+  @@index([userId])
+  @@index([targetId])
+  @@index([TargetType])
+}
+
+model deviceFingerPrint {
+  id String @id @default(cuid())
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
 model User {
-  id                String    @id @default(cuid())
-  username          String    @unique
-  email             String?   @unique
-  name              String?
-  phone             String?
-  image             String?
-  emailVerified     DateTime?
-  password          String? // For credentials auth
-  role              String    @default("CLIENT")
+  id       String @id @default(cuid())
+  username String @unique
+
+  role String @default("CLIENT")
+
+  email         String?   @unique
+  name          String?
+  phone         String?
+  image         String?
+  coverImage    String?
+  avatarImage   String?
+  emailVerified DateTime?
+  phoneVerified DateTime?
+  password      String? // For credentials auth
+
   locale            String    @default("fa")
   themeMode         ThemeMode @default(SYSTEM)
   resetToken        String? // Password reset token
@@ -144,13 +257,113 @@ model User {
   updatedAt DateTime @updatedAt
 
   // Relations
-  staff        Staff?        @relation()
-  accounts     Account[]
-  sessions     Session[]
-  appointments Appointment[] // Client's appointments
+  staff              Staff?              @relation()
+  accounts           Account[]
+  sessions           Session[]
+  appointments       Appointment[] // Client's appointments
+  deviceFingerPrints deviceFingerPrint[]
+  oders              Order[]
+
+  followings Following[] @relation("UserFollowings")
+
+  driver Driver? @relation()
+  pathes Path[]  @relation()
 
   @@index([username])
   @@index([role])
+}
+
+model Item {
+  id         String @id @default(cuid())
+  quantity   Float?
+  totalPrice Float?
+
+  productId String  @unique
+  product   Product @relation(fields: [productId], references: [id])
+
+  orderId String @unique
+  order   Order  @relation(fields: [orderId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Driver {
+  id String @id @default(cuid())
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orders Order[]
+}
+
+model Path {
+  id String @id @default(cuid())
+
+  stops Stop[]
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Stop {
+  id             String  @id @default(cuid())
+  latitudeStops  Float
+  longitudeStops Float
+  reason         String?
+
+  pathId String @unique
+  path   Path   @relation(fields: [pathId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Order {
+  id                       String      @id @default(cuid())
+  orderType                OrderType
+  status                   OrderStatus
+  items                    Item[]
+  isDone                   Boolean
+  isReceived               Boolean
+  isAcceptedByOrganization Boolean
+  isAcceptedByDriver       Boolean?
+
+  organizationId String       @unique
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  driverId String?
+  driver   Driver? @relation(fields: [driverId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum OrderStatus {
+  PENDING
+  PLACED
+  ACCEPTED
+  PREPARING
+  READY
+  PICKEDUP
+  DELIVERED
+  RECEIVED
+  RATED
+}
+
+enum OrderType {
+  DELIVERY
+  PICKUP
+  OTHER
 }
 
 enum Hierarchy {
@@ -169,8 +382,8 @@ model Staff {
   isDefault  Boolean @default(false) // Default staff for new bookings
   bufferTime Int     @default(0) // Buffer time in minutes between appointments
 
-  coverImage     String?
-  avatarImage    String?
+  coverImage  String?
+  avatarImage String?
 
   userId String @unique
   user   User   @relation(fields: [userId], references: [id])
@@ -264,33 +477,6 @@ model ServiceCategory {
   services Service[]
 }
 
-model Service {
-  id           String  @id @default(cuid())
-  name         String
-  description  String?
-  duration     Int // Duration in minutes
-  price        Float?
-  currency     String  @default("IRR")
-  color        String? // For calendar display
-  isActive     Boolean @default(true)
-  slotInterval Int     @default(30) // minutes between slots
-  bufferTime   Int     @default(0) // Buffer time in minutes after this service
-
-  // Foreign Keys
-  staffId String
-  staff   Staff  @relation(fields: [staffId], references: [id], onDelete: Cascade)
-
-  serviceCategoryId String
-  serviceCategory   ServiceCategory @relation(fields: [serviceCategoryId], references: [id])
-
-  appointments Appointment[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([staffId])
-}
-
 // ============================================
 // Appointments
 // ============================================
@@ -321,10 +507,10 @@ model Appointment {
   children      Appointment[] @relation("RecurringSeries")
 
   // Foreign Keys
-  serviceId      String
-  service        Service      @relation(fields: [serviceId], references: [id])
-  clientId       String?
-  client         User?        @relation(fields: [clientId], references: [id])
+  serviceId String
+  service   Service @relation(fields: [serviceId], references: [id])
+  clientId  String?
+  client    User?   @relation(fields: [clientId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

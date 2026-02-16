@@ -160,32 +160,44 @@ export function ImageUploadWithCrop({
     setIsUploading(true);
     try {
       // Get cropped image
+      console.log("[ImageUpload] Starting image processing...");
       const croppedImage = await getCroppedImage();
       if (!croppedImage) {
+        console.error("[ImageUpload] Failed to get cropped image - null returned");
         setError("Failed to process image");
         return;
       }
+      console.log("[ImageUpload] Cropped image obtained, length:", croppedImage.length);
 
-      // Convert base64 to blob
+      // Convert base64 to blob - explicitly set MIME type
       const response = await fetch(croppedImage);
       const blob = await response.blob();
+      console.log("[ImageUpload] Blob created, type:", blob.type, "size:", blob.size);
       
-      // Create form data
+      // Create form data with explicit MIME type
       const formData = new FormData();
-      formData.append("file", blob, "profile-image.jpg");
+      // Convert blob to have explicit type
+      const jpegFile = new File([blob], "profile-image.jpg", { type: "image/jpeg" });
+      console.log("[ImageUpload] File created, type:", jpegFile.type);
+      formData.append("file", jpegFile);
 
       // Upload to server
+      console.log("[ImageUpload] Uploading to /api/upload...");
       const uploadResponse = await fetch("/api/upload", {
         method: "POST",
         body: formData,
       });
 
+      console.log("[ImageUpload] Upload response status:", uploadResponse.status);
+
       if (!uploadResponse.ok) {
         const errorData = await uploadResponse.json();
+        console.error("[ImageUpload] Upload failed:", errorData);
         throw new Error(errorData.error || "Failed to upload");
       }
 
       const data = await uploadResponse.json();
+      console.log("[ImageUpload] Upload success, URL:", data.url);
       
       // Call onChange with the URL
       onChange(data.url);
@@ -194,6 +206,7 @@ export function ImageUploadWithCrop({
       setIsOpen(false);
       setSrc("");
     } catch (err) {
+      console.error("[ImageUpload] Error during upload:", err);
       setError(err instanceof Error ? err.message : "Failed to upload image");
     } finally {
       setIsUploading(false);
