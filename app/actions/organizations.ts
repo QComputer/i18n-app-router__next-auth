@@ -537,7 +537,7 @@ export async function getOrganization(organizationId: string) {
       id: true,
       name: true,
       slug: true,
-      type: true,
+      organizationType: true,
       description: true,
       logo: true,
       isActive: true

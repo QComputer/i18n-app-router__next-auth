@@ -335,10 +335,10 @@ export async function hardDeleteOrganization(id: string): Promise<void> {
  * @param type - Organization type
  * @returns Array of organizations
  */
-export async function getOrganizationsByType(type: typeof OrganizationType[keyof typeof OrganizationType]): Promise<Organization[]> {
+export async function getOrganizationsByType(organizationType: typeof OrganizationType[keyof typeof OrganizationType]): Promise<Organization[]> {
   return prisma.organization.findMany({
     where: {
-      type,
+      organizationType,
       isActive: true,
     },
     orderBy: { name: "asc" },
