@@ -271,6 +271,29 @@ async function createUser(username: string, name: string, role: string, avatarIn
   })
 }
 
+// Create admin user
+async function createAdminUser() {
+  const adminUsername = "admin"
+  const adminName = "System Administrator"
+  const hashedPassword = await bcrypt.hash("Admin123!", 10)
+  
+  return await prisma.user.upsert({
+    where: { username: adminUsername },
+    update: {},
+    create: {
+      username: adminUsername,
+      email: "admin@example.com",
+      name: adminName,
+      phone: "021-88880000",
+      password: hashedPassword,
+      role: "ADMIN",
+      locale: "fa",
+      themeMode: ThemeMode.SYSTEM,
+      image: getAvatarUrl(100),
+    },
+  })
+}
+
 async function createOrganization(orgData: OrgData, index: number) {
   const slug = generateSlug(orgData.name)
   
@@ -516,6 +539,11 @@ export default async function main() {
     await prisma.verificationToken.deleteMany()
     await prisma.user.deleteMany()
     console.log("Existing data cleaned\n")
+
+    // Create admin user
+    console.log("Creating admin user...")
+    await createAdminUser()
+    console.log("  - Admin user created: admin / Admin123!\n")
 
     // Track all created entities
     const allStaff: Array<{orgId: string; staffId: string}> = []
