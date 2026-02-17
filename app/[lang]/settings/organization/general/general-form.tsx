@@ -81,7 +81,7 @@ export function GeneralForm({ organization, dictionary, locale }: GeneralFormPro
       await updateMyOrganization({
         name: formData.get("name") as string,
         slug: formData.get("slug") as string,
-        type: formData.get("type") as "LAWYER" | "DOCTOR" | "MARKET" | "RESTAURANT" | "SALON" | "OTHER",
+        organizationType: formData.get("organizationType") as "LAWYER" | "DOCTOR" | "MARKET" | "RESTAURANT" | "SALON" | "OTHER",
         description: formData.get("description") as string || undefined,
         website: formData.get("website") as string || undefined,
         phone: formData.get("phone") as string || undefined,

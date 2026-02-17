@@ -219,7 +219,7 @@ function ProfileContent({ product, lang }: { product: Product; lang: string }) {
                 </div>
                 <div>
                   <p className="font-medium">{product.organization.name}</p>
-                  <p className="text-sm text-muted-foreground">{product.organization.type}</p>
+                  <p className="text-sm text-muted-foreground">{product.organization.organizationType}</p>
                 </div>
               </Link>
               
