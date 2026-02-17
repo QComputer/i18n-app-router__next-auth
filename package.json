@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npm install @tailwindcss/postcss@4.1.18 tailwindcss@4.1.18 && next build && npx prisma generate",
+    "build": "npm install @tailwindcss/postcss@4.1.18 tailwindcss@4.1.18 && npx prisma generate && next build ",
     "heap-profile": "node --heap-prof node_modules/next/dist/bin/next build",
     "start": "next start",
     "lint": "eslint",
