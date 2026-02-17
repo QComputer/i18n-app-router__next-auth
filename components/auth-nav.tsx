@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { UserAvatar } from "@/components/user-avatar"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -66,14 +66,11 @@ export function UserMenu({ user, locale, dictionary }: UserMenuProps) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-          <Avatar className="h-10 w-10">
-            {user.image && (
-              <AvatarImage src={user.image} alt={user.name || user.username} />
-            )}
-            <AvatarFallback className="bg-primary/10 text-primary">
-              {initials}
-            </AvatarFallback>
-          </Avatar>
+          <UserAvatar
+            fallbackImage={user.image}
+            name={user.name}
+            size="h-10 w-10"
+          />
         </Button>
       </DropdownMenuTrigger>
       

@@ -21,7 +21,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { StaffAvatar } from "@/components/user-avatar"
 import { followTarget, unfollowTarget } from "@/app/actions/follow"
 import { toPersianDigits } from "@/lib/utils"
 
@@ -256,13 +256,10 @@ function StaffServicesMenu({ organization, lang }: StaffServicesMenuProps) {
                   href={`/${lang}/staff/${staff.id}`}
                   className="flex flex-col items-center text-center hover:opacity-80 transition-opacity"
                 >
-                  <Avatar className="h-16 w-16 mb-2">
-                    {staff.user.image ? (
-                      <AvatarImage src={staff.user.image} alt={staff.user.name || ""} />
-                    ) : (
-                      <AvatarFallback>{staff.user.name?.charAt(0) || "?"}</AvatarFallback>
-                    )}
-                  </Avatar>
+                  <StaffAvatar
+                    staff={staff}
+                    size="h-16 w-16 mb-2"
+                  />
                   <p className="font-medium text-sm">{staff.user.name}</p>
                   <p className="text-xs text-muted-foreground">{staff.hierarchy}</p>
                 </Link>

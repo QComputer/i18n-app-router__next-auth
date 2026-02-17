@@ -12,7 +12,7 @@ interface StaffProfilePageProps {
 
 // Server component to fetch staff data
 export default async function StaffProfilePage({ params }: StaffProfilePageProps) {
-  const { lang, id } = params
+  const { lang, id } = await params
   
   // Fetch staff data
   const staff = await prisma.staff.findUnique({

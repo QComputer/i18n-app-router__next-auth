@@ -5,7 +5,6 @@ async function runSeed() {
   if (process.env.NODE_ENV === 'development' && process.env.SEED === 'true') {
     try {
       (await import("@/prisma/seed")).default
-      //await main()
       return { success: true }
     } catch (e) {
       console.error(e)

@@ -7,7 +7,7 @@ import { MapPin, Phone, Mail, Globe, Store, Users, Clock, ShoppingCart, Plus, Mi
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { StaffAvatar } from "@/components/user-avatar"
 import { followTarget, unfollowTarget } from "@/app/actions/follow"
 import { toPersianDigits } from "@/lib/utils"
 
@@ -184,7 +184,10 @@ export function MarketPageClient({ organization, dictionary, lang, isOwner, foll
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
               {organization.staffs.map(s => (
                 <Link key={s.id} href={`/${lang}/staff/${s.id}`} className="flex flex-col items-center text-center p-4 bg-background rounded-lg hover:shadow-md">
-                  <Avatar className="h-16 w-16 mb-2">{s.user.image ? <AvatarImage src={s.user.image} /> : <AvatarFallback>{s.user.name?.charAt(0) || "?"}</AvatarFallback>}</Avatar>
+                  <StaffAvatar
+                    staff={s}
+                    size="h-16 w-16 mb-2"
+                  />
                   <p className="font-medium text-sm">{s.user.name}</p>
                   <p className="text-xs text-muted-foreground">{s.hierarchy}</p>
                 </Link>

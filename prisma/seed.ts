@@ -7,6 +7,10 @@
  * - Client accounts: {slug}_client_1 to {slug}_client_10-20
  * 
  * Run with: npm run db:seed
+ * 
+ * Environment Variables:
+ * - SEED_LOG=true - Enable logging output
+ * - SEED_LOG=false (default) - Suppress logging
  */
 
 import "dotenv/config"
@@ -15,6 +19,24 @@ import { OrganizationType, ThemeMode, Hierarchy, FollowingTargetType } from "@/l
 import bcrypt from "bcryptjs"
 
 import prisma from "@/lib/db/prisma"
+
+// ============================================
+// Logging Utility
+// ============================================
+
+const SEED_LOG_ENABLED = process.env.SEED_LOG === "true"
+
+const log = {
+  log: (...args: unknown[]) => {
+    if (SEED_LOG_ENABLED) console.log(...args)
+  },
+  info: (...args: unknown[]) => {
+    if (SEED_LOG_ENABLED) console.info(...args)
+  },
+  error: (...args: unknown[]) => {
+    console.error(...args)
+  },
+}
 
 
 // ============================================
@@ -275,7 +297,7 @@ async function createUser(username: string, name: string, role: string, avatarIn
 async function createAdminUser() {
   const adminUsername = "admin"
   const adminName = "System Administrator"
-  const hashedPassword = await bcrypt.hash("Admin123!", 10)
+  const hashedPassword = await bcrypt.hash("Password123!", 10)
   
   return await prisma.user.upsert({
     where: { username: adminUsername },
@@ -518,13 +540,13 @@ async function createFollows(orgId: string, clients: Array<{userId: string}>, st
 // ============================================
 
 export default async function main() {
-  console.log("========================================")
-  console.log("Comprehensive Database Seed")
-  console.log("========================================\n")
+  log.log("========================================")
+  log.log("Comprehensive Database Seed")
+  log.log("========================================\n")
 
   try {
     // Clean existing data
-    console.log("Cleaning existing data...")
+    log.log("Cleaning existing data...")
     await prisma.following.deleteMany()
     await prisma.appointment.deleteMany()
     await prisma.product.deleteMany()
@@ -538,12 +560,12 @@ export default async function main() {
     await prisma.account.deleteMany()
     await prisma.verificationToken.deleteMany()
     await prisma.user.deleteMany()
-    console.log("Existing data cleaned\n")
+    log.log("Existing data cleaned\n")
 
     // Create admin user
-    console.log("Creating admin user...")
+    log.log("Creating admin user...")
     await createAdminUser()
-    console.log("  - Admin user created: admin / Admin123!\n")
+    log.log("  - Admin user created: admin / Password123!\n")
 
     // Track all created entities
     const allStaff: Array<{orgId: string; staffId: string}> = []
@@ -556,17 +578,17 @@ export default async function main() {
       const orgData = ORGANIZATIONS[i]
       const orgSlug = generateSlug(orgData.name)
       
-      console.log(`Creating ${orgData.name}...`)
+      log.log(`Creating ${orgData.name}...`)
       
       // Create organization
       const org = await createOrganization(orgData, i)
       organizationMap[orgSlug] = org.id
-      console.log(`  - Organization created: ${org.name} (${org.organizationType})`)
+      log.log(`  - Organization created: ${org.name} (${org.organizationType})`)
       
       // Create staff (owner + 5-10 staff members)
       const staffCount = randomBetween(5, 10)
       const staffMembers = await createStaffForOrganization(org.id, orgSlug, orgData, i * 15, staffCount)
-      console.log(`  - Created ${staffMembers.length} staff members`)
+      log.log(`  - Created ${staffMembers.length} staff members`)
       
       for (const staff of staffMembers) {
         allStaff.push({ orgId: org.id, staffId: staff.staffId })
@@ -575,7 +597,7 @@ export default async function main() {
       // Create clients (10-20 clients)
       const clientCount = randomBetween(10, 20)
       const clients = await createClientsForOrganization(org.id, orgSlug, i * 25, clientCount)
-      console.log(`  - Created ${clients.length} client accounts`)
+      log.log(`  - Created ${clients.length} client accounts`)
       
       for (const client of clients) {
         allClients.push({ orgId: org.id, userId: client.userId })
@@ -583,7 +605,7 @@ export default async function main() {
       
       // Create service categories and services
       await createServiceCategoriesAndServices(org.id, orgData, staffMembers)
-      console.log(`  - Created service categories and services`)
+      log.log(`  - Created service categories and services`)
       
       // Get created services for follows
       const services = await prisma.service.findMany({
@@ -597,14 +619,14 @@ export default async function main() {
       // Create product categories and products for MARKET and RESTAURANT
       if (orgData.productCategories) {
         await createProductCategoriesAndProducts(org.id, orgData)
-        console.log(`  - Created product categories and products`)
+        log.log(`  - Created product categories and products`)
       }
       
-      console.log("")
+      log.log("")
     }
 
     // Create follows
-    console.log("Creating follows...")
+    log.log("Creating follows...")
     let followCount = 0
     for (const orgData of ORGANIZATIONS) {
       const orgSlug = generateSlug(orgData.name)
@@ -616,6 +638,10 @@ export default async function main() {
       const orgServices = allServices.filter(s => s.orgId === orgId)
       
       for (const client of orgClients.slice(0, 10)) { // Use first 10 clients to follow
+        // Track followed targets for this client
+        const followedServices = new Set<string>()
+        const followedStaff = new Set<string>()
+        
         // Follow the organization
         try {
           await prisma.following.create({
@@ -628,11 +654,13 @@ export default async function main() {
           followCount++
         } catch (e) {}
         
-        // Follow 2-4 random services
+        // Follow 2-4 random services (avoid duplicates)
         const serviceFollowCount = randomBetween(2, 4)
         for (let i = 0; i < serviceFollowCount; i++) {
           if (orgServices.length === 0) break
           const randomSvc = randomElement(orgServices)
+          if (followedServices.has(randomSvc.id)) continue
+          followedServices.add(randomSvc.id)
           try {
             await prisma.following.create({
               data: {
@@ -645,11 +673,13 @@ export default async function main() {
           } catch (e) {}
         }
         
-        // Follow 1-2 random staff
+        // Follow 1-2 random staff (avoid duplicates)
         const staffFollowCount = randomBetween(1, 2)
         for (let i = 0; i < staffFollowCount; i++) {
           if (orgStaff.length === 0) break
           const randomStaff = randomElement(orgStaff)
+          if (followedStaff.has(randomStaff.staffId)) continue
+          followedStaff.add(randomStaff.staffId)
           try {
             await prisma.following.create({
               data: {
@@ -663,31 +693,31 @@ export default async function main() {
         }
       }
     }
-    console.log(`  - Created ${followCount} follows\n`)
+    log.log(`  - Created ${followCount} follows\n`)
 
     // Summary
     const orgCount = ORGANIZATIONS.length
     const totalStaff = allStaff.length
     const totalClients = allClients.length
     
-    console.log("========================================")
-    console.log("Seed Complete!")
-    console.log("========================================")
-    console.log(`Organizations: ${orgCount}`)
-    console.log(`Staff Members: ${totalStaff}`)
-    console.log(`Client Accounts: ${totalClients}`)
-    console.log(`Follows: ${followCount}`)
-    console.log("\nTest Accounts:")
+    log.log("========================================")
+    log.log("Seed Complete!")
+    log.log("========================================")
+    log.log(`Organizations: ${orgCount}`)
+    log.log(`Staff Members: ${totalStaff}`)
+    log.log(`Client Accounts: ${totalClients}`)
+    log.log(`Follows: ${followCount}`)
+    log.log("\nTest Accounts:")
     for (const orgData of ORGANIZATIONS) {
       const slug = generateSlug(orgData.name)
-      console.log(`  ${orgData.name}:`)
-      console.log(`    Owner: ${slug}_owner / Password123!`)
-      console.log(`    Staff: ${slug}_staff_1 / Password123!`)
-      console.log(`    Client: ${slug}_client_1 / Password123!`)
+      log.log(`  ${orgData.name}:`)
+      log.log(`    Owner: ${slug}_owner / Password123!`)
+      log.log(`    Staff: ${slug}_staff_1 / Password123!`)
+      log.log(`    Client: ${slug}_client_1 / Password123!`)
     }
-    console.log("========================================\n")
+    log.log("========================================\n")
   } catch (error) {
-    console.error("Error seeding database:", error)
+    log.error("Error seeding database:", error)
     throw error
   } finally {
     await prisma.$disconnect()
@@ -695,6 +725,6 @@ export default async function main() {
 }
 
 await main().catch((e) => {
-  console.error(e)
+  log.error(e)
   process.exit(1)
 })

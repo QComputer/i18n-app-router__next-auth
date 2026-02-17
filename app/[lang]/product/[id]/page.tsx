@@ -12,7 +12,7 @@ interface ProductProfilePageProps {
 
 // Server component to fetch product data
 export default async function ProductProfilePage({ params }: ProductProfilePageProps) {
-  const { lang, id } = params
+  const { lang, id } = await params
   
   // Fetch product data
   const product = await prisma.product.findUnique({

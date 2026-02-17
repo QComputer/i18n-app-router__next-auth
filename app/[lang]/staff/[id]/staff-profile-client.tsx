@@ -17,7 +17,7 @@ import {
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { UserAvatar } from "@/components/user-avatar"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { followTarget, unfollowTarget } from "@/app/actions/follow"
@@ -162,15 +162,12 @@ function ProfileHeader({
         <div className="flex flex-col md:flex-row items-start md:items-end gap-6">
           {/* Avatar */}
           <div className="relative">
-            <Avatar className="h-32 w-32 border-4 border-background shadow-lg">
-              {staff.avatarImage || staff.user.image ? (
-                <AvatarImage src={(staff.avatarImage || staff.user.image) as string} alt={staff.user.name || "Staff"} />
-              ) : (
-                <AvatarFallback className="text-4xl">
-                  {staff.user.name?.charAt(0) || "?"}
-                </AvatarFallback>
-              )}
-            </Avatar>
+            <UserAvatar
+              avatarImage={staff.avatarImage}
+              fallbackImage={staff.user.image}
+              name={staff.user.name}
+              size="h-32 w-32 border-4 border-background shadow-lg"
+            />
             <Badge className="absolute -bottom-2 -right-2 bg-primary text-primary-foreground">
               {staff.hierarchy}
             </Badge>

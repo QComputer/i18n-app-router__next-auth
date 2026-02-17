@@ -36,7 +36,7 @@ import {
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { UserAvatar } from "@/components/user-avatar"
 
 /**
  * Generate static params for all supported locales
@@ -339,14 +339,11 @@ export default async function DashboardPage(props: {
                         >
                           <div className="flex items-start justify-between">
                             <div className="flex items-start gap-4">
-                              <Avatar className="h-12 w-12">
-                                {appointment.client?.image && (
-                                  <AvatarImage src={appointment.client.image} alt={clientName} />
-                                )}
-                                <AvatarFallback className={statusStyle.text}>
-                                  {getInitials(clientName)}
-                                </AvatarFallback>
-                              </Avatar>
+                            <UserAvatar
+                              fallbackImage={appointment.client?.image}
+                              name={clientName}
+                              size="h-12 w-12"
+                            />
                               <div>
                                 <p className={`font-semibold ${statusStyle.text}`}>
                                   {clientName}
@@ -405,14 +402,11 @@ export default async function DashboardPage(props: {
               </CardHeader>
               <CardContent>
                 <div className="flex items-center gap-4">
-                  <Avatar className="h-16 w-16">
-                    {user.image && (
-                      <AvatarImage src={user.image} alt={user.name || ""} />
-                    )}
-                    <AvatarFallback className="text-xl bg-primary/10 text-primary">
-                      {getInitials(user.name)}
-                    </AvatarFallback>
-                  </Avatar>
+                  <UserAvatar
+                    fallbackImage={user.image}
+                    name={user.name}
+                    size="h-16 w-16"
+                  />
                   <div>
                     <p className="font-semibold text-lg">{user.name || user.username}</p>
                     <p className="text-sm text-muted-foreground">{(user as { email?: string }).email || ""}</p>
