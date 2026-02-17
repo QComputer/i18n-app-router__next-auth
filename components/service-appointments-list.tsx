@@ -15,6 +15,7 @@ import { Calendar, Clock, User, ChevronLeft, ChevronRight, Loader2 } from "lucid
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { toPersianDigits } from "@/lib/utils"
 
 type Appointment = {
@@ -29,6 +30,7 @@ type Appointment = {
     id: string
     user: {
       name: string | null
+      image: string | null
     }
   } | null
 }
@@ -187,9 +189,19 @@ export function ServiceAppointmentsList({
                       </span>
                     </div>
                     {appointment.staff && (
-                      <span className="truncate">
-                        {appointment.staff.user.name}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <Avatar className="h-6 w-6">
+                          {appointment.staff.user.image && (
+                            <AvatarImage src={appointment.staff.user.image} alt={appointment.staff.user.name || ""} />
+                          )}
+                          <AvatarFallback className="text-xs">
+                            {appointment.staff.user.name?.charAt(0) || "?"}
+                          </AvatarFallback>
+                        </Avatar>
+                        <span className="truncate">
+                          {appointment.staff.user.name}
+                        </span>
+                      </div>
                     )}
                   </div>
                 </div>

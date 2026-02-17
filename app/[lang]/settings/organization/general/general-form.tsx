@@ -60,6 +60,7 @@ export function GeneralForm({ organization, dictionary, locale }: GeneralFormPro
     // Organization types
     lawyer: dict.lawyer || "Lawyer",
     doctor: dict.doctor || "Doctor",
+    market: dict.market || "Market",
     supermarket: dict.supermarket || "Supermarket",
     restaurant: dict.restaurant || "Restaurant",
     salon: dict.salon || "Salon",
@@ -80,7 +81,7 @@ export function GeneralForm({ organization, dictionary, locale }: GeneralFormPro
       await updateMyOrganization({
         name: formData.get("name") as string,
         slug: formData.get("slug") as string,
-        type: formData.get("type") as "LAWYER" | "DOCTOR" | "SUPERMARKET" | "RESTAURANT" | "SALON" | "OTHER",
+        type: formData.get("type") as "LAWYER" | "DOCTOR" | "MARKET" | "RESTAURANT" | "SALON" | "OTHER",
         description: formData.get("description") as string || undefined,
         website: formData.get("website") as string || undefined,
         phone: formData.get("phone") as string || undefined,
@@ -149,7 +150,7 @@ export function GeneralForm({ organization, dictionary, locale }: GeneralFormPro
               <SelectContent>
                 <SelectItem value="LAWYER">{t.lawyer}</SelectItem>
                 <SelectItem value="DOCTOR">{t.doctor}</SelectItem>
-                <SelectItem value="SUPERMARKET">{t.supermarket}</SelectItem>
+                <SelectItem value="MARKET">{t.market}</SelectItem>
                 <SelectItem value="RESTAURANT">{t.restaurant}</SelectItem>
                 <SelectItem value="SALON">{t.salon}</SelectItem>
                 <SelectItem value="OTHER">{t.other}</SelectItem>

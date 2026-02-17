@@ -12,7 +12,7 @@
 export const OrganizationType = {
   LAWYER: 'LAWYER',
   DOCTOR: 'DOCTOR',
-  SUPERMARKET: 'SUPERMARKET',
+  MARKET: 'MARKET',
   RESTAURANT: 'RESTAURANT',
   SALON: 'SALON',
   OTHER: 'OTHER'
@@ -42,6 +42,45 @@ export const Role = {
 } as const
 
 export type Role = (typeof Role)[keyof typeof Role]
+
+
+export const FollowingTargetType = {
+  ORGANIZATION: 'ORGANIZATION',
+  SERVICE: 'SERVICE',
+  SERVICE_CATEGORY: 'SERVICE_CATEGORY',
+  SERVICE_FIELD: 'SERVICE_FIELD',
+  PRODUCT: 'PRODUCT',
+  PRODUCT_CATEGORY: 'PRODUCT_CATEGORY',
+  STAFF: 'STAFF',
+  DRIVER: 'DRIVER',
+  CLIENT: 'CLIENT'
+} as const
+
+export type FollowingTargetType = (typeof FollowingTargetType)[keyof typeof FollowingTargetType]
+
+
+export const OrderStatus = {
+  PENDING: 'PENDING',
+  PLACED: 'PLACED',
+  ACCEPTED: 'ACCEPTED',
+  PREPARING: 'PREPARING',
+  READY: 'READY',
+  PICKEDUP: 'PICKEDUP',
+  DELIVERED: 'DELIVERED',
+  RECEIVED: 'RECEIVED',
+  RATED: 'RATED'
+} as const
+
+export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus]
+
+
+export const OrderType = {
+  DELIVERY: 'DELIVERY',
+  PICKUP: 'PICKUP',
+  OTHER: 'OTHER'
+} as const
+
+export type OrderType = (typeof OrderType)[keyof typeof OrderType]
 
 
 export const Hierarchy = {

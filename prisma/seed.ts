@@ -144,7 +144,7 @@ const ORGANIZATION_DATA: OrgData[] = [
   },
   {
     name: "Fresh Foods Supermarket",
-    type: OrganizationType.SUPERMARKET,
+    type: OrganizationType.MARKET,
     description: "Quality groceries and fresh produce.",
     categories: [
       {
@@ -687,6 +687,145 @@ async function createServiceFields(organizations: CreatedOrg[]) {
   console.log("Service fields created")
 }
 
+/**
+ * Create product categories and products for MARKET and RESTAURANT organizations
+ */
+async function createProductCategoriesAndProducts(organizations: CreatedOrg[]) {
+  console.log("Creating product categories and products...")
+  
+  const marketProducts = [
+    { categoryName: "Fruits & Vegetables", products: [
+      { name: "Fresh Apples", price: 150000 },
+      { name: "Fresh Bananas", price: 80000 },
+      { name: "Organic Tomatoes", price: 120000 },
+      { name: "Fresh Lettuce", price: 90000 },
+    ]},
+    { categoryName: "Dairy Products", products: [
+      { name: "Whole Milk", price: 65000 },
+      { name: "Greek Yogurt", price: 95000 },
+      { name: "Cheese Block", price: 180000 },
+      { name: "Butter", price: 75000 },
+    ]},
+    { categoryName: "Bakery", products: [
+      { name: "Sourdough Bread", price: 45000 },
+      { name: "Croissants", price: 60000 },
+      { name: "Bagels", price: 35000 },
+    ]},
+  ]
+  
+  const restaurantProducts = [
+    { categoryName: "Appetizers", products: [
+      { name: "Truffle Fries", price: 250000 },
+      { name: "Bruschetta", price: 180000 },
+      { name: "Calamari", price: 320000 },
+    ]},
+    { categoryName: "Main Courses", products: [
+      { name: "Grilled Salmon", price: 850000 },
+      { name: "Filet Mignon", price: 1200000 },
+      { name: "Chicken Parmesan", price: 650000 },
+    ]},
+    { categoryName: "Desserts", products: [
+      { name: "Tiramisu", price: 280000 },
+      { name: "Chocolate Lava Cake", price: 320000 },
+      { name: "Cheesecake", price: 250000 },
+    ]},
+    { categoryName: "Beverages", products: [
+      { name: "Fresh Orange Juice", price: 120000 },
+      { name: "Espresso", price: 85000 },
+      { name: "Soft Drinks", price: 45000 },
+    ]},
+  ]
+  
+  for (const org of organizations) {
+    if (org.type === "MARKET") {
+      for (const categoryData of marketProducts) {
+        // Create product category
+        const category = await prisma.productCategory.create({
+          data: {
+            name: categoryData.categoryName,
+            description: `Fresh ${categoryData.categoryName.toLowerCase()}`,
+          },
+        })
+        
+        // Create products
+        for (const productData of categoryData.products) {
+          await prisma.product.create({
+            data: {
+              name: productData.name,
+              price: productData.price,
+              currency: "IRR",
+              isActive: true,
+              organizationId: org.id,
+              productCategoryId: category.id,
+            },
+          })
+        }
+        
+        console.log(`Created category "${categoryData.categoryName}" with ${categoryData.products.length} products for ${org.name}`)
+      }
+    } else if (org.type === "RESTAURANT") {
+      for (const categoryData of restaurantProducts) {
+        // Create product category
+        const category = await prisma.productCategory.create({
+          data: {
+            name: categoryData.categoryName,
+            description: `${categoryData.categoryName} - Tehran Garden Restaurant`,
+          },
+        })
+        
+        // Create products
+        for (const productData of categoryData.products) {
+          await prisma.product.create({
+            data: {
+              name: productData.name,
+              price: productData.price,
+              currency: "IRR",
+              isActive: true,
+              organizationId: org.id,
+              productCategoryId: category.id,
+            },
+          })
+        }
+        
+        console.log(`Created category "${categoryData.categoryName}" with ${categoryData.products.length} products for ${org.name}`)
+      }
+    }
+  }
+  
+  console.log("Product categories and products created")
+}
+
+/**
+ * Convert some users to Drivers
+ */
+async function createDrivers(clientUsers: CreatedUser[]) {
+  console.log("Creating drivers from client users...")
+  
+  // Select 3 random clients to convert to drivers
+  const driverCount = Math.min(3, clientUsers.length)
+  const shuffled = [...clientUsers].sort(() => Math.random() - 0.5)
+  const selectedClients = shuffled.slice(0, driverCount)
+  
+  for (const client of selectedClients) {
+    // Update user's role to DRIVER (if needed)
+    await prisma.user.update({
+      where: { id: client.id },
+      data: { role: "DRIVER" },
+    })
+    
+    // Create Driver record
+    await prisma.driver.create({
+      data: {
+        userId: client.id,
+      },
+    })
+    
+    console.log(`Created driver from user: ${client.username}`)
+  }
+  
+  console.log(`Created ${driverCount} drivers`)
+}
+
 async function createStaffMembers(staffUsers: CreatedUser[], organizations: CreatedOrg[]) {
   console.log("Creating staff members from converted staff users...")
   
@@ -817,6 +956,9 @@ export default async function main() {
     await prisma.serviceField.deleteMany()
     await prisma.staff.deleteMany()
     await prisma.organization.deleteMany()
+    await prisma.product.deleteMany()
+    await prisma.productCategory.deleteMany()
+    await prisma.driver.deleteMany()
     await prisma.session.deleteMany()
     await prisma.account.deleteMany()
     await prisma.verificationToken.deleteMany()
@@ -884,6 +1026,12 @@ export default async function main() {
 
     // Step 10: Create service fields and link to staff
     await createServiceFields(organizations)
+
+    // Step 11: Create product categories and products for MARKET and RESTAURANT
+    await createProductCategoriesAndProducts(organizations)
+
+    // Step 12: Create drivers from client users
+    await createDrivers(clientUsers)
 
     console.log("\n========================================")
     console.log("Seed Complete!")

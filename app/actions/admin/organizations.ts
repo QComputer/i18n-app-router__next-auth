@@ -143,7 +143,7 @@ export async function getOrganizationById(id: string) {
 export async function createOrganization(data: {
   name: string
   slug: string
-  type: 'LAWYER' | 'DOCTOR' | 'SUPERMARKET' | 'RESTAURANT' | 'SALON' | 'OTHER'
+  type: 'LAWYER' | 'DOCTOR' | 'MARKET' | 'RESTAURANT' | 'SALON' | 'OTHER'
   description?: string
   logo?: string
   website?: string

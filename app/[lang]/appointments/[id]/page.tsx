@@ -38,6 +38,7 @@ import {
 } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { 
   getAppointmentWithDetails, 
   updateAppointmentStatus,
@@ -390,12 +391,21 @@ export default async function AppointmentDetailPage(props: {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3">
+              <div className="flex items-center gap-4 mb-4">
+                <Avatar className="h-16 w-16">
+                  {staff?.user.image && (
+                    <AvatarImage src={staff?.user.image} alt={staff?.user.name || ""} />
+                  )}
+                  <AvatarFallback className="text-lg">
+                    {staff?.user.name?.charAt(0) || "?"}
+                  </AvatarFallback>
+                </Avatar>
                 <div>
-                  <p className="text-sm text-muted-foreground">{t.staffName}</p>
-                  <p className="font-medium">{staff?.user.name}</p>
+                  <p className="font-medium text-lg">{staff?.user.name}</p>
+                  <p className="text-sm text-muted-foreground">{staff?.hierarchy}</p>
                 </div>
-
+              </div>
+              <div className="space-y-3">
                 {staff?.user.phone && (
                   <div>
                     <p className="text-sm text-muted-foreground">{t.phoneNumber}</p>

@@ -29,6 +29,8 @@ export type OrganizationMinAggregateOutputType = {
   name: string | null
   slug: string | null
   type: $Enums.OrganizationType | null
+  coverImage: string | null
+  avatarImage: string | null
   logo: string | null
   description: string | null
   website: string | null
@@ -75,6 +77,8 @@ export type OrganizationMaxAggregateOutputType = {
   name: string | null
   slug: string | null
   type: $Enums.OrganizationType | null
+  coverImage: string | null
+  avatarImage: string | null
   logo: string | null
   description: string | null
   website: string | null
@@ -121,6 +125,8 @@ export type OrganizationCountAggregateOutputType = {
   name: number
   slug: number
   type: number
+  coverImage: number
+  avatarImage: number
   logo: number
   description: number
   website: number
@@ -169,6 +175,8 @@ export type OrganizationMinAggregateInputType = {
   name?: true
   slug?: true
   type?: true
+  coverImage?: true
+  avatarImage?: true
   logo?: true
   description?: true
   website?: true
@@ -215,6 +223,8 @@ export type OrganizationMaxAggregateInputType = {
   name?: true
   slug?: true
   type?: true
+  coverImage?: true
+  avatarImage?: true
   logo?: true
   description?: true
   website?: true
@@ -261,6 +271,8 @@ export type OrganizationCountAggregateInputType = {
   name?: true
   slug?: true
   type?: true
+  coverImage?: true
+  avatarImage?: true
   logo?: true
   description?: true
   website?: true
@@ -380,6 +392,8 @@ export type OrganizationGroupByOutputType = {
   name: string
   slug: string
   type: $Enums.OrganizationType
+  coverImage: string | null
+  avatarImage: string | null
   logo: string | null
   description: string | null
   website: string | null
@@ -447,6 +461,8 @@ export type OrganizationWhereInput = {
   name?: Prisma.StringFilter<"Organization"> | string
   slug?: Prisma.StringFilter<"Organization"> | string
   type?: Prisma.EnumOrganizationTypeFilter<"Organization"> | $Enums.OrganizationType
+  coverImage?: Prisma.StringNullableFilter<"Organization"> | string | null
+  avatarImage?: Prisma.StringNullableFilter<"Organization"> | string | null
   logo?: Prisma.StringNullableFilter<"Organization"> | string | null
   description?: Prisma.StringNullableFilter<"Organization"> | string | null
   website?: Prisma.StringNullableFilter<"Organization"> | string | null
@@ -491,6 +507,8 @@ export type OrganizationWhereInput = {
   holidays?: Prisma.HolidayListRelationFilter
   staffs?: Prisma.StaffListRelationFilter
   serviceFields?: Prisma.ServiceFieldListRelationFilter
+  products?: Prisma.ProductListRelationFilter
+  orders?: Prisma.OrderListRelationFilter
 }
 
 export type OrganizationOrderByWithRelationInput = {
@@ -498,6 +516,8 @@ export type OrganizationOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  coverImage?: Prisma.SortOrderInput | Prisma.SortOrder
+  avatarImage?: Prisma.SortOrderInput | Prisma.SortOrder
   logo?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   website?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -542,6 +562,8 @@ export type OrganizationOrderByWithRelationInput = {
   holidays?: Prisma.HolidayOrderByRelationAggregateInput
   staffs?: Prisma.StaffOrderByRelationAggregateInput
   serviceFields?: Prisma.ServiceFieldOrderByRelationAggregateInput
+  products?: Prisma.ProductOrderByRelationAggregateInput
+  orders?: Prisma.OrderOrderByRelationAggregateInput
 }
 
 export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
@@ -552,6 +574,8 @@ export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.OrganizationWhereInput | Prisma.OrganizationWhereInput[]
   name?: Prisma.StringFilter<"Organization"> | string
   type?: Prisma.EnumOrganizationTypeFilter<"Organization"> | $Enums.OrganizationType
+  coverImage?: Prisma.StringNullableFilter<"Organization"> | string | null
+  avatarImage?: Prisma.StringNullableFilter<"Organization"> | string | null
   logo?: Prisma.StringNullableFilter<"Organization"> | string | null
   description?: Prisma.StringNullableFilter<"Organization"> | string | null
   website?: Prisma.StringNullableFilter<"Organization"> | string | null
@@ -596,6 +620,8 @@ export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
   holidays?: Prisma.HolidayListRelationFilter
   staffs?: Prisma.StaffListRelationFilter
   serviceFields?: Prisma.ServiceFieldListRelationFilter
+  products?: Prisma.ProductListRelationFilter
+  orders?: Prisma.OrderListRelationFilter
 }, "id" | "slug">
 
 export type OrganizationOrderByWithAggregationInput = {
@@ -603,6 +629,8 @@ export type OrganizationOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  coverImage?: Prisma.SortOrderInput | Prisma.SortOrder
+  avatarImage?: Prisma.SortOrderInput | Prisma.SortOrder
   logo?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   website?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -655,6 +683,8 @@ export type OrganizationScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"Organization"> | string
   slug?: Prisma.StringWithAggregatesFilter<"Organization"> | string
   type?: Prisma.EnumOrganizationTypeWithAggregatesFilter<"Organization"> | $Enums.OrganizationType
+  coverImage?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
+  avatarImage?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
   logo?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
   description?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
   website?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
@@ -701,6 +731,8 @@ export type OrganizationCreateInput = {
   name: string
   slug: string
   type: $Enums.OrganizationType
+  coverImage?: string | null
+  avatarImage?: string | null
   logo?: string | null
   description?: string | null
   website?: string | null
@@ -745,6 +777,8 @@ export type OrganizationCreateInput = {
   holidays?: Prisma.HolidayCreateNestedManyWithoutOrganizationInput
   staffs?: Prisma.StaffCreateNestedManyWithoutOrganizationInput
   serviceFields?: Prisma.ServiceFieldCreateNestedManyWithoutOrganizationInput
+  products?: Prisma.ProductCreateNestedManyWithoutOrganizationInput
+  orders?: Prisma.OrderCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateInput = {
@@ -752,6 +786,8 @@ export type OrganizationUncheckedCreateInput = {
   name: string
   slug: string
   type: $Enums.OrganizationType
+  coverImage?: string | null
+  avatarImage?: string | null
   logo?: string | null
   description?: string | null
   website?: string | null
@@ -796,6 +832,8 @@ export type OrganizationUncheckedCreateInput = {
   holidays?: Prisma.HolidayUncheckedCreateNestedManyWithoutOrganizationInput
   staffs?: Prisma.StaffUncheckedCreateNestedManyWithoutOrganizationInput
   serviceFields?: Prisma.ServiceFieldUncheckedCreateNestedManyWithoutOrganizationInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutOrganizationInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUpdateInput = {
@@ -803,6 +841,8 @@ export type OrganizationUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -847,6 +887,8 @@ export type OrganizationUpdateInput = {
   holidays?: Prisma.HolidayUpdateManyWithoutOrganizationNestedInput
   staffs?: Prisma.StaffUpdateManyWithoutOrganizationNestedInput
   serviceFields?: Prisma.ServiceFieldUpdateManyWithoutOrganizationNestedInput
+  products?: Prisma.ProductUpdateManyWithoutOrganizationNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateInput = {
@@ -854,6 +896,8 @@ export type OrganizationUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -898,6 +942,8 @@ export type OrganizationUncheckedUpdateInput = {
   holidays?: Prisma.HolidayUncheckedUpdateManyWithoutOrganizationNestedInput
   staffs?: Prisma.StaffUncheckedUpdateManyWithoutOrganizationNestedInput
   serviceFields?: Prisma.ServiceFieldUncheckedUpdateManyWithoutOrganizationNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutOrganizationNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateManyInput = {
@@ -905,6 +951,8 @@ export type OrganizationCreateManyInput = {
   name: string
   slug: string
   type: $Enums.OrganizationType
+  coverImage?: string | null
+  avatarImage?: string | null
   logo?: string | null
   description?: string | null
   website?: string | null
@@ -951,6 +999,8 @@ export type OrganizationUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -997,6 +1047,8 @@ export type OrganizationUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1043,6 +1095,8 @@ export type OrganizationCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  coverImage?: Prisma.SortOrder
+  avatarImage?: Prisma.SortOrder
   logo?: Prisma.SortOrder
   description?: Prisma.SortOrder
   website?: Prisma.SortOrder
@@ -1089,6 +1143,8 @@ export type OrganizationMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  coverImage?: Prisma.SortOrder
+  avatarImage?: Prisma.SortOrder
   logo?: Prisma.SortOrder
   description?: Prisma.SortOrder
   website?: Prisma.SortOrder
@@ -1135,6 +1191,8 @@ export type OrganizationMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  coverImage?: Prisma.SortOrder
+  avatarImage?: Prisma.SortOrder
   logo?: Prisma.SortOrder
   description?: Prisma.SortOrder
   website?: Prisma.SortOrder
@@ -1205,6 +1263,20 @@ export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
 }
 
+export type OrganizationCreateNestedOneWithoutProductsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutProductsInput, Prisma.OrganizationUncheckedCreateWithoutProductsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutProductsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutProductsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutProductsInput, Prisma.OrganizationUncheckedCreateWithoutProductsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutProductsInput
+  upsert?: Prisma.OrganizationUpsertWithoutProductsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutProductsInput, Prisma.OrganizationUpdateWithoutProductsInput>, Prisma.OrganizationUncheckedUpdateWithoutProductsInput>
+}
+
 export type OrganizationCreateNestedOneWithoutServiceFieldsInput = {
   create?: Prisma.XOR<Prisma.OrganizationCreateWithoutServiceFieldsInput, Prisma.OrganizationUncheckedCreateWithoutServiceFieldsInput>
   connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutServiceFieldsInput
@@ -1217,6 +1289,20 @@ export type OrganizationUpdateOneRequiredWithoutServiceFieldsNestedInput = {
   upsert?: Prisma.OrganizationUpsertWithoutServiceFieldsInput
   connect?: Prisma.OrganizationWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutServiceFieldsInput, Prisma.OrganizationUpdateWithoutServiceFieldsInput>, Prisma.OrganizationUncheckedUpdateWithoutServiceFieldsInput>
+}
+
+export type OrganizationCreateNestedOneWithoutOrdersInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutOrdersInput, Prisma.OrganizationUncheckedCreateWithoutOrdersInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutOrdersInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutOrdersNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutOrdersInput, Prisma.OrganizationUncheckedCreateWithoutOrdersInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutOrdersInput
+  upsert?: Prisma.OrganizationUpsertWithoutOrdersInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutOrdersInput, Prisma.OrganizationUpdateWithoutOrdersInput>, Prisma.OrganizationUncheckedUpdateWithoutOrdersInput>
 }
 
 export type OrganizationCreateNestedOneWithoutStaffsInput = {
@@ -1275,11 +1361,13 @@ export type OrganizationUpdateOneRequiredWithoutHolidaysNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutHolidaysInput, Prisma.OrganizationUpdateWithoutHolidaysInput>, Prisma.OrganizationUncheckedUpdateWithoutHolidaysInput>
 }
 
-export type OrganizationCreateWithoutServiceFieldsInput = {
+export type OrganizationCreateWithoutProductsInput = {
   id?: string
   name: string
   slug: string
   type: $Enums.OrganizationType
+  coverImage?: string | null
+  avatarImage?: string | null
   logo?: string | null
   description?: string | null
   website?: string | null
@@ -1323,13 +1411,17 @@ export type OrganizationCreateWithoutServiceFieldsInput = {
   businessHours?: Prisma.BusinessHoursCreateNestedManyWithoutOrganizationInput
   holidays?: Prisma.HolidayCreateNestedManyWithoutOrganizationInput
   staffs?: Prisma.StaffCreateNestedManyWithoutOrganizationInput
+  serviceFields?: Prisma.ServiceFieldCreateNestedManyWithoutOrganizationInput
+  orders?: Prisma.OrderCreateNestedManyWithoutOrganizationInput
 }
 
-export type OrganizationUncheckedCreateWithoutServiceFieldsInput = {
+export type OrganizationUncheckedCreateWithoutProductsInput = {
   id?: string
   name: string
   slug: string
   type: $Enums.OrganizationType
+  coverImage?: string | null
+  avatarImage?: string | null
   logo?: string | null
   description?: string | null
   website?: string | null
@@ -1373,6 +1465,240 @@ export type OrganizationUncheckedCreateWithoutServiceFieldsInput = {
   businessHours?: Prisma.BusinessHoursUncheckedCreateNestedManyWithoutOrganizationInput
   holidays?: Prisma.HolidayUncheckedCreateNestedManyWithoutOrganizationInput
   staffs?: Prisma.StaffUncheckedCreateNestedManyWithoutOrganizationInput
+  serviceFields?: Prisma.ServiceFieldUncheckedCreateNestedManyWithoutOrganizationInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutProductsInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutProductsInput, Prisma.OrganizationUncheckedCreateWithoutProductsInput>
+}
+
+export type OrganizationUpsertWithoutProductsInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutProductsInput, Prisma.OrganizationUncheckedUpdateWithoutProductsInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutProductsInput, Prisma.OrganizationUncheckedCreateWithoutProductsInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutProductsInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutProductsInput, Prisma.OrganizationUncheckedUpdateWithoutProductsInput>
+}
+
+export type OrganizationUpdateWithoutProductsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  locale?: Prisma.StringFieldUpdateOperationsInput | string
+  themeMode?: Prisma.EnumThemeModeFieldUpdateOperationsInput | $Enums.ThemeMode
+  primaryColor?: Prisma.StringFieldUpdateOperationsInput | string
+  secondaryColor?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  heroTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  heroSubtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  heroBackgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aboutEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aboutContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aboutImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  practiceAreasEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attorneysEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  testimonialsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  caseResultsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  awardsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  faqEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  contactEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  appointmentEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoKeywords?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workingHours?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  linkedinUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  telegramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  serviceCategories?: Prisma.ServiceCategoryUpdateManyWithoutOrganizationNestedInput
+  businessHours?: Prisma.BusinessHoursUpdateManyWithoutOrganizationNestedInput
+  holidays?: Prisma.HolidayUpdateManyWithoutOrganizationNestedInput
+  staffs?: Prisma.StaffUpdateManyWithoutOrganizationNestedInput
+  serviceFields?: Prisma.ServiceFieldUpdateManyWithoutOrganizationNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutProductsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  locale?: Prisma.StringFieldUpdateOperationsInput | string
+  themeMode?: Prisma.EnumThemeModeFieldUpdateOperationsInput | $Enums.ThemeMode
+  primaryColor?: Prisma.StringFieldUpdateOperationsInput | string
+  secondaryColor?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  heroTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  heroSubtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  heroBackgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aboutEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aboutContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aboutImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  practiceAreasEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attorneysEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  testimonialsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  caseResultsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  awardsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  faqEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  contactEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  appointmentEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoKeywords?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workingHours?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  linkedinUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  telegramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  serviceCategories?: Prisma.ServiceCategoryUncheckedUpdateManyWithoutOrganizationNestedInput
+  businessHours?: Prisma.BusinessHoursUncheckedUpdateManyWithoutOrganizationNestedInput
+  holidays?: Prisma.HolidayUncheckedUpdateManyWithoutOrganizationNestedInput
+  staffs?: Prisma.StaffUncheckedUpdateManyWithoutOrganizationNestedInput
+  serviceFields?: Prisma.ServiceFieldUncheckedUpdateManyWithoutOrganizationNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutServiceFieldsInput = {
+  id?: string
+  name: string
+  slug: string
+  type: $Enums.OrganizationType
+  coverImage?: string | null
+  avatarImage?: string | null
+  logo?: string | null
+  description?: string | null
+  website?: string | null
+  phone?: string | null
+  email?: string | null
+  address?: string | null
+  timezone?: string
+  locale?: string
+  themeMode?: $Enums.ThemeMode
+  primaryColor?: string
+  secondaryColor?: string
+  isActive?: boolean
+  heroTitle?: string | null
+  heroSubtitle?: string | null
+  heroBackgroundImage?: string | null
+  aboutEnabled?: boolean
+  aboutContent?: string | null
+  aboutImage?: string | null
+  practiceAreasEnabled?: boolean
+  attorneysEnabled?: boolean
+  testimonialsEnabled?: boolean
+  caseResultsEnabled?: boolean
+  awardsEnabled?: boolean
+  faqEnabled?: boolean
+  contactEnabled?: boolean
+  appointmentEnabled?: boolean
+  seoTitle?: string | null
+  seoDescription?: string | null
+  seoKeywords?: string | null
+  mapUrl?: string | null
+  workingHours?: string | null
+  emergencyPhone?: string | null
+  facebookUrl?: string | null
+  twitterUrl?: string | null
+  instagramUrl?: string | null
+  linkedinUrl?: string | null
+  telegramUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  serviceCategories?: Prisma.ServiceCategoryCreateNestedManyWithoutOrganizationInput
+  businessHours?: Prisma.BusinessHoursCreateNestedManyWithoutOrganizationInput
+  holidays?: Prisma.HolidayCreateNestedManyWithoutOrganizationInput
+  staffs?: Prisma.StaffCreateNestedManyWithoutOrganizationInput
+  products?: Prisma.ProductCreateNestedManyWithoutOrganizationInput
+  orders?: Prisma.OrderCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutServiceFieldsInput = {
+  id?: string
+  name: string
+  slug: string
+  type: $Enums.OrganizationType
+  coverImage?: string | null
+  avatarImage?: string | null
+  logo?: string | null
+  description?: string | null
+  website?: string | null
+  phone?: string | null
+  email?: string | null
+  address?: string | null
+  timezone?: string
+  locale?: string
+  themeMode?: $Enums.ThemeMode
+  primaryColor?: string
+  secondaryColor?: string
+  isActive?: boolean
+  heroTitle?: string | null
+  heroSubtitle?: string | null
+  heroBackgroundImage?: string | null
+  aboutEnabled?: boolean
+  aboutContent?: string | null
+  aboutImage?: string | null
+  practiceAreasEnabled?: boolean
+  attorneysEnabled?: boolean
+  testimonialsEnabled?: boolean
+  caseResultsEnabled?: boolean
+  awardsEnabled?: boolean
+  faqEnabled?: boolean
+  contactEnabled?: boolean
+  appointmentEnabled?: boolean
+  seoTitle?: string | null
+  seoDescription?: string | null
+  seoKeywords?: string | null
+  mapUrl?: string | null
+  workingHours?: string | null
+  emergencyPhone?: string | null
+  facebookUrl?: string | null
+  twitterUrl?: string | null
+  instagramUrl?: string | null
+  linkedinUrl?: string | null
+  telegramUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  serviceCategories?: Prisma.ServiceCategoryUncheckedCreateNestedManyWithoutOrganizationInput
+  businessHours?: Prisma.BusinessHoursUncheckedCreateNestedManyWithoutOrganizationInput
+  holidays?: Prisma.HolidayUncheckedCreateNestedManyWithoutOrganizationInput
+  staffs?: Prisma.StaffUncheckedCreateNestedManyWithoutOrganizationInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutOrganizationInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutServiceFieldsInput = {
@@ -1396,6 +1722,8 @@ export type OrganizationUpdateWithoutServiceFieldsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1439,6 +1767,8 @@ export type OrganizationUpdateWithoutServiceFieldsInput = {
   businessHours?: Prisma.BusinessHoursUpdateManyWithoutOrganizationNestedInput
   holidays?: Prisma.HolidayUpdateManyWithoutOrganizationNestedInput
   staffs?: Prisma.StaffUpdateManyWithoutOrganizationNestedInput
+  products?: Prisma.ProductUpdateManyWithoutOrganizationNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutServiceFieldsInput = {
@@ -1446,6 +1776,8 @@ export type OrganizationUncheckedUpdateWithoutServiceFieldsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1489,6 +1821,240 @@ export type OrganizationUncheckedUpdateWithoutServiceFieldsInput = {
   businessHours?: Prisma.BusinessHoursUncheckedUpdateManyWithoutOrganizationNestedInput
   holidays?: Prisma.HolidayUncheckedUpdateManyWithoutOrganizationNestedInput
   staffs?: Prisma.StaffUncheckedUpdateManyWithoutOrganizationNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutOrganizationNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutOrdersInput = {
+  id?: string
+  name: string
+  slug: string
+  type: $Enums.OrganizationType
+  coverImage?: string | null
+  avatarImage?: string | null
+  logo?: string | null
+  description?: string | null
+  website?: string | null
+  phone?: string | null
+  email?: string | null
+  address?: string | null
+  timezone?: string
+  locale?: string
+  themeMode?: $Enums.ThemeMode
+  primaryColor?: string
+  secondaryColor?: string
+  isActive?: boolean
+  heroTitle?: string | null
+  heroSubtitle?: string | null
+  heroBackgroundImage?: string | null
+  aboutEnabled?: boolean
+  aboutContent?: string | null
+  aboutImage?: string | null
+  practiceAreasEnabled?: boolean
+  attorneysEnabled?: boolean
+  testimonialsEnabled?: boolean
+  caseResultsEnabled?: boolean
+  awardsEnabled?: boolean
+  faqEnabled?: boolean
+  contactEnabled?: boolean
+  appointmentEnabled?: boolean
+  seoTitle?: string | null
+  seoDescription?: string | null
+  seoKeywords?: string | null
+  mapUrl?: string | null
+  workingHours?: string | null
+  emergencyPhone?: string | null
+  facebookUrl?: string | null
+  twitterUrl?: string | null
+  instagramUrl?: string | null
+  linkedinUrl?: string | null
+  telegramUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  serviceCategories?: Prisma.ServiceCategoryCreateNestedManyWithoutOrganizationInput
+  businessHours?: Prisma.BusinessHoursCreateNestedManyWithoutOrganizationInput
+  holidays?: Prisma.HolidayCreateNestedManyWithoutOrganizationInput
+  staffs?: Prisma.StaffCreateNestedManyWithoutOrganizationInput
+  serviceFields?: Prisma.ServiceFieldCreateNestedManyWithoutOrganizationInput
+  products?: Prisma.ProductCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutOrdersInput = {
+  id?: string
+  name: string
+  slug: string
+  type: $Enums.OrganizationType
+  coverImage?: string | null
+  avatarImage?: string | null
+  logo?: string | null
+  description?: string | null
+  website?: string | null
+  phone?: string | null
+  email?: string | null
+  address?: string | null
+  timezone?: string
+  locale?: string
+  themeMode?: $Enums.ThemeMode
+  primaryColor?: string
+  secondaryColor?: string
+  isActive?: boolean
+  heroTitle?: string | null
+  heroSubtitle?: string | null
+  heroBackgroundImage?: string | null
+  aboutEnabled?: boolean
+  aboutContent?: string | null
+  aboutImage?: string | null
+  practiceAreasEnabled?: boolean
+  attorneysEnabled?: boolean
+  testimonialsEnabled?: boolean
+  caseResultsEnabled?: boolean
+  awardsEnabled?: boolean
+  faqEnabled?: boolean
+  contactEnabled?: boolean
+  appointmentEnabled?: boolean
+  seoTitle?: string | null
+  seoDescription?: string | null
+  seoKeywords?: string | null
+  mapUrl?: string | null
+  workingHours?: string | null
+  emergencyPhone?: string | null
+  facebookUrl?: string | null
+  twitterUrl?: string | null
+  instagramUrl?: string | null
+  linkedinUrl?: string | null
+  telegramUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  serviceCategories?: Prisma.ServiceCategoryUncheckedCreateNestedManyWithoutOrganizationInput
+  businessHours?: Prisma.BusinessHoursUncheckedCreateNestedManyWithoutOrganizationInput
+  holidays?: Prisma.HolidayUncheckedCreateNestedManyWithoutOrganizationInput
+  staffs?: Prisma.StaffUncheckedCreateNestedManyWithoutOrganizationInput
+  serviceFields?: Prisma.ServiceFieldUncheckedCreateNestedManyWithoutOrganizationInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutOrdersInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutOrdersInput, Prisma.OrganizationUncheckedCreateWithoutOrdersInput>
+}
+
+export type OrganizationUpsertWithoutOrdersInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutOrdersInput, Prisma.OrganizationUncheckedUpdateWithoutOrdersInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutOrdersInput, Prisma.OrganizationUncheckedCreateWithoutOrdersInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutOrdersInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutOrdersInput, Prisma.OrganizationUncheckedUpdateWithoutOrdersInput>
+}
+
+export type OrganizationUpdateWithoutOrdersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  locale?: Prisma.StringFieldUpdateOperationsInput | string
+  themeMode?: Prisma.EnumThemeModeFieldUpdateOperationsInput | $Enums.ThemeMode
+  primaryColor?: Prisma.StringFieldUpdateOperationsInput | string
+  secondaryColor?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  heroTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  heroSubtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  heroBackgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aboutEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aboutContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aboutImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  practiceAreasEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attorneysEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  testimonialsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  caseResultsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  awardsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  faqEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  contactEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  appointmentEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoKeywords?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workingHours?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  linkedinUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  telegramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  serviceCategories?: Prisma.ServiceCategoryUpdateManyWithoutOrganizationNestedInput
+  businessHours?: Prisma.BusinessHoursUpdateManyWithoutOrganizationNestedInput
+  holidays?: Prisma.HolidayUpdateManyWithoutOrganizationNestedInput
+  staffs?: Prisma.StaffUpdateManyWithoutOrganizationNestedInput
+  serviceFields?: Prisma.ServiceFieldUpdateManyWithoutOrganizationNestedInput
+  products?: Prisma.ProductUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutOrdersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  locale?: Prisma.StringFieldUpdateOperationsInput | string
+  themeMode?: Prisma.EnumThemeModeFieldUpdateOperationsInput | $Enums.ThemeMode
+  primaryColor?: Prisma.StringFieldUpdateOperationsInput | string
+  secondaryColor?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  heroTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  heroSubtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  heroBackgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aboutEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aboutContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aboutImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  practiceAreasEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attorneysEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  testimonialsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  caseResultsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  awardsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  faqEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  contactEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  appointmentEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoKeywords?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workingHours?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  linkedinUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  telegramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  serviceCategories?: Prisma.ServiceCategoryUncheckedUpdateManyWithoutOrganizationNestedInput
+  businessHours?: Prisma.BusinessHoursUncheckedUpdateManyWithoutOrganizationNestedInput
+  holidays?: Prisma.HolidayUncheckedUpdateManyWithoutOrganizationNestedInput
+  staffs?: Prisma.StaffUncheckedUpdateManyWithoutOrganizationNestedInput
+  serviceFields?: Prisma.ServiceFieldUncheckedUpdateManyWithoutOrganizationNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutStaffsInput = {
@@ -1496,6 +2062,8 @@ export type OrganizationCreateWithoutStaffsInput = {
   name: string
   slug: string
   type: $Enums.OrganizationType
+  coverImage?: string | null
+  avatarImage?: string | null
   logo?: string | null
   description?: string | null
   website?: string | null
@@ -1539,6 +2107,8 @@ export type OrganizationCreateWithoutStaffsInput = {
   businessHours?: Prisma.BusinessHoursCreateNestedManyWithoutOrganizationInput
   holidays?: Prisma.HolidayCreateNestedManyWithoutOrganizationInput
   serviceFields?: Prisma.ServiceFieldCreateNestedManyWithoutOrganizationInput
+  products?: Prisma.ProductCreateNestedManyWithoutOrganizationInput
+  orders?: Prisma.OrderCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutStaffsInput = {
@@ -1546,6 +2116,8 @@ export type OrganizationUncheckedCreateWithoutStaffsInput = {
   name: string
   slug: string
   type: $Enums.OrganizationType
+  coverImage?: string | null
+  avatarImage?: string | null
   logo?: string | null
   description?: string | null
   website?: string | null
@@ -1589,6 +2161,8 @@ export type OrganizationUncheckedCreateWithoutStaffsInput = {
   businessHours?: Prisma.BusinessHoursUncheckedCreateNestedManyWithoutOrganizationInput
   holidays?: Prisma.HolidayUncheckedCreateNestedManyWithoutOrganizationInput
   serviceFields?: Prisma.ServiceFieldUncheckedCreateNestedManyWithoutOrganizationInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutOrganizationInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutStaffsInput = {
@@ -1612,6 +2186,8 @@ export type OrganizationUpdateWithoutStaffsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1655,6 +2231,8 @@ export type OrganizationUpdateWithoutStaffsInput = {
   businessHours?: Prisma.BusinessHoursUpdateManyWithoutOrganizationNestedInput
   holidays?: Prisma.HolidayUpdateManyWithoutOrganizationNestedInput
   serviceFields?: Prisma.ServiceFieldUpdateManyWithoutOrganizationNestedInput
+  products?: Prisma.ProductUpdateManyWithoutOrganizationNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutStaffsInput = {
@@ -1662,6 +2240,8 @@ export type OrganizationUncheckedUpdateWithoutStaffsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1705,6 +2285,8 @@ export type OrganizationUncheckedUpdateWithoutStaffsInput = {
   businessHours?: Prisma.BusinessHoursUncheckedUpdateManyWithoutOrganizationNestedInput
   holidays?: Prisma.HolidayUncheckedUpdateManyWithoutOrganizationNestedInput
   serviceFields?: Prisma.ServiceFieldUncheckedUpdateManyWithoutOrganizationNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutOrganizationNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutServiceCategoriesInput = {
@@ -1712,6 +2294,8 @@ export type OrganizationCreateWithoutServiceCategoriesInput = {
   name: string
   slug: string
   type: $Enums.OrganizationType
+  coverImage?: string | null
+  avatarImage?: string | null
   logo?: string | null
   description?: string | null
   website?: string | null
@@ -1755,6 +2339,8 @@ export type OrganizationCreateWithoutServiceCategoriesInput = {
   holidays?: Prisma.HolidayCreateNestedManyWithoutOrganizationInput
   staffs?: Prisma.StaffCreateNestedManyWithoutOrganizationInput
   serviceFields?: Prisma.ServiceFieldCreateNestedManyWithoutOrganizationInput
+  products?: Prisma.ProductCreateNestedManyWithoutOrganizationInput
+  orders?: Prisma.OrderCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutServiceCategoriesInput = {
@@ -1762,6 +2348,8 @@ export type OrganizationUncheckedCreateWithoutServiceCategoriesInput = {
   name: string
   slug: string
   type: $Enums.OrganizationType
+  coverImage?: string | null
+  avatarImage?: string | null
   logo?: string | null
   description?: string | null
   website?: string | null
@@ -1805,6 +2393,8 @@ export type OrganizationUncheckedCreateWithoutServiceCategoriesInput = {
   holidays?: Prisma.HolidayUncheckedCreateNestedManyWithoutOrganizationInput
   staffs?: Prisma.StaffUncheckedCreateNestedManyWithoutOrganizationInput
   serviceFields?: Prisma.ServiceFieldUncheckedCreateNestedManyWithoutOrganizationInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutOrganizationInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutServiceCategoriesInput = {
@@ -1828,6 +2418,8 @@ export type OrganizationUpdateWithoutServiceCategoriesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1871,6 +2463,8 @@ export type OrganizationUpdateWithoutServiceCategoriesInput = {
   holidays?: Prisma.HolidayUpdateManyWithoutOrganizationNestedInput
   staffs?: Prisma.StaffUpdateManyWithoutOrganizationNestedInput
   serviceFields?: Prisma.ServiceFieldUpdateManyWithoutOrganizationNestedInput
+  products?: Prisma.ProductUpdateManyWithoutOrganizationNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutServiceCategoriesInput = {
@@ -1878,6 +2472,8 @@ export type OrganizationUncheckedUpdateWithoutServiceCategoriesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1921,6 +2517,8 @@ export type OrganizationUncheckedUpdateWithoutServiceCategoriesInput = {
   holidays?: Prisma.HolidayUncheckedUpdateManyWithoutOrganizationNestedInput
   staffs?: Prisma.StaffUncheckedUpdateManyWithoutOrganizationNestedInput
   serviceFields?: Prisma.ServiceFieldUncheckedUpdateManyWithoutOrganizationNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutOrganizationNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutBusinessHoursInput = {
@@ -1928,6 +2526,8 @@ export type OrganizationCreateWithoutBusinessHoursInput = {
   name: string
   slug: string
   type: $Enums.OrganizationType
+  coverImage?: string | null
+  avatarImage?: string | null
   logo?: string | null
   description?: string | null
   website?: string | null
@@ -1971,6 +2571,8 @@ export type OrganizationCreateWithoutBusinessHoursInput = {
   holidays?: Prisma.HolidayCreateNestedManyWithoutOrganizationInput
   staffs?: Prisma.StaffCreateNestedManyWithoutOrganizationInput
   serviceFields?: Prisma.ServiceFieldCreateNestedManyWithoutOrganizationInput
+  products?: Prisma.ProductCreateNestedManyWithoutOrganizationInput
+  orders?: Prisma.OrderCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutBusinessHoursInput = {
@@ -1978,6 +2580,8 @@ export type OrganizationUncheckedCreateWithoutBusinessHoursInput = {
   name: string
   slug: string
   type: $Enums.OrganizationType
+  coverImage?: string | null
+  avatarImage?: string | null
   logo?: string | null
   description?: string | null
   website?: string | null
@@ -2021,6 +2625,8 @@ export type OrganizationUncheckedCreateWithoutBusinessHoursInput = {
   holidays?: Prisma.HolidayUncheckedCreateNestedManyWithoutOrganizationInput
   staffs?: Prisma.StaffUncheckedCreateNestedManyWithoutOrganizationInput
   serviceFields?: Prisma.ServiceFieldUncheckedCreateNestedManyWithoutOrganizationInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutOrganizationInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutBusinessHoursInput = {
@@ -2044,6 +2650,8 @@ export type OrganizationUpdateWithoutBusinessHoursInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2087,6 +2695,8 @@ export type OrganizationUpdateWithoutBusinessHoursInput = {
   holidays?: Prisma.HolidayUpdateManyWithoutOrganizationNestedInput
   staffs?: Prisma.StaffUpdateManyWithoutOrganizationNestedInput
   serviceFields?: Prisma.ServiceFieldUpdateManyWithoutOrganizationNestedInput
+  products?: Prisma.ProductUpdateManyWithoutOrganizationNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutBusinessHoursInput = {
@@ -2094,6 +2704,8 @@ export type OrganizationUncheckedUpdateWithoutBusinessHoursInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2137,6 +2749,8 @@ export type OrganizationUncheckedUpdateWithoutBusinessHoursInput = {
   holidays?: Prisma.HolidayUncheckedUpdateManyWithoutOrganizationNestedInput
   staffs?: Prisma.StaffUncheckedUpdateManyWithoutOrganizationNestedInput
   serviceFields?: Prisma.ServiceFieldUncheckedUpdateManyWithoutOrganizationNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutOrganizationNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutHolidaysInput = {
@@ -2144,6 +2758,8 @@ export type OrganizationCreateWithoutHolidaysInput = {
   name: string
   slug: string
   type: $Enums.OrganizationType
+  coverImage?: string | null
+  avatarImage?: string | null
   logo?: string | null
   description?: string | null
   website?: string | null
@@ -2187,6 +2803,8 @@ export type OrganizationCreateWithoutHolidaysInput = {
   businessHours?: Prisma.BusinessHoursCreateNestedManyWithoutOrganizationInput
   staffs?: Prisma.StaffCreateNestedManyWithoutOrganizationInput
   serviceFields?: Prisma.ServiceFieldCreateNestedManyWithoutOrganizationInput
+  products?: Prisma.ProductCreateNestedManyWithoutOrganizationInput
+  orders?: Prisma.OrderCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutHolidaysInput = {
@@ -2194,6 +2812,8 @@ export type OrganizationUncheckedCreateWithoutHolidaysInput = {
   name: string
   slug: string
   type: $Enums.OrganizationType
+  coverImage?: string | null
+  avatarImage?: string | null
   logo?: string | null
   description?: string | null
   website?: string | null
@@ -2237,6 +2857,8 @@ export type OrganizationUncheckedCreateWithoutHolidaysInput = {
   businessHours?: Prisma.BusinessHoursUncheckedCreateNestedManyWithoutOrganizationInput
   staffs?: Prisma.StaffUncheckedCreateNestedManyWithoutOrganizationInput
   serviceFields?: Prisma.ServiceFieldUncheckedCreateNestedManyWithoutOrganizationInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutOrganizationInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutHolidaysInput = {
@@ -2260,6 +2882,8 @@ export type OrganizationUpdateWithoutHolidaysInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2303,6 +2927,8 @@ export type OrganizationUpdateWithoutHolidaysInput = {
   businessHours?: Prisma.BusinessHoursUpdateManyWithoutOrganizationNestedInput
   staffs?: Prisma.StaffUpdateManyWithoutOrganizationNestedInput
   serviceFields?: Prisma.ServiceFieldUpdateManyWithoutOrganizationNestedInput
+  products?: Prisma.ProductUpdateManyWithoutOrganizationNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutHolidaysInput = {
@@ -2310,6 +2936,8 @@ export type OrganizationUncheckedUpdateWithoutHolidaysInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2353,6 +2981,8 @@ export type OrganizationUncheckedUpdateWithoutHolidaysInput = {
   businessHours?: Prisma.BusinessHoursUncheckedUpdateManyWithoutOrganizationNestedInput
   staffs?: Prisma.StaffUncheckedUpdateManyWithoutOrganizationNestedInput
   serviceFields?: Prisma.ServiceFieldUncheckedUpdateManyWithoutOrganizationNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutOrganizationNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 
@@ -2366,6 +2996,8 @@ export type OrganizationCountOutputType = {
   holidays: number
   staffs: number
   serviceFields: number
+  products: number
+  orders: number
 }
 
 export type OrganizationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2374,6 +3006,8 @@ export type OrganizationCountOutputTypeSelect<ExtArgs extends runtime.Types.Exte
   holidays?: boolean | OrganizationCountOutputTypeCountHolidaysArgs
   staffs?: boolean | OrganizationCountOutputTypeCountStaffsArgs
   serviceFields?: boolean | OrganizationCountOutputTypeCountServiceFieldsArgs
+  products?: boolean | OrganizationCountOutputTypeCountProductsArgs
+  orders?: boolean | OrganizationCountOutputTypeCountOrdersArgs
 }
 
 /**
@@ -2421,12 +3055,28 @@ export type OrganizationCountOutputTypeCountServiceFieldsArgs<ExtArgs extends ru
   where?: Prisma.ServiceFieldWhereInput
 }
 
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountProductsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProductWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OrderWhereInput
+}
+
 
 export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
   slug?: boolean
   type?: boolean
+  coverImage?: boolean
+  avatarImage?: boolean
   logo?: boolean
   description?: boolean
   website?: boolean
@@ -2471,6 +3121,8 @@ export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   holidays?: boolean | Prisma.Organization$holidaysArgs<ExtArgs>
   staffs?: boolean | Prisma.Organization$staffsArgs<ExtArgs>
   serviceFields?: boolean | Prisma.Organization$serviceFieldsArgs<ExtArgs>
+  products?: boolean | Prisma.Organization$productsArgs<ExtArgs>
+  orders?: boolean | Prisma.Organization$ordersArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["organization"]>
 
@@ -2479,6 +3131,8 @@ export type OrganizationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   name?: boolean
   slug?: boolean
   type?: boolean
+  coverImage?: boolean
+  avatarImage?: boolean
   logo?: boolean
   description?: boolean
   website?: boolean
@@ -2525,6 +3179,8 @@ export type OrganizationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   name?: boolean
   slug?: boolean
   type?: boolean
+  coverImage?: boolean
+  avatarImage?: boolean
   logo?: boolean
   description?: boolean
   website?: boolean
@@ -2571,6 +3227,8 @@ export type OrganizationSelectScalar = {
   name?: boolean
   slug?: boolean
   type?: boolean
+  coverImage?: boolean
+  avatarImage?: boolean
   logo?: boolean
   description?: boolean
   website?: boolean
@@ -2612,13 +3270,15 @@ export type OrganizationSelectScalar = {
   updatedAt?: boolean
 }
 
-export type OrganizationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "slug" | "type" | "logo" | "description" | "website" | "phone" | "email" | "address" | "timezone" | "locale" | "themeMode" | "primaryColor" | "secondaryColor" | "isActive" | "heroTitle" | "heroSubtitle" | "heroBackgroundImage" | "aboutEnabled" | "aboutContent" | "aboutImage" | "practiceAreasEnabled" | "attorneysEnabled" | "testimonialsEnabled" | "caseResultsEnabled" | "awardsEnabled" | "faqEnabled" | "contactEnabled" | "appointmentEnabled" | "seoTitle" | "seoDescription" | "seoKeywords" | "mapUrl" | "workingHours" | "emergencyPhone" | "facebookUrl" | "twitterUrl" | "instagramUrl" | "linkedinUrl" | "telegramUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["organization"]>
+export type OrganizationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "slug" | "type" | "coverImage" | "avatarImage" | "logo" | "description" | "website" | "phone" | "email" | "address" | "timezone" | "locale" | "themeMode" | "primaryColor" | "secondaryColor" | "isActive" | "heroTitle" | "heroSubtitle" | "heroBackgroundImage" | "aboutEnabled" | "aboutContent" | "aboutImage" | "practiceAreasEnabled" | "attorneysEnabled" | "testimonialsEnabled" | "caseResultsEnabled" | "awardsEnabled" | "faqEnabled" | "contactEnabled" | "appointmentEnabled" | "seoTitle" | "seoDescription" | "seoKeywords" | "mapUrl" | "workingHours" | "emergencyPhone" | "facebookUrl" | "twitterUrl" | "instagramUrl" | "linkedinUrl" | "telegramUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["organization"]>
 export type OrganizationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   serviceCategories?: boolean | Prisma.Organization$serviceCategoriesArgs<ExtArgs>
   businessHours?: boolean | Prisma.Organization$businessHoursArgs<ExtArgs>
   holidays?: boolean | Prisma.Organization$holidaysArgs<ExtArgs>
   staffs?: boolean | Prisma.Organization$staffsArgs<ExtArgs>
   serviceFields?: boolean | Prisma.Organization$serviceFieldsArgs<ExtArgs>
+  products?: boolean | Prisma.Organization$productsArgs<ExtArgs>
+  orders?: boolean | Prisma.Organization$ordersArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OrganizationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -2632,12 +3292,16 @@ export type $OrganizationPayload<ExtArgs extends runtime.Types.Extensions.Intern
     holidays: Prisma.$HolidayPayload<ExtArgs>[]
     staffs: Prisma.$StaffPayload<ExtArgs>[]
     serviceFields: Prisma.$ServiceFieldPayload<ExtArgs>[]
+    products: Prisma.$ProductPayload<ExtArgs>[]
+    orders: Prisma.$OrderPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
     slug: string
     type: $Enums.OrganizationType
+    coverImage: string | null
+    avatarImage: string | null
     logo: string | null
     description: string | null
     website: string | null
@@ -3076,6 +3740,8 @@ export interface Prisma__OrganizationClient<T, Null = never, ExtArgs extends run
   holidays<T extends Prisma.Organization$holidaysArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$holidaysArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HolidayPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   staffs<T extends Prisma.Organization$staffsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$staffsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StaffPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   serviceFields<T extends Prisma.Organization$serviceFieldsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$serviceFieldsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ServiceFieldPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  products<T extends Prisma.Organization$productsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$productsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  orders<T extends Prisma.Organization$ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3109,6 +3775,8 @@ export interface OrganizationFieldRefs {
   readonly name: Prisma.FieldRef<"Organization", 'String'>
   readonly slug: Prisma.FieldRef<"Organization", 'String'>
   readonly type: Prisma.FieldRef<"Organization", 'OrganizationType'>
+  readonly coverImage: Prisma.FieldRef<"Organization", 'String'>
+  readonly avatarImage: Prisma.FieldRef<"Organization", 'String'>
   readonly logo: Prisma.FieldRef<"Organization", 'String'>
   readonly description: Prisma.FieldRef<"Organization", 'String'>
   readonly website: Prisma.FieldRef<"Organization", 'String'>
@@ -3653,6 +4321,54 @@ export type Organization$serviceFieldsArgs<ExtArgs extends runtime.Types.Extensi
   take?: number
   skip?: number
   distinct?: Prisma.ServiceFieldScalarFieldEnum | Prisma.ServiceFieldScalarFieldEnum[]
+}
+
+/**
+ * Organization.products
+ */
+export type Organization$productsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Product
+   */
+  select?: Prisma.ProductSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Product
+   */
+  omit?: Prisma.ProductOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProductInclude<ExtArgs> | null
+  where?: Prisma.ProductWhereInput
+  orderBy?: Prisma.ProductOrderByWithRelationInput | Prisma.ProductOrderByWithRelationInput[]
+  cursor?: Prisma.ProductWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProductScalarFieldEnum | Prisma.ProductScalarFieldEnum[]
+}
+
+/**
+ * Organization.orders
+ */
+export type Organization$ordersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Order
+   */
+  select?: Prisma.OrderSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Order
+   */
+  omit?: Prisma.OrderOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OrderInclude<ExtArgs> | null
+  where?: Prisma.OrderWhereInput
+  orderBy?: Prisma.OrderOrderByWithRelationInput | Prisma.OrderOrderByWithRelationInput[]
+  cursor?: Prisma.OrderWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OrderScalarFieldEnum | Prisma.OrderScalarFieldEnum[]
 }
 
 /**

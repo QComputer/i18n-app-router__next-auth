@@ -12,7 +12,7 @@ export default function OrganizationCreateForm({ dict, lang }: OrganizationCreat
   const [formData, setFormData] = useState({
     name: "",
     slug: "",
-    type: "OTHER" as 'LAWYER' | 'DOCTOR' | 'SUPERMARKET' | 'RESTAURANT' | 'SALON' | 'OTHER',
+    type: "OTHER" as 'LAWYER' | 'DOCTOR' | 'MARKET' | 'RESTAURANT' | 'SALON' | 'OTHER',
     description: "",
     website: "",
     email: "",
@@ -122,7 +122,7 @@ export default function OrganizationCreateForm({ dict, lang }: OrganizationCreat
         >
           <option value="LAWYER">{dict.admin?.organizationTypes?.LAWYER || "Lawyer"}</option>
           <option value="DOCTOR">{dict.admin?.organizationTypes?.DOCTOR || "Doctor"}</option>
-          <option value="SUPERMARKET">{dict.admin?.organizationTypes?.SUPERMARKET || "Supermarket"}</option>
+          <option value="MARKET">{dict.admin?.organizationTypes?.MARKET || "Market"}</option>
           <option value="RESTAURANT">{dict.admin?.organizationTypes?.RESTAURANT || "Restaurant"}</option>
           <option value="SALON">{dict.admin?.organizationTypes?.SALON || "Salon"}</option>
           <option value="OTHER">{dict.admin?.organizationTypes?.OTHER || "Other"}</option>

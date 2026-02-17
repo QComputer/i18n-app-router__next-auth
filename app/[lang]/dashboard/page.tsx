@@ -36,7 +36,7 @@ import {
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 /**
  * Generate static params for all supported locales
@@ -340,6 +340,9 @@ export default async function DashboardPage(props: {
                           <div className="flex items-start justify-between">
                             <div className="flex items-start gap-4">
                               <Avatar className="h-12 w-12">
+                                {appointment.client?.image && (
+                                  <AvatarImage src={appointment.client.image} alt={clientName} />
+                                )}
                                 <AvatarFallback className={statusStyle.text}>
                                   {getInitials(clientName)}
                                 </AvatarFallback>
@@ -403,6 +406,9 @@ export default async function DashboardPage(props: {
               <CardContent>
                 <div className="flex items-center gap-4">
                   <Avatar className="h-16 w-16">
+                    {user.image && (
+                      <AvatarImage src={user.image} alt={user.name || ""} />
+                    )}
                     <AvatarFallback className="text-xl bg-primary/10 text-primary">
                       {getInitials(user.name)}
                     </AvatarFallback>

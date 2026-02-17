@@ -315,7 +315,7 @@ export async function updateMyOrganizationContactInfo(data: ContactInfoConfig) {
 export async function updateMyOrganization(data: {
   name?: string;
   slug?: string;
-  type?: "LAWYER" | "DOCTOR" | "SUPERMARKET" | "RESTAURANT" | "SALON" | "OTHER";
+  type?: "LAWYER" | "DOCTOR" | "MARKET" | "RESTAURANT" | "SALON" | "OTHER";
   description?: string;
   logo?: string;
   website?: string;

@@ -333,6 +333,7 @@ interface ServiceAppointment {
     id: string
     user: {
       name: string | null
+      image: string | null
     }
   } | null
 }
@@ -386,6 +387,7 @@ export async function getAppointmentsByService(
                 user: {
                   select: {
                     name: true,
+                    image: true,
                   },
                 },
               },

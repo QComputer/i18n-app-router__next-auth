@@ -108,7 +108,7 @@ export default function OrganizationEditForm({ orgData, dict, lang }: Organizati
         >
           <option value="LAWYER">{dict.admin?.organizationTypes?.LAWYER || "Lawyer"}</option>
           <option value="DOCTOR">{dict.admin?.organizationTypes?.DOCTOR || "Doctor"}</option>
-          <option value="SUPERMARKET">{dict.admin?.organizationTypes?.SUPERMARKET || "Supermarket"}</option>
+          <option value="MARKET">{dict.admin?.organizationTypes?.MARKET || "Market"}</option>
           <option value="RESTAURANT">{dict.admin?.organizationTypes?.RESTAURANT || "Restaurant"}</option>
           <option value="SALON">{dict.admin?.organizationTypes?.SALON || "Salon"}</option>
           <option value="OTHER">{dict.admin?.organizationTypes?.OTHER || "Other"}</option>

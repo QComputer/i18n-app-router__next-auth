@@ -27,13 +27,16 @@ export type AggregateUser = {
 export type UserMinAggregateOutputType = {
   id: string | null
   username: string | null
+  role: string | null
   email: string | null
   name: string | null
   phone: string | null
   image: string | null
+  coverImage: string | null
+  avatarImage: string | null
   emailVerified: Date | null
+  phoneVerified: Date | null
   password: string | null
-  role: string | null
   locale: string | null
   themeMode: $Enums.ThemeMode | null
   resetToken: string | null
@@ -45,13 +48,16 @@ export type UserMinAggregateOutputType = {
 export type UserMaxAggregateOutputType = {
   id: string | null
   username: string | null
+  role: string | null
   email: string | null
   name: string | null
   phone: string | null
   image: string | null
+  coverImage: string | null
+  avatarImage: string | null
   emailVerified: Date | null
+  phoneVerified: Date | null
   password: string | null
-  role: string | null
   locale: string | null
   themeMode: $Enums.ThemeMode | null
   resetToken: string | null
@@ -63,13 +69,16 @@ export type UserMaxAggregateOutputType = {
 export type UserCountAggregateOutputType = {
   id: number
   username: number
+  role: number
   email: number
   name: number
   phone: number
   image: number
+  coverImage: number
+  avatarImage: number
   emailVerified: number
+  phoneVerified: number
   password: number
-  role: number
   locale: number
   themeMode: number
   resetToken: number
@@ -83,13 +92,16 @@ export type UserCountAggregateOutputType = {
 export type UserMinAggregateInputType = {
   id?: true
   username?: true
+  role?: true
   email?: true
   name?: true
   phone?: true
   image?: true
+  coverImage?: true
+  avatarImage?: true
   emailVerified?: true
+  phoneVerified?: true
   password?: true
-  role?: true
   locale?: true
   themeMode?: true
   resetToken?: true
@@ -101,13 +113,16 @@ export type UserMinAggregateInputType = {
 export type UserMaxAggregateInputType = {
   id?: true
   username?: true
+  role?: true
   email?: true
   name?: true
   phone?: true
   image?: true
+  coverImage?: true
+  avatarImage?: true
   emailVerified?: true
+  phoneVerified?: true
   password?: true
-  role?: true
   locale?: true
   themeMode?: true
   resetToken?: true
@@ -119,13 +134,16 @@ export type UserMaxAggregateInputType = {
 export type UserCountAggregateInputType = {
   id?: true
   username?: true
+  role?: true
   email?: true
   name?: true
   phone?: true
   image?: true
+  coverImage?: true
+  avatarImage?: true
   emailVerified?: true
+  phoneVerified?: true
   password?: true
-  role?: true
   locale?: true
   themeMode?: true
   resetToken?: true
@@ -210,13 +228,16 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 export type UserGroupByOutputType = {
   id: string
   username: string
+  role: string
   email: string | null
   name: string | null
   phone: string | null
   image: string | null
+  coverImage: string | null
+  avatarImage: string | null
   emailVerified: Date | null
+  phoneVerified: Date | null
   password: string | null
-  role: string
   locale: string
   themeMode: $Enums.ThemeMode
   resetToken: string | null
@@ -249,13 +270,16 @@ export type UserWhereInput = {
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   id?: Prisma.StringFilter<"User"> | string
   username?: Prisma.StringFilter<"User"> | string
+  role?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringNullableFilter<"User"> | string | null
   name?: Prisma.StringNullableFilter<"User"> | string | null
   phone?: Prisma.StringNullableFilter<"User"> | string | null
   image?: Prisma.StringNullableFilter<"User"> | string | null
+  coverImage?: Prisma.StringNullableFilter<"User"> | string | null
+  avatarImage?: Prisma.StringNullableFilter<"User"> | string | null
   emailVerified?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  phoneVerified?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   password?: Prisma.StringNullableFilter<"User"> | string | null
-  role?: Prisma.StringFilter<"User"> | string
   locale?: Prisma.StringFilter<"User"> | string
   themeMode?: Prisma.EnumThemeModeFilter<"User"> | $Enums.ThemeMode
   resetToken?: Prisma.StringNullableFilter<"User"> | string | null
@@ -266,18 +290,26 @@ export type UserWhereInput = {
   accounts?: Prisma.AccountListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   appointments?: Prisma.AppointmentListRelationFilter
+  deviceFingerPrints?: Prisma.DeviceFingerPrintListRelationFilter
+  oders?: Prisma.OrderListRelationFilter
+  followings?: Prisma.FollowingListRelationFilter
+  driver?: Prisma.XOR<Prisma.DriverNullableScalarRelationFilter, Prisma.DriverWhereInput> | null
+  pathes?: Prisma.PathListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   username?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   image?: Prisma.SortOrderInput | Prisma.SortOrder
+  coverImage?: Prisma.SortOrderInput | Prisma.SortOrder
+  avatarImage?: Prisma.SortOrderInput | Prisma.SortOrder
   emailVerified?: Prisma.SortOrderInput | Prisma.SortOrder
+  phoneVerified?: Prisma.SortOrderInput | Prisma.SortOrder
   password?: Prisma.SortOrderInput | Prisma.SortOrder
-  role?: Prisma.SortOrder
   locale?: Prisma.SortOrder
   themeMode?: Prisma.SortOrder
   resetToken?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -288,6 +320,11 @@ export type UserOrderByWithRelationInput = {
   accounts?: Prisma.AccountOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   appointments?: Prisma.AppointmentOrderByRelationAggregateInput
+  deviceFingerPrints?: Prisma.deviceFingerPrintOrderByRelationAggregateInput
+  oders?: Prisma.OrderOrderByRelationAggregateInput
+  followings?: Prisma.FollowingOrderByRelationAggregateInput
+  driver?: Prisma.DriverOrderByWithRelationInput
+  pathes?: Prisma.PathOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -297,12 +334,15 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
+  role?: Prisma.StringFilter<"User"> | string
   name?: Prisma.StringNullableFilter<"User"> | string | null
   phone?: Prisma.StringNullableFilter<"User"> | string | null
   image?: Prisma.StringNullableFilter<"User"> | string | null
+  coverImage?: Prisma.StringNullableFilter<"User"> | string | null
+  avatarImage?: Prisma.StringNullableFilter<"User"> | string | null
   emailVerified?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  phoneVerified?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   password?: Prisma.StringNullableFilter<"User"> | string | null
-  role?: Prisma.StringFilter<"User"> | string
   locale?: Prisma.StringFilter<"User"> | string
   themeMode?: Prisma.EnumThemeModeFilter<"User"> | $Enums.ThemeMode
   resetToken?: Prisma.StringNullableFilter<"User"> | string | null
@@ -313,18 +353,26 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   accounts?: Prisma.AccountListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   appointments?: Prisma.AppointmentListRelationFilter
+  deviceFingerPrints?: Prisma.DeviceFingerPrintListRelationFilter
+  oders?: Prisma.OrderListRelationFilter
+  followings?: Prisma.FollowingListRelationFilter
+  driver?: Prisma.XOR<Prisma.DriverNullableScalarRelationFilter, Prisma.DriverWhereInput> | null
+  pathes?: Prisma.PathListRelationFilter
 }, "id" | "username" | "email">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   username?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   image?: Prisma.SortOrderInput | Prisma.SortOrder
+  coverImage?: Prisma.SortOrderInput | Prisma.SortOrder
+  avatarImage?: Prisma.SortOrderInput | Prisma.SortOrder
   emailVerified?: Prisma.SortOrderInput | Prisma.SortOrder
+  phoneVerified?: Prisma.SortOrderInput | Prisma.SortOrder
   password?: Prisma.SortOrderInput | Prisma.SortOrder
-  role?: Prisma.SortOrder
   locale?: Prisma.SortOrder
   themeMode?: Prisma.SortOrder
   resetToken?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -342,13 +390,16 @@ export type UserScalarWhereWithAggregatesInput = {
   NOT?: Prisma.UserScalarWhereWithAggregatesInput | Prisma.UserScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"User"> | string
   username?: Prisma.StringWithAggregatesFilter<"User"> | string
+  role?: Prisma.StringWithAggregatesFilter<"User"> | string
   email?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   name?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   phone?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   image?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  coverImage?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  avatarImage?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   emailVerified?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  phoneVerified?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   password?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
-  role?: Prisma.StringWithAggregatesFilter<"User"> | string
   locale?: Prisma.StringWithAggregatesFilter<"User"> | string
   themeMode?: Prisma.EnumThemeModeWithAggregatesFilter<"User"> | $Enums.ThemeMode
   resetToken?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
@@ -360,13 +411,16 @@ export type UserScalarWhereWithAggregatesInput = {
 export type UserCreateInput = {
   id?: string
   username: string
+  role?: string
   email?: string | null
   name?: string | null
   phone?: string | null
   image?: string | null
+  coverImage?: string | null
+  avatarImage?: string | null
   emailVerified?: Date | string | null
+  phoneVerified?: Date | string | null
   password?: string | null
-  role?: string
   locale?: string
   themeMode?: $Enums.ThemeMode
   resetToken?: string | null
@@ -377,18 +431,26 @@ export type UserCreateInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   appointments?: Prisma.AppointmentCreateNestedManyWithoutClientInput
+  deviceFingerPrints?: Prisma.deviceFingerPrintCreateNestedManyWithoutUserInput
+  oders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  followings?: Prisma.FollowingCreateNestedManyWithoutUserInput
+  driver?: Prisma.DriverCreateNestedOneWithoutUserInput
+  pathes?: Prisma.PathCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
   id?: string
   username: string
+  role?: string
   email?: string | null
   name?: string | null
   phone?: string | null
   image?: string | null
+  coverImage?: string | null
+  avatarImage?: string | null
   emailVerified?: Date | string | null
+  phoneVerified?: Date | string | null
   password?: string | null
-  role?: string
   locale?: string
   themeMode?: $Enums.ThemeMode
   resetToken?: string | null
@@ -399,18 +461,26 @@ export type UserUncheckedCreateInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   appointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutClientInput
+  deviceFingerPrints?: Prisma.deviceFingerPrintUncheckedCreateNestedManyWithoutUserInput
+  oders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  followings?: Prisma.FollowingUncheckedCreateNestedManyWithoutUserInput
+  driver?: Prisma.DriverUncheckedCreateNestedOneWithoutUserInput
+  pathes?: Prisma.PathUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phoneVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.StringFieldUpdateOperationsInput | string
   locale?: Prisma.StringFieldUpdateOperationsInput | string
   themeMode?: Prisma.EnumThemeModeFieldUpdateOperationsInput | $Enums.ThemeMode
   resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -421,18 +491,26 @@ export type UserUpdateInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   appointments?: Prisma.AppointmentUpdateManyWithoutClientNestedInput
+  deviceFingerPrints?: Prisma.deviceFingerPrintUpdateManyWithoutUserNestedInput
+  oders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  followings?: Prisma.FollowingUpdateManyWithoutUserNestedInput
+  driver?: Prisma.DriverUpdateOneWithoutUserNestedInput
+  pathes?: Prisma.PathUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phoneVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.StringFieldUpdateOperationsInput | string
   locale?: Prisma.StringFieldUpdateOperationsInput | string
   themeMode?: Prisma.EnumThemeModeFieldUpdateOperationsInput | $Enums.ThemeMode
   resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -443,18 +521,26 @@ export type UserUncheckedUpdateInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   appointments?: Prisma.AppointmentUncheckedUpdateManyWithoutClientNestedInput
+  deviceFingerPrints?: Prisma.deviceFingerPrintUncheckedUpdateManyWithoutUserNestedInput
+  oders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  followings?: Prisma.FollowingUncheckedUpdateManyWithoutUserNestedInput
+  driver?: Prisma.DriverUncheckedUpdateOneWithoutUserNestedInput
+  pathes?: Prisma.PathUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
   id?: string
   username: string
+  role?: string
   email?: string | null
   name?: string | null
   phone?: string | null
   image?: string | null
+  coverImage?: string | null
+  avatarImage?: string | null
   emailVerified?: Date | string | null
+  phoneVerified?: Date | string | null
   password?: string | null
-  role?: string
   locale?: string
   themeMode?: $Enums.ThemeMode
   resetToken?: string | null
@@ -466,13 +552,16 @@ export type UserCreateManyInput = {
 export type UserUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phoneVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.StringFieldUpdateOperationsInput | string
   locale?: Prisma.StringFieldUpdateOperationsInput | string
   themeMode?: Prisma.EnumThemeModeFieldUpdateOperationsInput | $Enums.ThemeMode
   resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -484,13 +573,16 @@ export type UserUpdateManyMutationInput = {
 export type UserUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phoneVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.StringFieldUpdateOperationsInput | string
   locale?: Prisma.StringFieldUpdateOperationsInput | string
   themeMode?: Prisma.EnumThemeModeFieldUpdateOperationsInput | $Enums.ThemeMode
   resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -499,16 +591,24 @@ export type UserUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type UserScalarRelationFilter = {
+  is?: Prisma.UserWhereInput
+  isNot?: Prisma.UserWhereInput
+}
+
 export type UserCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   username?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   email?: Prisma.SortOrder
   name?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   image?: Prisma.SortOrder
+  coverImage?: Prisma.SortOrder
+  avatarImage?: Prisma.SortOrder
   emailVerified?: Prisma.SortOrder
+  phoneVerified?: Prisma.SortOrder
   password?: Prisma.SortOrder
-  role?: Prisma.SortOrder
   locale?: Prisma.SortOrder
   themeMode?: Prisma.SortOrder
   resetToken?: Prisma.SortOrder
@@ -520,13 +620,16 @@ export type UserCountOrderByAggregateInput = {
 export type UserMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   username?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   email?: Prisma.SortOrder
   name?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   image?: Prisma.SortOrder
+  coverImage?: Prisma.SortOrder
+  avatarImage?: Prisma.SortOrder
   emailVerified?: Prisma.SortOrder
+  phoneVerified?: Prisma.SortOrder
   password?: Prisma.SortOrder
-  role?: Prisma.SortOrder
   locale?: Prisma.SortOrder
   themeMode?: Prisma.SortOrder
   resetToken?: Prisma.SortOrder
@@ -538,13 +641,16 @@ export type UserMaxOrderByAggregateInput = {
 export type UserMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   username?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   email?: Prisma.SortOrder
   name?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   image?: Prisma.SortOrder
+  coverImage?: Prisma.SortOrder
+  avatarImage?: Prisma.SortOrder
   emailVerified?: Prisma.SortOrder
+  phoneVerified?: Prisma.SortOrder
   password?: Prisma.SortOrder
-  role?: Prisma.SortOrder
   locale?: Prisma.SortOrder
   themeMode?: Prisma.SortOrder
   resetToken?: Prisma.SortOrder
@@ -553,18 +659,83 @@ export type UserMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
-export type UserScalarRelationFilter = {
-  is?: Prisma.UserWhereInput
-  isNot?: Prisma.UserWhereInput
-}
-
 export type UserNullableScalarRelationFilter = {
   is?: Prisma.UserWhereInput | null
   isNot?: Prisma.UserWhereInput | null
 }
 
+export type UserCreateNestedOneWithoutFollowingsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFollowingsInput, Prisma.UserUncheckedCreateWithoutFollowingsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFollowingsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutFollowingsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFollowingsInput, Prisma.UserUncheckedCreateWithoutFollowingsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFollowingsInput
+  upsert?: Prisma.UserUpsertWithoutFollowingsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFollowingsInput, Prisma.UserUpdateWithoutFollowingsInput>, Prisma.UserUncheckedUpdateWithoutFollowingsInput>
+}
+
+export type UserCreateNestedOneWithoutDeviceFingerPrintsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDeviceFingerPrintsInput, Prisma.UserUncheckedCreateWithoutDeviceFingerPrintsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDeviceFingerPrintsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutDeviceFingerPrintsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDeviceFingerPrintsInput, Prisma.UserUncheckedCreateWithoutDeviceFingerPrintsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDeviceFingerPrintsInput
+  upsert?: Prisma.UserUpsertWithoutDeviceFingerPrintsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutDeviceFingerPrintsInput, Prisma.UserUpdateWithoutDeviceFingerPrintsInput>, Prisma.UserUncheckedUpdateWithoutDeviceFingerPrintsInput>
+}
+
 export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
+}
+
+export type UserCreateNestedOneWithoutDriverInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDriverInput, Prisma.UserUncheckedCreateWithoutDriverInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDriverInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutDriverNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDriverInput, Prisma.UserUncheckedCreateWithoutDriverInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDriverInput
+  upsert?: Prisma.UserUpsertWithoutDriverInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutDriverInput, Prisma.UserUpdateWithoutDriverInput>, Prisma.UserUncheckedUpdateWithoutDriverInput>
+}
+
+export type UserCreateNestedOneWithoutPathesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPathesInput, Prisma.UserUncheckedCreateWithoutPathesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPathesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutPathesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPathesInput, Prisma.UserUncheckedCreateWithoutPathesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPathesInput
+  upsert?: Prisma.UserUpsertWithoutPathesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPathesInput, Prisma.UserUpdateWithoutPathesInput>, Prisma.UserUncheckedUpdateWithoutPathesInput>
+}
+
+export type UserCreateNestedOneWithoutOdersInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOdersInput, Prisma.UserUncheckedCreateWithoutOdersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOdersInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutOdersNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOdersInput, Prisma.UserUncheckedCreateWithoutOdersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOdersInput
+  upsert?: Prisma.UserUpsertWithoutOdersInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutOdersInput, Prisma.UserUpdateWithoutOdersInput>, Prisma.UserUncheckedUpdateWithoutOdersInput>
 }
 
 export type UserCreateNestedOneWithoutStaffInput = {
@@ -625,16 +796,679 @@ export type UserUpdateOneWithoutAppointmentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAppointmentsInput, Prisma.UserUpdateWithoutAppointmentsInput>, Prisma.UserUncheckedUpdateWithoutAppointmentsInput>
 }
 
-export type UserCreateWithoutStaffInput = {
+export type UserCreateWithoutFollowingsInput = {
   id?: string
   username: string
+  role?: string
   email?: string | null
   name?: string | null
   phone?: string | null
   image?: string | null
+  coverImage?: string | null
+  avatarImage?: string | null
   emailVerified?: Date | string | null
+  phoneVerified?: Date | string | null
   password?: string | null
+  locale?: string
+  themeMode?: $Enums.ThemeMode
+  resetToken?: string | null
+  resetTokenExpires?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  staff?: Prisma.StaffCreateNestedOneWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  appointments?: Prisma.AppointmentCreateNestedManyWithoutClientInput
+  deviceFingerPrints?: Prisma.deviceFingerPrintCreateNestedManyWithoutUserInput
+  oders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  driver?: Prisma.DriverCreateNestedOneWithoutUserInput
+  pathes?: Prisma.PathCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutFollowingsInput = {
+  id?: string
+  username: string
   role?: string
+  email?: string | null
+  name?: string | null
+  phone?: string | null
+  image?: string | null
+  coverImage?: string | null
+  avatarImage?: string | null
+  emailVerified?: Date | string | null
+  phoneVerified?: Date | string | null
+  password?: string | null
+  locale?: string
+  themeMode?: $Enums.ThemeMode
+  resetToken?: string | null
+  resetTokenExpires?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  staff?: Prisma.StaffUncheckedCreateNestedOneWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  appointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutClientInput
+  deviceFingerPrints?: Prisma.deviceFingerPrintUncheckedCreateNestedManyWithoutUserInput
+  oders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  driver?: Prisma.DriverUncheckedCreateNestedOneWithoutUserInput
+  pathes?: Prisma.PathUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutFollowingsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutFollowingsInput, Prisma.UserUncheckedCreateWithoutFollowingsInput>
+}
+
+export type UserUpsertWithoutFollowingsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutFollowingsInput, Prisma.UserUncheckedUpdateWithoutFollowingsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutFollowingsInput, Prisma.UserUncheckedCreateWithoutFollowingsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutFollowingsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutFollowingsInput, Prisma.UserUncheckedUpdateWithoutFollowingsInput>
+}
+
+export type UserUpdateWithoutFollowingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phoneVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locale?: Prisma.StringFieldUpdateOperationsInput | string
+  themeMode?: Prisma.EnumThemeModeFieldUpdateOperationsInput | $Enums.ThemeMode
+  resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetTokenExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  staff?: Prisma.StaffUpdateOneWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  appointments?: Prisma.AppointmentUpdateManyWithoutClientNestedInput
+  deviceFingerPrints?: Prisma.deviceFingerPrintUpdateManyWithoutUserNestedInput
+  oders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  driver?: Prisma.DriverUpdateOneWithoutUserNestedInput
+  pathes?: Prisma.PathUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutFollowingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phoneVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locale?: Prisma.StringFieldUpdateOperationsInput | string
+  themeMode?: Prisma.EnumThemeModeFieldUpdateOperationsInput | $Enums.ThemeMode
+  resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetTokenExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  staff?: Prisma.StaffUncheckedUpdateOneWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  appointments?: Prisma.AppointmentUncheckedUpdateManyWithoutClientNestedInput
+  deviceFingerPrints?: Prisma.deviceFingerPrintUncheckedUpdateManyWithoutUserNestedInput
+  oders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  driver?: Prisma.DriverUncheckedUpdateOneWithoutUserNestedInput
+  pathes?: Prisma.PathUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutDeviceFingerPrintsInput = {
+  id?: string
+  username: string
+  role?: string
+  email?: string | null
+  name?: string | null
+  phone?: string | null
+  image?: string | null
+  coverImage?: string | null
+  avatarImage?: string | null
+  emailVerified?: Date | string | null
+  phoneVerified?: Date | string | null
+  password?: string | null
+  locale?: string
+  themeMode?: $Enums.ThemeMode
+  resetToken?: string | null
+  resetTokenExpires?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  staff?: Prisma.StaffCreateNestedOneWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  appointments?: Prisma.AppointmentCreateNestedManyWithoutClientInput
+  oders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  followings?: Prisma.FollowingCreateNestedManyWithoutUserInput
+  driver?: Prisma.DriverCreateNestedOneWithoutUserInput
+  pathes?: Prisma.PathCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutDeviceFingerPrintsInput = {
+  id?: string
+  username: string
+  role?: string
+  email?: string | null
+  name?: string | null
+  phone?: string | null
+  image?: string | null
+  coverImage?: string | null
+  avatarImage?: string | null
+  emailVerified?: Date | string | null
+  phoneVerified?: Date | string | null
+  password?: string | null
+  locale?: string
+  themeMode?: $Enums.ThemeMode
+  resetToken?: string | null
+  resetTokenExpires?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  staff?: Prisma.StaffUncheckedCreateNestedOneWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  appointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutClientInput
+  oders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  followings?: Prisma.FollowingUncheckedCreateNestedManyWithoutUserInput
+  driver?: Prisma.DriverUncheckedCreateNestedOneWithoutUserInput
+  pathes?: Prisma.PathUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutDeviceFingerPrintsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutDeviceFingerPrintsInput, Prisma.UserUncheckedCreateWithoutDeviceFingerPrintsInput>
+}
+
+export type UserUpsertWithoutDeviceFingerPrintsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutDeviceFingerPrintsInput, Prisma.UserUncheckedUpdateWithoutDeviceFingerPrintsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutDeviceFingerPrintsInput, Prisma.UserUncheckedCreateWithoutDeviceFingerPrintsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutDeviceFingerPrintsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutDeviceFingerPrintsInput, Prisma.UserUncheckedUpdateWithoutDeviceFingerPrintsInput>
+}
+
+export type UserUpdateWithoutDeviceFingerPrintsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phoneVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locale?: Prisma.StringFieldUpdateOperationsInput | string
+  themeMode?: Prisma.EnumThemeModeFieldUpdateOperationsInput | $Enums.ThemeMode
+  resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetTokenExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  staff?: Prisma.StaffUpdateOneWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  appointments?: Prisma.AppointmentUpdateManyWithoutClientNestedInput
+  oders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  followings?: Prisma.FollowingUpdateManyWithoutUserNestedInput
+  driver?: Prisma.DriverUpdateOneWithoutUserNestedInput
+  pathes?: Prisma.PathUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutDeviceFingerPrintsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phoneVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locale?: Prisma.StringFieldUpdateOperationsInput | string
+  themeMode?: Prisma.EnumThemeModeFieldUpdateOperationsInput | $Enums.ThemeMode
+  resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetTokenExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  staff?: Prisma.StaffUncheckedUpdateOneWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  appointments?: Prisma.AppointmentUncheckedUpdateManyWithoutClientNestedInput
+  oders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  followings?: Prisma.FollowingUncheckedUpdateManyWithoutUserNestedInput
+  driver?: Prisma.DriverUncheckedUpdateOneWithoutUserNestedInput
+  pathes?: Prisma.PathUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutDriverInput = {
+  id?: string
+  username: string
+  role?: string
+  email?: string | null
+  name?: string | null
+  phone?: string | null
+  image?: string | null
+  coverImage?: string | null
+  avatarImage?: string | null
+  emailVerified?: Date | string | null
+  phoneVerified?: Date | string | null
+  password?: string | null
+  locale?: string
+  themeMode?: $Enums.ThemeMode
+  resetToken?: string | null
+  resetTokenExpires?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  staff?: Prisma.StaffCreateNestedOneWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  appointments?: Prisma.AppointmentCreateNestedManyWithoutClientInput
+  deviceFingerPrints?: Prisma.deviceFingerPrintCreateNestedManyWithoutUserInput
+  oders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  followings?: Prisma.FollowingCreateNestedManyWithoutUserInput
+  pathes?: Prisma.PathCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutDriverInput = {
+  id?: string
+  username: string
+  role?: string
+  email?: string | null
+  name?: string | null
+  phone?: string | null
+  image?: string | null
+  coverImage?: string | null
+  avatarImage?: string | null
+  emailVerified?: Date | string | null
+  phoneVerified?: Date | string | null
+  password?: string | null
+  locale?: string
+  themeMode?: $Enums.ThemeMode
+  resetToken?: string | null
+  resetTokenExpires?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  staff?: Prisma.StaffUncheckedCreateNestedOneWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  appointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutClientInput
+  deviceFingerPrints?: Prisma.deviceFingerPrintUncheckedCreateNestedManyWithoutUserInput
+  oders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  followings?: Prisma.FollowingUncheckedCreateNestedManyWithoutUserInput
+  pathes?: Prisma.PathUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutDriverInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutDriverInput, Prisma.UserUncheckedCreateWithoutDriverInput>
+}
+
+export type UserUpsertWithoutDriverInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutDriverInput, Prisma.UserUncheckedUpdateWithoutDriverInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutDriverInput, Prisma.UserUncheckedCreateWithoutDriverInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutDriverInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutDriverInput, Prisma.UserUncheckedUpdateWithoutDriverInput>
+}
+
+export type UserUpdateWithoutDriverInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phoneVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locale?: Prisma.StringFieldUpdateOperationsInput | string
+  themeMode?: Prisma.EnumThemeModeFieldUpdateOperationsInput | $Enums.ThemeMode
+  resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetTokenExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  staff?: Prisma.StaffUpdateOneWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  appointments?: Prisma.AppointmentUpdateManyWithoutClientNestedInput
+  deviceFingerPrints?: Prisma.deviceFingerPrintUpdateManyWithoutUserNestedInput
+  oders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  followings?: Prisma.FollowingUpdateManyWithoutUserNestedInput
+  pathes?: Prisma.PathUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutDriverInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phoneVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locale?: Prisma.StringFieldUpdateOperationsInput | string
+  themeMode?: Prisma.EnumThemeModeFieldUpdateOperationsInput | $Enums.ThemeMode
+  resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetTokenExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  staff?: Prisma.StaffUncheckedUpdateOneWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  appointments?: Prisma.AppointmentUncheckedUpdateManyWithoutClientNestedInput
+  deviceFingerPrints?: Prisma.deviceFingerPrintUncheckedUpdateManyWithoutUserNestedInput
+  oders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  followings?: Prisma.FollowingUncheckedUpdateManyWithoutUserNestedInput
+  pathes?: Prisma.PathUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutPathesInput = {
+  id?: string
+  username: string
+  role?: string
+  email?: string | null
+  name?: string | null
+  phone?: string | null
+  image?: string | null
+  coverImage?: string | null
+  avatarImage?: string | null
+  emailVerified?: Date | string | null
+  phoneVerified?: Date | string | null
+  password?: string | null
+  locale?: string
+  themeMode?: $Enums.ThemeMode
+  resetToken?: string | null
+  resetTokenExpires?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  staff?: Prisma.StaffCreateNestedOneWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  appointments?: Prisma.AppointmentCreateNestedManyWithoutClientInput
+  deviceFingerPrints?: Prisma.deviceFingerPrintCreateNestedManyWithoutUserInput
+  oders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  followings?: Prisma.FollowingCreateNestedManyWithoutUserInput
+  driver?: Prisma.DriverCreateNestedOneWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutPathesInput = {
+  id?: string
+  username: string
+  role?: string
+  email?: string | null
+  name?: string | null
+  phone?: string | null
+  image?: string | null
+  coverImage?: string | null
+  avatarImage?: string | null
+  emailVerified?: Date | string | null
+  phoneVerified?: Date | string | null
+  password?: string | null
+  locale?: string
+  themeMode?: $Enums.ThemeMode
+  resetToken?: string | null
+  resetTokenExpires?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  staff?: Prisma.StaffUncheckedCreateNestedOneWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  appointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutClientInput
+  deviceFingerPrints?: Prisma.deviceFingerPrintUncheckedCreateNestedManyWithoutUserInput
+  oders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  followings?: Prisma.FollowingUncheckedCreateNestedManyWithoutUserInput
+  driver?: Prisma.DriverUncheckedCreateNestedOneWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutPathesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPathesInput, Prisma.UserUncheckedCreateWithoutPathesInput>
+}
+
+export type UserUpsertWithoutPathesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPathesInput, Prisma.UserUncheckedUpdateWithoutPathesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPathesInput, Prisma.UserUncheckedCreateWithoutPathesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutPathesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPathesInput, Prisma.UserUncheckedUpdateWithoutPathesInput>
+}
+
+export type UserUpdateWithoutPathesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phoneVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locale?: Prisma.StringFieldUpdateOperationsInput | string
+  themeMode?: Prisma.EnumThemeModeFieldUpdateOperationsInput | $Enums.ThemeMode
+  resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetTokenExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  staff?: Prisma.StaffUpdateOneWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  appointments?: Prisma.AppointmentUpdateManyWithoutClientNestedInput
+  deviceFingerPrints?: Prisma.deviceFingerPrintUpdateManyWithoutUserNestedInput
+  oders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  followings?: Prisma.FollowingUpdateManyWithoutUserNestedInput
+  driver?: Prisma.DriverUpdateOneWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPathesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phoneVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locale?: Prisma.StringFieldUpdateOperationsInput | string
+  themeMode?: Prisma.EnumThemeModeFieldUpdateOperationsInput | $Enums.ThemeMode
+  resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetTokenExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  staff?: Prisma.StaffUncheckedUpdateOneWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  appointments?: Prisma.AppointmentUncheckedUpdateManyWithoutClientNestedInput
+  deviceFingerPrints?: Prisma.deviceFingerPrintUncheckedUpdateManyWithoutUserNestedInput
+  oders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  followings?: Prisma.FollowingUncheckedUpdateManyWithoutUserNestedInput
+  driver?: Prisma.DriverUncheckedUpdateOneWithoutUserNestedInput
+}
+
+export type UserCreateWithoutOdersInput = {
+  id?: string
+  username: string
+  role?: string
+  email?: string | null
+  name?: string | null
+  phone?: string | null
+  image?: string | null
+  coverImage?: string | null
+  avatarImage?: string | null
+  emailVerified?: Date | string | null
+  phoneVerified?: Date | string | null
+  password?: string | null
+  locale?: string
+  themeMode?: $Enums.ThemeMode
+  resetToken?: string | null
+  resetTokenExpires?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  staff?: Prisma.StaffCreateNestedOneWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  appointments?: Prisma.AppointmentCreateNestedManyWithoutClientInput
+  deviceFingerPrints?: Prisma.deviceFingerPrintCreateNestedManyWithoutUserInput
+  followings?: Prisma.FollowingCreateNestedManyWithoutUserInput
+  driver?: Prisma.DriverCreateNestedOneWithoutUserInput
+  pathes?: Prisma.PathCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutOdersInput = {
+  id?: string
+  username: string
+  role?: string
+  email?: string | null
+  name?: string | null
+  phone?: string | null
+  image?: string | null
+  coverImage?: string | null
+  avatarImage?: string | null
+  emailVerified?: Date | string | null
+  phoneVerified?: Date | string | null
+  password?: string | null
+  locale?: string
+  themeMode?: $Enums.ThemeMode
+  resetToken?: string | null
+  resetTokenExpires?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  staff?: Prisma.StaffUncheckedCreateNestedOneWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  appointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutClientInput
+  deviceFingerPrints?: Prisma.deviceFingerPrintUncheckedCreateNestedManyWithoutUserInput
+  followings?: Prisma.FollowingUncheckedCreateNestedManyWithoutUserInput
+  driver?: Prisma.DriverUncheckedCreateNestedOneWithoutUserInput
+  pathes?: Prisma.PathUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutOdersInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutOdersInput, Prisma.UserUncheckedCreateWithoutOdersInput>
+}
+
+export type UserUpsertWithoutOdersInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutOdersInput, Prisma.UserUncheckedUpdateWithoutOdersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutOdersInput, Prisma.UserUncheckedCreateWithoutOdersInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutOdersInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutOdersInput, Prisma.UserUncheckedUpdateWithoutOdersInput>
+}
+
+export type UserUpdateWithoutOdersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phoneVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locale?: Prisma.StringFieldUpdateOperationsInput | string
+  themeMode?: Prisma.EnumThemeModeFieldUpdateOperationsInput | $Enums.ThemeMode
+  resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetTokenExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  staff?: Prisma.StaffUpdateOneWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  appointments?: Prisma.AppointmentUpdateManyWithoutClientNestedInput
+  deviceFingerPrints?: Prisma.deviceFingerPrintUpdateManyWithoutUserNestedInput
+  followings?: Prisma.FollowingUpdateManyWithoutUserNestedInput
+  driver?: Prisma.DriverUpdateOneWithoutUserNestedInput
+  pathes?: Prisma.PathUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutOdersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phoneVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locale?: Prisma.StringFieldUpdateOperationsInput | string
+  themeMode?: Prisma.EnumThemeModeFieldUpdateOperationsInput | $Enums.ThemeMode
+  resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetTokenExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  staff?: Prisma.StaffUncheckedUpdateOneWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  appointments?: Prisma.AppointmentUncheckedUpdateManyWithoutClientNestedInput
+  deviceFingerPrints?: Prisma.deviceFingerPrintUncheckedUpdateManyWithoutUserNestedInput
+  followings?: Prisma.FollowingUncheckedUpdateManyWithoutUserNestedInput
+  driver?: Prisma.DriverUncheckedUpdateOneWithoutUserNestedInput
+  pathes?: Prisma.PathUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutStaffInput = {
+  id?: string
+  username: string
+  role?: string
+  email?: string | null
+  name?: string | null
+  phone?: string | null
+  image?: string | null
+  coverImage?: string | null
+  avatarImage?: string | null
+  emailVerified?: Date | string | null
+  phoneVerified?: Date | string | null
+  password?: string | null
   locale?: string
   themeMode?: $Enums.ThemeMode
   resetToken?: string | null
@@ -644,18 +1478,26 @@ export type UserCreateWithoutStaffInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   appointments?: Prisma.AppointmentCreateNestedManyWithoutClientInput
+  deviceFingerPrints?: Prisma.deviceFingerPrintCreateNestedManyWithoutUserInput
+  oders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  followings?: Prisma.FollowingCreateNestedManyWithoutUserInput
+  driver?: Prisma.DriverCreateNestedOneWithoutUserInput
+  pathes?: Prisma.PathCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutStaffInput = {
   id?: string
   username: string
+  role?: string
   email?: string | null
   name?: string | null
   phone?: string | null
   image?: string | null
+  coverImage?: string | null
+  avatarImage?: string | null
   emailVerified?: Date | string | null
+  phoneVerified?: Date | string | null
   password?: string | null
-  role?: string
   locale?: string
   themeMode?: $Enums.ThemeMode
   resetToken?: string | null
@@ -665,6 +1507,11 @@ export type UserUncheckedCreateWithoutStaffInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   appointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutClientInput
+  deviceFingerPrints?: Prisma.deviceFingerPrintUncheckedCreateNestedManyWithoutUserInput
+  oders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  followings?: Prisma.FollowingUncheckedCreateNestedManyWithoutUserInput
+  driver?: Prisma.DriverUncheckedCreateNestedOneWithoutUserInput
+  pathes?: Prisma.PathUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutStaffInput = {
@@ -686,13 +1533,16 @@ export type UserUpdateToOneWithWhereWithoutStaffInput = {
 export type UserUpdateWithoutStaffInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phoneVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.StringFieldUpdateOperationsInput | string
   locale?: Prisma.StringFieldUpdateOperationsInput | string
   themeMode?: Prisma.EnumThemeModeFieldUpdateOperationsInput | $Enums.ThemeMode
   resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -702,18 +1552,26 @@ export type UserUpdateWithoutStaffInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   appointments?: Prisma.AppointmentUpdateManyWithoutClientNestedInput
+  deviceFingerPrints?: Prisma.deviceFingerPrintUpdateManyWithoutUserNestedInput
+  oders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  followings?: Prisma.FollowingUpdateManyWithoutUserNestedInput
+  driver?: Prisma.DriverUpdateOneWithoutUserNestedInput
+  pathes?: Prisma.PathUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutStaffInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phoneVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.StringFieldUpdateOperationsInput | string
   locale?: Prisma.StringFieldUpdateOperationsInput | string
   themeMode?: Prisma.EnumThemeModeFieldUpdateOperationsInput | $Enums.ThemeMode
   resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -723,18 +1581,26 @@ export type UserUncheckedUpdateWithoutStaffInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   appointments?: Prisma.AppointmentUncheckedUpdateManyWithoutClientNestedInput
+  deviceFingerPrints?: Prisma.deviceFingerPrintUncheckedUpdateManyWithoutUserNestedInput
+  oders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  followings?: Prisma.FollowingUncheckedUpdateManyWithoutUserNestedInput
+  driver?: Prisma.DriverUncheckedUpdateOneWithoutUserNestedInput
+  pathes?: Prisma.PathUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
   id?: string
   username: string
+  role?: string
   email?: string | null
   name?: string | null
   phone?: string | null
   image?: string | null
+  coverImage?: string | null
+  avatarImage?: string | null
   emailVerified?: Date | string | null
+  phoneVerified?: Date | string | null
   password?: string | null
-  role?: string
   locale?: string
   themeMode?: $Enums.ThemeMode
   resetToken?: string | null
@@ -744,18 +1610,26 @@ export type UserCreateWithoutAccountsInput = {
   staff?: Prisma.StaffCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   appointments?: Prisma.AppointmentCreateNestedManyWithoutClientInput
+  deviceFingerPrints?: Prisma.deviceFingerPrintCreateNestedManyWithoutUserInput
+  oders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  followings?: Prisma.FollowingCreateNestedManyWithoutUserInput
+  driver?: Prisma.DriverCreateNestedOneWithoutUserInput
+  pathes?: Prisma.PathCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
   id?: string
   username: string
+  role?: string
   email?: string | null
   name?: string | null
   phone?: string | null
   image?: string | null
+  coverImage?: string | null
+  avatarImage?: string | null
   emailVerified?: Date | string | null
+  phoneVerified?: Date | string | null
   password?: string | null
-  role?: string
   locale?: string
   themeMode?: $Enums.ThemeMode
   resetToken?: string | null
@@ -765,6 +1639,11 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   staff?: Prisma.StaffUncheckedCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   appointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutClientInput
+  deviceFingerPrints?: Prisma.deviceFingerPrintUncheckedCreateNestedManyWithoutUserInput
+  oders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  followings?: Prisma.FollowingUncheckedCreateNestedManyWithoutUserInput
+  driver?: Prisma.DriverUncheckedCreateNestedOneWithoutUserInput
+  pathes?: Prisma.PathUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -786,13 +1665,16 @@ export type UserUpdateToOneWithWhereWithoutAccountsInput = {
 export type UserUpdateWithoutAccountsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phoneVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.StringFieldUpdateOperationsInput | string
   locale?: Prisma.StringFieldUpdateOperationsInput | string
   themeMode?: Prisma.EnumThemeModeFieldUpdateOperationsInput | $Enums.ThemeMode
   resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -802,18 +1684,26 @@ export type UserUpdateWithoutAccountsInput = {
   staff?: Prisma.StaffUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   appointments?: Prisma.AppointmentUpdateManyWithoutClientNestedInput
+  deviceFingerPrints?: Prisma.deviceFingerPrintUpdateManyWithoutUserNestedInput
+  oders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  followings?: Prisma.FollowingUpdateManyWithoutUserNestedInput
+  driver?: Prisma.DriverUpdateOneWithoutUserNestedInput
+  pathes?: Prisma.PathUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phoneVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.StringFieldUpdateOperationsInput | string
   locale?: Prisma.StringFieldUpdateOperationsInput | string
   themeMode?: Prisma.EnumThemeModeFieldUpdateOperationsInput | $Enums.ThemeMode
   resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -823,18 +1713,26 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   staff?: Prisma.StaffUncheckedUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   appointments?: Prisma.AppointmentUncheckedUpdateManyWithoutClientNestedInput
+  deviceFingerPrints?: Prisma.deviceFingerPrintUncheckedUpdateManyWithoutUserNestedInput
+  oders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  followings?: Prisma.FollowingUncheckedUpdateManyWithoutUserNestedInput
+  driver?: Prisma.DriverUncheckedUpdateOneWithoutUserNestedInput
+  pathes?: Prisma.PathUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
   id?: string
   username: string
+  role?: string
   email?: string | null
   name?: string | null
   phone?: string | null
   image?: string | null
+  coverImage?: string | null
+  avatarImage?: string | null
   emailVerified?: Date | string | null
+  phoneVerified?: Date | string | null
   password?: string | null
-  role?: string
   locale?: string
   themeMode?: $Enums.ThemeMode
   resetToken?: string | null
@@ -844,18 +1742,26 @@ export type UserCreateWithoutSessionsInput = {
   staff?: Prisma.StaffCreateNestedOneWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   appointments?: Prisma.AppointmentCreateNestedManyWithoutClientInput
+  deviceFingerPrints?: Prisma.deviceFingerPrintCreateNestedManyWithoutUserInput
+  oders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  followings?: Prisma.FollowingCreateNestedManyWithoutUserInput
+  driver?: Prisma.DriverCreateNestedOneWithoutUserInput
+  pathes?: Prisma.PathCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
   id?: string
   username: string
+  role?: string
   email?: string | null
   name?: string | null
   phone?: string | null
   image?: string | null
+  coverImage?: string | null
+  avatarImage?: string | null
   emailVerified?: Date | string | null
+  phoneVerified?: Date | string | null
   password?: string | null
-  role?: string
   locale?: string
   themeMode?: $Enums.ThemeMode
   resetToken?: string | null
@@ -865,6 +1771,11 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   staff?: Prisma.StaffUncheckedCreateNestedOneWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   appointments?: Prisma.AppointmentUncheckedCreateNestedManyWithoutClientInput
+  deviceFingerPrints?: Prisma.deviceFingerPrintUncheckedCreateNestedManyWithoutUserInput
+  oders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  followings?: Prisma.FollowingUncheckedCreateNestedManyWithoutUserInput
+  driver?: Prisma.DriverUncheckedCreateNestedOneWithoutUserInput
+  pathes?: Prisma.PathUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -886,13 +1797,16 @@ export type UserUpdateToOneWithWhereWithoutSessionsInput = {
 export type UserUpdateWithoutSessionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phoneVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.StringFieldUpdateOperationsInput | string
   locale?: Prisma.StringFieldUpdateOperationsInput | string
   themeMode?: Prisma.EnumThemeModeFieldUpdateOperationsInput | $Enums.ThemeMode
   resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -902,18 +1816,26 @@ export type UserUpdateWithoutSessionsInput = {
   staff?: Prisma.StaffUpdateOneWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   appointments?: Prisma.AppointmentUpdateManyWithoutClientNestedInput
+  deviceFingerPrints?: Prisma.deviceFingerPrintUpdateManyWithoutUserNestedInput
+  oders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  followings?: Prisma.FollowingUpdateManyWithoutUserNestedInput
+  driver?: Prisma.DriverUpdateOneWithoutUserNestedInput
+  pathes?: Prisma.PathUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phoneVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.StringFieldUpdateOperationsInput | string
   locale?: Prisma.StringFieldUpdateOperationsInput | string
   themeMode?: Prisma.EnumThemeModeFieldUpdateOperationsInput | $Enums.ThemeMode
   resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -923,18 +1845,26 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   staff?: Prisma.StaffUncheckedUpdateOneWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   appointments?: Prisma.AppointmentUncheckedUpdateManyWithoutClientNestedInput
+  deviceFingerPrints?: Prisma.deviceFingerPrintUncheckedUpdateManyWithoutUserNestedInput
+  oders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  followings?: Prisma.FollowingUncheckedUpdateManyWithoutUserNestedInput
+  driver?: Prisma.DriverUncheckedUpdateOneWithoutUserNestedInput
+  pathes?: Prisma.PathUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAppointmentsInput = {
   id?: string
   username: string
+  role?: string
   email?: string | null
   name?: string | null
   phone?: string | null
   image?: string | null
+  coverImage?: string | null
+  avatarImage?: string | null
   emailVerified?: Date | string | null
+  phoneVerified?: Date | string | null
   password?: string | null
-  role?: string
   locale?: string
   themeMode?: $Enums.ThemeMode
   resetToken?: string | null
@@ -944,18 +1874,26 @@ export type UserCreateWithoutAppointmentsInput = {
   staff?: Prisma.StaffCreateNestedOneWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  deviceFingerPrints?: Prisma.deviceFingerPrintCreateNestedManyWithoutUserInput
+  oders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  followings?: Prisma.FollowingCreateNestedManyWithoutUserInput
+  driver?: Prisma.DriverCreateNestedOneWithoutUserInput
+  pathes?: Prisma.PathCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAppointmentsInput = {
   id?: string
   username: string
+  role?: string
   email?: string | null
   name?: string | null
   phone?: string | null
   image?: string | null
+  coverImage?: string | null
+  avatarImage?: string | null
   emailVerified?: Date | string | null
+  phoneVerified?: Date | string | null
   password?: string | null
-  role?: string
   locale?: string
   themeMode?: $Enums.ThemeMode
   resetToken?: string | null
@@ -965,6 +1903,11 @@ export type UserUncheckedCreateWithoutAppointmentsInput = {
   staff?: Prisma.StaffUncheckedCreateNestedOneWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  deviceFingerPrints?: Prisma.deviceFingerPrintUncheckedCreateNestedManyWithoutUserInput
+  oders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  followings?: Prisma.FollowingUncheckedCreateNestedManyWithoutUserInput
+  driver?: Prisma.DriverUncheckedCreateNestedOneWithoutUserInput
+  pathes?: Prisma.PathUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAppointmentsInput = {
@@ -986,13 +1929,16 @@ export type UserUpdateToOneWithWhereWithoutAppointmentsInput = {
 export type UserUpdateWithoutAppointmentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phoneVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.StringFieldUpdateOperationsInput | string
   locale?: Prisma.StringFieldUpdateOperationsInput | string
   themeMode?: Prisma.EnumThemeModeFieldUpdateOperationsInput | $Enums.ThemeMode
   resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1002,18 +1948,26 @@ export type UserUpdateWithoutAppointmentsInput = {
   staff?: Prisma.StaffUpdateOneWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  deviceFingerPrints?: Prisma.deviceFingerPrintUpdateManyWithoutUserNestedInput
+  oders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  followings?: Prisma.FollowingUpdateManyWithoutUserNestedInput
+  driver?: Prisma.DriverUpdateOneWithoutUserNestedInput
+  pathes?: Prisma.PathUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAppointmentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phoneVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.StringFieldUpdateOperationsInput | string
   locale?: Prisma.StringFieldUpdateOperationsInput | string
   themeMode?: Prisma.EnumThemeModeFieldUpdateOperationsInput | $Enums.ThemeMode
   resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1023,6 +1977,11 @@ export type UserUncheckedUpdateWithoutAppointmentsInput = {
   staff?: Prisma.StaffUncheckedUpdateOneWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  deviceFingerPrints?: Prisma.deviceFingerPrintUncheckedUpdateManyWithoutUserNestedInput
+  oders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  followings?: Prisma.FollowingUncheckedUpdateManyWithoutUserNestedInput
+  driver?: Prisma.DriverUncheckedUpdateOneWithoutUserNestedInput
+  pathes?: Prisma.PathUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -1034,12 +1993,20 @@ export type UserCountOutputType = {
   accounts: number
   sessions: number
   appointments: number
+  deviceFingerPrints: number
+  oders: number
+  followings: number
+  pathes: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   accounts?: boolean | UserCountOutputTypeCountAccountsArgs
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
   appointments?: boolean | UserCountOutputTypeCountAppointmentsArgs
+  deviceFingerPrints?: boolean | UserCountOutputTypeCountDeviceFingerPrintsArgs
+  oders?: boolean | UserCountOutputTypeCountOdersArgs
+  followings?: boolean | UserCountOutputTypeCountFollowingsArgs
+  pathes?: boolean | UserCountOutputTypeCountPathesArgs
 }
 
 /**
@@ -1073,17 +2040,48 @@ export type UserCountOutputTypeCountAppointmentsArgs<ExtArgs extends runtime.Typ
   where?: Prisma.AppointmentWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountDeviceFingerPrintsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.deviceFingerPrintWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountOdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OrderWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountFollowingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FollowingWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountPathesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PathWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   username?: boolean
+  role?: boolean
   email?: boolean
   name?: boolean
   phone?: boolean
   image?: boolean
+  coverImage?: boolean
+  avatarImage?: boolean
   emailVerified?: boolean
+  phoneVerified?: boolean
   password?: boolean
-  role?: boolean
   locale?: boolean
   themeMode?: boolean
   resetToken?: boolean
@@ -1094,19 +2092,27 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   appointments?: boolean | Prisma.User$appointmentsArgs<ExtArgs>
+  deviceFingerPrints?: boolean | Prisma.User$deviceFingerPrintsArgs<ExtArgs>
+  oders?: boolean | Prisma.User$odersArgs<ExtArgs>
+  followings?: boolean | Prisma.User$followingsArgs<ExtArgs>
+  driver?: boolean | Prisma.User$driverArgs<ExtArgs>
+  pathes?: boolean | Prisma.User$pathesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   username?: boolean
+  role?: boolean
   email?: boolean
   name?: boolean
   phone?: boolean
   image?: boolean
+  coverImage?: boolean
+  avatarImage?: boolean
   emailVerified?: boolean
+  phoneVerified?: boolean
   password?: boolean
-  role?: boolean
   locale?: boolean
   themeMode?: boolean
   resetToken?: boolean
@@ -1118,13 +2124,16 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   username?: boolean
+  role?: boolean
   email?: boolean
   name?: boolean
   phone?: boolean
   image?: boolean
+  coverImage?: boolean
+  avatarImage?: boolean
   emailVerified?: boolean
+  phoneVerified?: boolean
   password?: boolean
-  role?: boolean
   locale?: boolean
   themeMode?: boolean
   resetToken?: boolean
@@ -1136,13 +2145,16 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 export type UserSelectScalar = {
   id?: boolean
   username?: boolean
+  role?: boolean
   email?: boolean
   name?: boolean
   phone?: boolean
   image?: boolean
+  coverImage?: boolean
+  avatarImage?: boolean
   emailVerified?: boolean
+  phoneVerified?: boolean
   password?: boolean
-  role?: boolean
   locale?: boolean
   themeMode?: boolean
   resetToken?: boolean
@@ -1151,12 +2163,17 @@ export type UserSelectScalar = {
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "username" | "email" | "name" | "phone" | "image" | "emailVerified" | "password" | "role" | "locale" | "themeMode" | "resetToken" | "resetTokenExpires" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "username" | "role" | "email" | "name" | "phone" | "image" | "coverImage" | "avatarImage" | "emailVerified" | "phoneVerified" | "password" | "locale" | "themeMode" | "resetToken" | "resetTokenExpires" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   staff?: boolean | Prisma.User$staffArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   appointments?: boolean | Prisma.User$appointmentsArgs<ExtArgs>
+  deviceFingerPrints?: boolean | Prisma.User$deviceFingerPrintsArgs<ExtArgs>
+  oders?: boolean | Prisma.User$odersArgs<ExtArgs>
+  followings?: boolean | Prisma.User$followingsArgs<ExtArgs>
+  driver?: boolean | Prisma.User$driverArgs<ExtArgs>
+  pathes?: boolean | Prisma.User$pathesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1169,17 +2186,25 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     accounts: Prisma.$AccountPayload<ExtArgs>[]
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     appointments: Prisma.$AppointmentPayload<ExtArgs>[]
+    deviceFingerPrints: Prisma.$deviceFingerPrintPayload<ExtArgs>[]
+    oders: Prisma.$OrderPayload<ExtArgs>[]
+    followings: Prisma.$FollowingPayload<ExtArgs>[]
+    driver: Prisma.$DriverPayload<ExtArgs> | null
+    pathes: Prisma.$PathPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     username: string
+    role: string
     email: string | null
     name: string | null
     phone: string | null
     image: string | null
+    coverImage: string | null
+    avatarImage: string | null
     emailVerified: Date | null
+    phoneVerified: Date | null
     password: string | null
-    role: string
     locale: string
     themeMode: $Enums.ThemeMode
     resetToken: string | null
@@ -1584,6 +2609,11 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   accounts<T extends Prisma.User$accountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   appointments<T extends Prisma.User$appointmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$appointmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AppointmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  deviceFingerPrints<T extends Prisma.User$deviceFingerPrintsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$deviceFingerPrintsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$deviceFingerPrintPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  oders<T extends Prisma.User$odersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$odersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  followings<T extends Prisma.User$followingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$followingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FollowingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  driver<T extends Prisma.User$driverArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$driverArgs<ExtArgs>>): Prisma.Prisma__DriverClient<runtime.Types.Result.GetResult<Prisma.$DriverPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  pathes<T extends Prisma.User$pathesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$pathesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PathPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1615,13 +2645,16 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
 export interface UserFieldRefs {
   readonly id: Prisma.FieldRef<"User", 'String'>
   readonly username: Prisma.FieldRef<"User", 'String'>
+  readonly role: Prisma.FieldRef<"User", 'String'>
   readonly email: Prisma.FieldRef<"User", 'String'>
   readonly name: Prisma.FieldRef<"User", 'String'>
   readonly phone: Prisma.FieldRef<"User", 'String'>
   readonly image: Prisma.FieldRef<"User", 'String'>
+  readonly coverImage: Prisma.FieldRef<"User", 'String'>
+  readonly avatarImage: Prisma.FieldRef<"User", 'String'>
   readonly emailVerified: Prisma.FieldRef<"User", 'DateTime'>
+  readonly phoneVerified: Prisma.FieldRef<"User", 'DateTime'>
   readonly password: Prisma.FieldRef<"User", 'String'>
-  readonly role: Prisma.FieldRef<"User", 'String'>
   readonly locale: Prisma.FieldRef<"User", 'String'>
   readonly themeMode: Prisma.FieldRef<"User", 'ThemeMode'>
   readonly resetToken: Prisma.FieldRef<"User", 'String'>
@@ -2104,6 +3137,121 @@ export type User$appointmentsArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.AppointmentScalarFieldEnum | Prisma.AppointmentScalarFieldEnum[]
+}
+
+/**
+ * User.deviceFingerPrints
+ */
+export type User$deviceFingerPrintsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the deviceFingerPrint
+   */
+  select?: Prisma.deviceFingerPrintSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the deviceFingerPrint
+   */
+  omit?: Prisma.deviceFingerPrintOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.deviceFingerPrintInclude<ExtArgs> | null
+  where?: Prisma.deviceFingerPrintWhereInput
+  orderBy?: Prisma.deviceFingerPrintOrderByWithRelationInput | Prisma.deviceFingerPrintOrderByWithRelationInput[]
+  cursor?: Prisma.deviceFingerPrintWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DeviceFingerPrintScalarFieldEnum | Prisma.DeviceFingerPrintScalarFieldEnum[]
+}
+
+/**
+ * User.oders
+ */
+export type User$odersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Order
+   */
+  select?: Prisma.OrderSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Order
+   */
+  omit?: Prisma.OrderOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OrderInclude<ExtArgs> | null
+  where?: Prisma.OrderWhereInput
+  orderBy?: Prisma.OrderOrderByWithRelationInput | Prisma.OrderOrderByWithRelationInput[]
+  cursor?: Prisma.OrderWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OrderScalarFieldEnum | Prisma.OrderScalarFieldEnum[]
+}
+
+/**
+ * User.followings
+ */
+export type User$followingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Following
+   */
+  select?: Prisma.FollowingSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Following
+   */
+  omit?: Prisma.FollowingOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FollowingInclude<ExtArgs> | null
+  where?: Prisma.FollowingWhereInput
+  orderBy?: Prisma.FollowingOrderByWithRelationInput | Prisma.FollowingOrderByWithRelationInput[]
+  cursor?: Prisma.FollowingWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FollowingScalarFieldEnum | Prisma.FollowingScalarFieldEnum[]
+}
+
+/**
+ * User.driver
+ */
+export type User$driverArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Driver
+   */
+  select?: Prisma.DriverSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Driver
+   */
+  omit?: Prisma.DriverOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DriverInclude<ExtArgs> | null
+  where?: Prisma.DriverWhereInput
+}
+
+/**
+ * User.pathes
+ */
+export type User$pathesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Path
+   */
+  select?: Prisma.PathSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Path
+   */
+  omit?: Prisma.PathOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PathInclude<ExtArgs> | null
+  where?: Prisma.PathWhereInput
+  orderBy?: Prisma.PathOrderByWithRelationInput | Prisma.PathOrderByWithRelationInput[]
+  cursor?: Prisma.PathWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PathScalarFieldEnum | Prisma.PathScalarFieldEnum[]
 }
 
 /**

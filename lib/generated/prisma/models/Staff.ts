@@ -41,6 +41,8 @@ export type StaffMinAggregateOutputType = {
   isActive: boolean | null
   isDefault: boolean | null
   bufferTime: number | null
+  coverImage: string | null
+  avatarImage: string | null
   userId: string | null
   organizationId: string | null
   createdAt: Date | null
@@ -54,6 +56,8 @@ export type StaffMaxAggregateOutputType = {
   isActive: boolean | null
   isDefault: boolean | null
   bufferTime: number | null
+  coverImage: string | null
+  avatarImage: string | null
   userId: string | null
   organizationId: string | null
   createdAt: Date | null
@@ -67,6 +71,8 @@ export type StaffCountAggregateOutputType = {
   isActive: number
   isDefault: number
   bufferTime: number
+  coverImage: number
+  avatarImage: number
   userId: number
   organizationId: number
   createdAt: number
@@ -90,6 +96,8 @@ export type StaffMinAggregateInputType = {
   isActive?: true
   isDefault?: true
   bufferTime?: true
+  coverImage?: true
+  avatarImage?: true
   userId?: true
   organizationId?: true
   createdAt?: true
@@ -103,6 +111,8 @@ export type StaffMaxAggregateInputType = {
   isActive?: true
   isDefault?: true
   bufferTime?: true
+  coverImage?: true
+  avatarImage?: true
   userId?: true
   organizationId?: true
   createdAt?: true
@@ -116,6 +126,8 @@ export type StaffCountAggregateInputType = {
   isActive?: true
   isDefault?: true
   bufferTime?: true
+  coverImage?: true
+  avatarImage?: true
   userId?: true
   organizationId?: true
   createdAt?: true
@@ -216,6 +228,8 @@ export type StaffGroupByOutputType = {
   isActive: boolean
   isDefault: boolean
   bufferTime: number
+  coverImage: string | null
+  avatarImage: string | null
   userId: string
   organizationId: string
   createdAt: Date
@@ -252,6 +266,8 @@ export type StaffWhereInput = {
   isActive?: Prisma.BoolFilter<"Staff"> | boolean
   isDefault?: Prisma.BoolFilter<"Staff"> | boolean
   bufferTime?: Prisma.IntFilter<"Staff"> | number
+  coverImage?: Prisma.StringNullableFilter<"Staff"> | string | null
+  avatarImage?: Prisma.StringNullableFilter<"Staff"> | string | null
   userId?: Prisma.StringFilter<"Staff"> | string
   organizationId?: Prisma.StringFilter<"Staff"> | string
   createdAt?: Prisma.DateTimeFilter<"Staff"> | Date | string
@@ -270,6 +286,8 @@ export type StaffOrderByWithRelationInput = {
   isActive?: Prisma.SortOrder
   isDefault?: Prisma.SortOrder
   bufferTime?: Prisma.SortOrder
+  coverImage?: Prisma.SortOrderInput | Prisma.SortOrder
+  avatarImage?: Prisma.SortOrderInput | Prisma.SortOrder
   userId?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -292,6 +310,8 @@ export type StaffWhereUniqueInput = Prisma.AtLeast<{
   isActive?: Prisma.BoolFilter<"Staff"> | boolean
   isDefault?: Prisma.BoolFilter<"Staff"> | boolean
   bufferTime?: Prisma.IntFilter<"Staff"> | number
+  coverImage?: Prisma.StringNullableFilter<"Staff"> | string | null
+  avatarImage?: Prisma.StringNullableFilter<"Staff"> | string | null
   organizationId?: Prisma.StringFilter<"Staff"> | string
   createdAt?: Prisma.DateTimeFilter<"Staff"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Staff"> | Date | string
@@ -309,6 +329,8 @@ export type StaffOrderByWithAggregationInput = {
   isActive?: Prisma.SortOrder
   isDefault?: Prisma.SortOrder
   bufferTime?: Prisma.SortOrder
+  coverImage?: Prisma.SortOrderInput | Prisma.SortOrder
+  avatarImage?: Prisma.SortOrderInput | Prisma.SortOrder
   userId?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -330,6 +352,8 @@ export type StaffScalarWhereWithAggregatesInput = {
   isActive?: Prisma.BoolWithAggregatesFilter<"Staff"> | boolean
   isDefault?: Prisma.BoolWithAggregatesFilter<"Staff"> | boolean
   bufferTime?: Prisma.IntWithAggregatesFilter<"Staff"> | number
+  coverImage?: Prisma.StringNullableWithAggregatesFilter<"Staff"> | string | null
+  avatarImage?: Prisma.StringNullableWithAggregatesFilter<"Staff"> | string | null
   userId?: Prisma.StringWithAggregatesFilter<"Staff"> | string
   organizationId?: Prisma.StringWithAggregatesFilter<"Staff"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Staff"> | Date | string
@@ -343,6 +367,8 @@ export type StaffCreateInput = {
   isActive?: boolean
   isDefault?: boolean
   bufferTime?: number
+  coverImage?: string | null
+  avatarImage?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutStaffInput
@@ -359,6 +385,8 @@ export type StaffUncheckedCreateInput = {
   isActive?: boolean
   isDefault?: boolean
   bufferTime?: number
+  coverImage?: string | null
+  avatarImage?: string | null
   userId: string
   organizationId: string
   createdAt?: Date | string
@@ -375,6 +403,8 @@ export type StaffUpdateInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bufferTime?: Prisma.IntFieldUpdateOperationsInput | number
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutStaffNestedInput
@@ -391,6 +421,8 @@ export type StaffUncheckedUpdateInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bufferTime?: Prisma.IntFieldUpdateOperationsInput | number
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -407,6 +439,8 @@ export type StaffCreateManyInput = {
   isActive?: boolean
   isDefault?: boolean
   bufferTime?: number
+  coverImage?: string | null
+  avatarImage?: string | null
   userId: string
   organizationId: string
   createdAt?: Date | string
@@ -420,6 +454,8 @@ export type StaffUpdateManyMutationInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bufferTime?: Prisma.IntFieldUpdateOperationsInput | number
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -431,6 +467,8 @@ export type StaffUncheckedUpdateManyInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bufferTime?: Prisma.IntFieldUpdateOperationsInput | number
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -447,6 +485,11 @@ export type StaffOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type StaffScalarRelationFilter = {
+  is?: Prisma.StaffWhereInput
+  isNot?: Prisma.StaffWhereInput
+}
+
 export type StaffNullableScalarRelationFilter = {
   is?: Prisma.StaffWhereInput | null
   isNot?: Prisma.StaffWhereInput | null
@@ -459,6 +502,8 @@ export type StaffCountOrderByAggregateInput = {
   isActive?: Prisma.SortOrder
   isDefault?: Prisma.SortOrder
   bufferTime?: Prisma.SortOrder
+  coverImage?: Prisma.SortOrder
+  avatarImage?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -476,6 +521,8 @@ export type StaffMaxOrderByAggregateInput = {
   isActive?: Prisma.SortOrder
   isDefault?: Prisma.SortOrder
   bufferTime?: Prisma.SortOrder
+  coverImage?: Prisma.SortOrder
+  avatarImage?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -489,6 +536,8 @@ export type StaffMinOrderByAggregateInput = {
   isActive?: Prisma.SortOrder
   isDefault?: Prisma.SortOrder
   bufferTime?: Prisma.SortOrder
+  coverImage?: Prisma.SortOrder
+  avatarImage?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -497,11 +546,6 @@ export type StaffMinOrderByAggregateInput = {
 
 export type StaffSumOrderByAggregateInput = {
   bufferTime?: Prisma.SortOrder
-}
-
-export type StaffScalarRelationFilter = {
-  is?: Prisma.StaffWhereInput
-  isNot?: Prisma.StaffWhereInput
 }
 
 export type StaffCreateNestedManyWithoutOrganizationInput = {
@@ -544,6 +588,20 @@ export type StaffUncheckedUpdateManyWithoutOrganizationNestedInput = {
   update?: Prisma.StaffUpdateWithWhereUniqueWithoutOrganizationInput | Prisma.StaffUpdateWithWhereUniqueWithoutOrganizationInput[]
   updateMany?: Prisma.StaffUpdateManyWithWhereWithoutOrganizationInput | Prisma.StaffUpdateManyWithWhereWithoutOrganizationInput[]
   deleteMany?: Prisma.StaffScalarWhereInput | Prisma.StaffScalarWhereInput[]
+}
+
+export type StaffCreateNestedOneWithoutServicesInput = {
+  create?: Prisma.XOR<Prisma.StaffCreateWithoutServicesInput, Prisma.StaffUncheckedCreateWithoutServicesInput>
+  connectOrCreate?: Prisma.StaffCreateOrConnectWithoutServicesInput
+  connect?: Prisma.StaffWhereUniqueInput
+}
+
+export type StaffUpdateOneRequiredWithoutServicesNestedInput = {
+  create?: Prisma.XOR<Prisma.StaffCreateWithoutServicesInput, Prisma.StaffUncheckedCreateWithoutServicesInput>
+  connectOrCreate?: Prisma.StaffCreateOrConnectWithoutServicesInput
+  upsert?: Prisma.StaffUpsertWithoutServicesInput
+  connect?: Prisma.StaffWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StaffUpdateToOneWithWhereWithoutServicesInput, Prisma.StaffUpdateWithoutServicesInput>, Prisma.StaffUncheckedUpdateWithoutServicesInput>
 }
 
 export type StaffCreateNestedManyWithoutServiceFieldInput = {
@@ -616,14 +674,6 @@ export type StaffUncheckedUpdateOneWithoutUserNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.StaffUpdateToOneWithWhereWithoutUserInput, Prisma.StaffUpdateWithoutUserInput>, Prisma.StaffUncheckedUpdateWithoutUserInput>
 }
 
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type StaffCreateNestedOneWithoutAvailabilityInput = {
   create?: Prisma.XOR<Prisma.StaffCreateWithoutAvailabilityInput, Prisma.StaffUncheckedCreateWithoutAvailabilityInput>
   connectOrCreate?: Prisma.StaffCreateOrConnectWithoutAvailabilityInput
@@ -638,20 +688,6 @@ export type StaffUpdateOneRequiredWithoutAvailabilityNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.StaffUpdateToOneWithWhereWithoutAvailabilityInput, Prisma.StaffUpdateWithoutAvailabilityInput>, Prisma.StaffUncheckedUpdateWithoutAvailabilityInput>
 }
 
-export type StaffCreateNestedOneWithoutServicesInput = {
-  create?: Prisma.XOR<Prisma.StaffCreateWithoutServicesInput, Prisma.StaffUncheckedCreateWithoutServicesInput>
-  connectOrCreate?: Prisma.StaffCreateOrConnectWithoutServicesInput
-  connect?: Prisma.StaffWhereUniqueInput
-}
-
-export type StaffUpdateOneRequiredWithoutServicesNestedInput = {
-  create?: Prisma.XOR<Prisma.StaffCreateWithoutServicesInput, Prisma.StaffUncheckedCreateWithoutServicesInput>
-  connectOrCreate?: Prisma.StaffCreateOrConnectWithoutServicesInput
-  upsert?: Prisma.StaffUpsertWithoutServicesInput
-  connect?: Prisma.StaffWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.StaffUpdateToOneWithWhereWithoutServicesInput, Prisma.StaffUpdateWithoutServicesInput>, Prisma.StaffUncheckedUpdateWithoutServicesInput>
-}
-
 export type StaffCreateWithoutOrganizationInput = {
   id?: string
   hierarchy?: string
@@ -659,6 +695,8 @@ export type StaffCreateWithoutOrganizationInput = {
   isActive?: boolean
   isDefault?: boolean
   bufferTime?: number
+  coverImage?: string | null
+  avatarImage?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutStaffInput
@@ -674,6 +712,8 @@ export type StaffUncheckedCreateWithoutOrganizationInput = {
   isActive?: boolean
   isDefault?: boolean
   bufferTime?: number
+  coverImage?: string | null
+  avatarImage?: string | null
   userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -718,10 +758,96 @@ export type StaffScalarWhereInput = {
   isActive?: Prisma.BoolFilter<"Staff"> | boolean
   isDefault?: Prisma.BoolFilter<"Staff"> | boolean
   bufferTime?: Prisma.IntFilter<"Staff"> | number
+  coverImage?: Prisma.StringNullableFilter<"Staff"> | string | null
+  avatarImage?: Prisma.StringNullableFilter<"Staff"> | string | null
   userId?: Prisma.StringFilter<"Staff"> | string
   organizationId?: Prisma.StringFilter<"Staff"> | string
   createdAt?: Prisma.DateTimeFilter<"Staff"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Staff"> | Date | string
+}
+
+export type StaffCreateWithoutServicesInput = {
+  id?: string
+  hierarchy?: string
+  bio?: string | null
+  isActive?: boolean
+  isDefault?: boolean
+  bufferTime?: number
+  coverImage?: string | null
+  avatarImage?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutStaffInput
+  organization: Prisma.OrganizationCreateNestedOneWithoutStaffsInput
+  availability?: Prisma.StaffAvailabilityCreateNestedManyWithoutStaffInput
+  serviceField?: Prisma.ServiceFieldCreateNestedManyWithoutStaffsInput
+}
+
+export type StaffUncheckedCreateWithoutServicesInput = {
+  id?: string
+  hierarchy?: string
+  bio?: string | null
+  isActive?: boolean
+  isDefault?: boolean
+  bufferTime?: number
+  coverImage?: string | null
+  avatarImage?: string | null
+  userId: string
+  organizationId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  availability?: Prisma.StaffAvailabilityUncheckedCreateNestedManyWithoutStaffInput
+  serviceField?: Prisma.ServiceFieldUncheckedCreateNestedManyWithoutStaffsInput
+}
+
+export type StaffCreateOrConnectWithoutServicesInput = {
+  where: Prisma.StaffWhereUniqueInput
+  create: Prisma.XOR<Prisma.StaffCreateWithoutServicesInput, Prisma.StaffUncheckedCreateWithoutServicesInput>
+}
+
+export type StaffUpsertWithoutServicesInput = {
+  update: Prisma.XOR<Prisma.StaffUpdateWithoutServicesInput, Prisma.StaffUncheckedUpdateWithoutServicesInput>
+  create: Prisma.XOR<Prisma.StaffCreateWithoutServicesInput, Prisma.StaffUncheckedCreateWithoutServicesInput>
+  where?: Prisma.StaffWhereInput
+}
+
+export type StaffUpdateToOneWithWhereWithoutServicesInput = {
+  where?: Prisma.StaffWhereInput
+  data: Prisma.XOR<Prisma.StaffUpdateWithoutServicesInput, Prisma.StaffUncheckedUpdateWithoutServicesInput>
+}
+
+export type StaffUpdateWithoutServicesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  hierarchy?: Prisma.StringFieldUpdateOperationsInput | string
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  bufferTime?: Prisma.IntFieldUpdateOperationsInput | number
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutStaffNestedInput
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutStaffsNestedInput
+  availability?: Prisma.StaffAvailabilityUpdateManyWithoutStaffNestedInput
+  serviceField?: Prisma.ServiceFieldUpdateManyWithoutStaffsNestedInput
+}
+
+export type StaffUncheckedUpdateWithoutServicesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  hierarchy?: Prisma.StringFieldUpdateOperationsInput | string
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  bufferTime?: Prisma.IntFieldUpdateOperationsInput | number
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  availability?: Prisma.StaffAvailabilityUncheckedUpdateManyWithoutStaffNestedInput
+  serviceField?: Prisma.ServiceFieldUncheckedUpdateManyWithoutStaffsNestedInput
 }
 
 export type StaffCreateWithoutServiceFieldInput = {
@@ -731,6 +857,8 @@ export type StaffCreateWithoutServiceFieldInput = {
   isActive?: boolean
   isDefault?: boolean
   bufferTime?: number
+  coverImage?: string | null
+  avatarImage?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutStaffInput
@@ -746,6 +874,8 @@ export type StaffUncheckedCreateWithoutServiceFieldInput = {
   isActive?: boolean
   isDefault?: boolean
   bufferTime?: number
+  coverImage?: string | null
+  avatarImage?: string | null
   userId: string
   organizationId: string
   createdAt?: Date | string
@@ -782,6 +912,8 @@ export type StaffCreateWithoutUserInput = {
   isActive?: boolean
   isDefault?: boolean
   bufferTime?: number
+  coverImage?: string | null
+  avatarImage?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutStaffsInput
@@ -797,6 +929,8 @@ export type StaffUncheckedCreateWithoutUserInput = {
   isActive?: boolean
   isDefault?: boolean
   bufferTime?: number
+  coverImage?: string | null
+  avatarImage?: string | null
   organizationId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -828,6 +962,8 @@ export type StaffUpdateWithoutUserInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bufferTime?: Prisma.IntFieldUpdateOperationsInput | number
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutStaffsNestedInput
@@ -843,6 +979,8 @@ export type StaffUncheckedUpdateWithoutUserInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bufferTime?: Prisma.IntFieldUpdateOperationsInput | number
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -858,6 +996,8 @@ export type StaffCreateWithoutAvailabilityInput = {
   isActive?: boolean
   isDefault?: boolean
   bufferTime?: number
+  coverImage?: string | null
+  avatarImage?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutStaffInput
@@ -873,6 +1013,8 @@ export type StaffUncheckedCreateWithoutAvailabilityInput = {
   isActive?: boolean
   isDefault?: boolean
   bufferTime?: number
+  coverImage?: string | null
+  avatarImage?: string | null
   userId: string
   organizationId: string
   createdAt?: Date | string
@@ -904,6 +1046,8 @@ export type StaffUpdateWithoutAvailabilityInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bufferTime?: Prisma.IntFieldUpdateOperationsInput | number
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutStaffNestedInput
@@ -919,87 +1063,13 @@ export type StaffUncheckedUpdateWithoutAvailabilityInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bufferTime?: Prisma.IntFieldUpdateOperationsInput | number
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   services?: Prisma.ServiceUncheckedUpdateManyWithoutStaffNestedInput
-  serviceField?: Prisma.ServiceFieldUncheckedUpdateManyWithoutStaffsNestedInput
-}
-
-export type StaffCreateWithoutServicesInput = {
-  id?: string
-  hierarchy?: string
-  bio?: string | null
-  isActive?: boolean
-  isDefault?: boolean
-  bufferTime?: number
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutStaffInput
-  organization: Prisma.OrganizationCreateNestedOneWithoutStaffsInput
-  availability?: Prisma.StaffAvailabilityCreateNestedManyWithoutStaffInput
-  serviceField?: Prisma.ServiceFieldCreateNestedManyWithoutStaffsInput
-}
-
-export type StaffUncheckedCreateWithoutServicesInput = {
-  id?: string
-  hierarchy?: string
-  bio?: string | null
-  isActive?: boolean
-  isDefault?: boolean
-  bufferTime?: number
-  userId: string
-  organizationId: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  availability?: Prisma.StaffAvailabilityUncheckedCreateNestedManyWithoutStaffInput
-  serviceField?: Prisma.ServiceFieldUncheckedCreateNestedManyWithoutStaffsInput
-}
-
-export type StaffCreateOrConnectWithoutServicesInput = {
-  where: Prisma.StaffWhereUniqueInput
-  create: Prisma.XOR<Prisma.StaffCreateWithoutServicesInput, Prisma.StaffUncheckedCreateWithoutServicesInput>
-}
-
-export type StaffUpsertWithoutServicesInput = {
-  update: Prisma.XOR<Prisma.StaffUpdateWithoutServicesInput, Prisma.StaffUncheckedUpdateWithoutServicesInput>
-  create: Prisma.XOR<Prisma.StaffCreateWithoutServicesInput, Prisma.StaffUncheckedCreateWithoutServicesInput>
-  where?: Prisma.StaffWhereInput
-}
-
-export type StaffUpdateToOneWithWhereWithoutServicesInput = {
-  where?: Prisma.StaffWhereInput
-  data: Prisma.XOR<Prisma.StaffUpdateWithoutServicesInput, Prisma.StaffUncheckedUpdateWithoutServicesInput>
-}
-
-export type StaffUpdateWithoutServicesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  hierarchy?: Prisma.StringFieldUpdateOperationsInput | string
-  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  bufferTime?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutStaffNestedInput
-  organization?: Prisma.OrganizationUpdateOneRequiredWithoutStaffsNestedInput
-  availability?: Prisma.StaffAvailabilityUpdateManyWithoutStaffNestedInput
-  serviceField?: Prisma.ServiceFieldUpdateManyWithoutStaffsNestedInput
-}
-
-export type StaffUncheckedUpdateWithoutServicesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  hierarchy?: Prisma.StringFieldUpdateOperationsInput | string
-  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  bufferTime?: Prisma.IntFieldUpdateOperationsInput | number
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  availability?: Prisma.StaffAvailabilityUncheckedUpdateManyWithoutStaffNestedInput
   serviceField?: Prisma.ServiceFieldUncheckedUpdateManyWithoutStaffsNestedInput
 }
 
@@ -1010,6 +1080,8 @@ export type StaffCreateManyOrganizationInput = {
   isActive?: boolean
   isDefault?: boolean
   bufferTime?: number
+  coverImage?: string | null
+  avatarImage?: string | null
   userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1022,6 +1094,8 @@ export type StaffUpdateWithoutOrganizationInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bufferTime?: Prisma.IntFieldUpdateOperationsInput | number
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutStaffNestedInput
@@ -1037,6 +1111,8 @@ export type StaffUncheckedUpdateWithoutOrganizationInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bufferTime?: Prisma.IntFieldUpdateOperationsInput | number
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1052,6 +1128,8 @@ export type StaffUncheckedUpdateManyWithoutOrganizationInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bufferTime?: Prisma.IntFieldUpdateOperationsInput | number
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1064,6 +1142,8 @@ export type StaffUpdateWithoutServiceFieldInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bufferTime?: Prisma.IntFieldUpdateOperationsInput | number
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutStaffNestedInput
@@ -1079,6 +1159,8 @@ export type StaffUncheckedUpdateWithoutServiceFieldInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bufferTime?: Prisma.IntFieldUpdateOperationsInput | number
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1094,6 +1176,8 @@ export type StaffUncheckedUpdateManyWithoutServiceFieldInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   bufferTime?: Prisma.IntFieldUpdateOperationsInput | number
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1156,6 +1240,8 @@ export type StaffSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   isActive?: boolean
   isDefault?: boolean
   bufferTime?: boolean
+  coverImage?: boolean
+  avatarImage?: boolean
   userId?: boolean
   organizationId?: boolean
   createdAt?: boolean
@@ -1175,6 +1261,8 @@ export type StaffSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   isActive?: boolean
   isDefault?: boolean
   bufferTime?: boolean
+  coverImage?: boolean
+  avatarImage?: boolean
   userId?: boolean
   organizationId?: boolean
   createdAt?: boolean
@@ -1190,6 +1278,8 @@ export type StaffSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   isActive?: boolean
   isDefault?: boolean
   bufferTime?: boolean
+  coverImage?: boolean
+  avatarImage?: boolean
   userId?: boolean
   organizationId?: boolean
   createdAt?: boolean
@@ -1205,13 +1295,15 @@ export type StaffSelectScalar = {
   isActive?: boolean
   isDefault?: boolean
   bufferTime?: boolean
+  coverImage?: boolean
+  avatarImage?: boolean
   userId?: boolean
   organizationId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type StaffOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "hierarchy" | "bio" | "isActive" | "isDefault" | "bufferTime" | "userId" | "organizationId" | "createdAt" | "updatedAt", ExtArgs["result"]["staff"]>
+export type StaffOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "hierarchy" | "bio" | "isActive" | "isDefault" | "bufferTime" | "coverImage" | "avatarImage" | "userId" | "organizationId" | "createdAt" | "updatedAt", ExtArgs["result"]["staff"]>
 export type StaffInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
@@ -1245,6 +1337,8 @@ export type $StaffPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     isActive: boolean
     isDefault: boolean
     bufferTime: number
+    coverImage: string | null
+    avatarImage: string | null
     userId: string
     organizationId: string
     createdAt: Date
@@ -1683,6 +1777,8 @@ export interface StaffFieldRefs {
   readonly isActive: Prisma.FieldRef<"Staff", 'Boolean'>
   readonly isDefault: Prisma.FieldRef<"Staff", 'Boolean'>
   readonly bufferTime: Prisma.FieldRef<"Staff", 'Int'>
+  readonly coverImage: Prisma.FieldRef<"Staff", 'String'>
+  readonly avatarImage: Prisma.FieldRef<"Staff", 'String'>
   readonly userId: Prisma.FieldRef<"Staff", 'String'>
   readonly organizationId: Prisma.FieldRef<"Staff", 'String'>
   readonly createdAt: Prisma.FieldRef<"Staff", 'DateTime'>

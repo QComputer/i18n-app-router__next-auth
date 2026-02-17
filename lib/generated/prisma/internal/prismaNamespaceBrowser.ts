@@ -50,15 +50,24 @@ export const AnyNull = runtime.objectEnumValues.instances.AnyNull
 
 export const ModelName = {
   Organization: 'Organization',
+  Product: 'Product',
+  ProductCategory: 'ProductCategory',
+  Service: 'Service',
   ServiceField: 'ServiceField',
+  Following: 'Following',
+  deviceFingerPrint: 'deviceFingerPrint',
   User: 'User',
+  Item: 'Item',
+  Driver: 'Driver',
+  Path: 'Path',
+  Stop: 'Stop',
+  Order: 'Order',
   Staff: 'Staff',
   StaffAvailability: 'StaffAvailability',
   Account: 'Account',
   Session: 'Session',
   VerificationToken: 'VerificationToken',
   ServiceCategory: 'ServiceCategory',
-  Service: 'Service',
   Appointment: 'Appointment',
   BusinessHours: 'BusinessHours',
   Holiday: 'Holiday'
@@ -85,6 +94,8 @@ export const OrganizationScalarFieldEnum = {
   name: 'name',
   slug: 'slug',
   type: 'type',
+  coverImage: 'coverImage',
+  avatarImage: 'avatarImage',
   logo: 'logo',
   description: 'description',
   website: 'website',
@@ -129,6 +140,60 @@ export const OrganizationScalarFieldEnum = {
 export type OrganizationScalarFieldEnum = (typeof OrganizationScalarFieldEnum)[keyof typeof OrganizationScalarFieldEnum]
 
 
+export const ProductScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  image: 'image',
+  coverImage: 'coverImage',
+  avatarImage: 'avatarImage',
+  price: 'price',
+  currency: 'currency',
+  color: 'color',
+  isActive: 'isActive',
+  slotInterval: 'slotInterval',
+  bufferTime: 'bufferTime',
+  organizationId: 'organizationId',
+  productCategoryId: 'productCategoryId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
+
+
+export const ProductCategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  coverImage: 'coverImage',
+  avatarImage: 'avatarImage'
+} as const
+
+export type ProductCategoryScalarFieldEnum = (typeof ProductCategoryScalarFieldEnum)[keyof typeof ProductCategoryScalarFieldEnum]
+
+
+export const ServiceScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  duration: 'duration',
+  coverImage: 'coverImage',
+  avatarImage: 'avatarImage',
+  price: 'price',
+  currency: 'currency',
+  color: 'color',
+  isActive: 'isActive',
+  slotInterval: 'slotInterval',
+  bufferTime: 'bufferTime',
+  staffId: 'staffId',
+  serviceCategoryId: 'serviceCategoryId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ServiceScalarFieldEnum = (typeof ServiceScalarFieldEnum)[keyof typeof ServiceScalarFieldEnum]
+
+
 export const ServiceFieldScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -138,16 +203,39 @@ export const ServiceFieldScalarFieldEnum = {
 export type ServiceFieldScalarFieldEnum = (typeof ServiceFieldScalarFieldEnum)[keyof typeof ServiceFieldScalarFieldEnum]
 
 
+export const FollowingScalarFieldEnum = {
+  id: 'id',
+  TargetType: 'TargetType',
+  targetId: 'targetId',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type FollowingScalarFieldEnum = (typeof FollowingScalarFieldEnum)[keyof typeof FollowingScalarFieldEnum]
+
+
+export const DeviceFingerPrintScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type DeviceFingerPrintScalarFieldEnum = (typeof DeviceFingerPrintScalarFieldEnum)[keyof typeof DeviceFingerPrintScalarFieldEnum]
+
+
 export const UserScalarFieldEnum = {
   id: 'id',
   username: 'username',
+  role: 'role',
   email: 'email',
   name: 'name',
   phone: 'phone',
   image: 'image',
+  coverImage: 'coverImage',
+  avatarImage: 'avatarImage',
   emailVerified: 'emailVerified',
+  phoneVerified: 'phoneVerified',
   password: 'password',
-  role: 'role',
   locale: 'locale',
   themeMode: 'themeMode',
   resetToken: 'resetToken',
@@ -159,6 +247,70 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const ItemScalarFieldEnum = {
+  id: 'id',
+  quantity: 'quantity',
+  totalPrice: 'totalPrice',
+  productId: 'productId',
+  orderId: 'orderId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ItemScalarFieldEnum = (typeof ItemScalarFieldEnum)[keyof typeof ItemScalarFieldEnum]
+
+
+export const DriverScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DriverScalarFieldEnum = (typeof DriverScalarFieldEnum)[keyof typeof DriverScalarFieldEnum]
+
+
+export const PathScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PathScalarFieldEnum = (typeof PathScalarFieldEnum)[keyof typeof PathScalarFieldEnum]
+
+
+export const StopScalarFieldEnum = {
+  id: 'id',
+  latitudeStops: 'latitudeStops',
+  longitudeStops: 'longitudeStops',
+  reason: 'reason',
+  pathId: 'pathId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StopScalarFieldEnum = (typeof StopScalarFieldEnum)[keyof typeof StopScalarFieldEnum]
+
+
+export const OrderScalarFieldEnum = {
+  id: 'id',
+  orderType: 'orderType',
+  status: 'status',
+  isDone: 'isDone',
+  isReceived: 'isReceived',
+  isAcceptedByOrganization: 'isAcceptedByOrganization',
+  isAcceptedByDriver: 'isAcceptedByDriver',
+  organizationId: 'organizationId',
+  userId: 'userId',
+  driverId: 'driverId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
+
+
 export const StaffScalarFieldEnum = {
   id: 'id',
   hierarchy: 'hierarchy',
@@ -166,6 +318,8 @@ export const StaffScalarFieldEnum = {
   isActive: 'isActive',
   isDefault: 'isDefault',
   bufferTime: 'bufferTime',
+  coverImage: 'coverImage',
+  avatarImage: 'avatarImage',
   userId: 'userId',
   organizationId: 'organizationId',
   createdAt: 'createdAt',
@@ -229,30 +383,12 @@ export const ServiceCategoryScalarFieldEnum = {
   id: 'id',
   name: 'name',
   description: 'description',
+  coverImage: 'coverImage',
+  avatarImage: 'avatarImage',
   organizationId: 'organizationId'
 } as const
 
 export type ServiceCategoryScalarFieldEnum = (typeof ServiceCategoryScalarFieldEnum)[keyof typeof ServiceCategoryScalarFieldEnum]
-
-
-export const ServiceScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  description: 'description',
-  duration: 'duration',
-  price: 'price',
-  currency: 'currency',
-  color: 'color',
-  isActive: 'isActive',
-  slotInterval: 'slotInterval',
-  bufferTime: 'bufferTime',
-  staffId: 'staffId',
-  serviceCategoryId: 'serviceCategoryId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type ServiceScalarFieldEnum = (typeof ServiceScalarFieldEnum)[keyof typeof ServiceScalarFieldEnum]
 
 
 export const AppointmentScalarFieldEnum = {

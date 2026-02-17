@@ -122,6 +122,7 @@ export async function getAppointments(params: {
                   select: {
                     name: true,
                     username: true,
+                    image: true,
                   },
                 },
               },
@@ -134,6 +135,7 @@ export async function getAppointments(params: {
             name: true,
             email: true,
             phone: true,
+            image: true,
           },
         },
       },

@@ -23,6 +23,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Calendar as CalendarIcon, Clock, User, CheckCircle, XCircle, AlertCircle } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -105,6 +106,7 @@ async function getCalendarAppointments(
                 select: {
                   name: true,
                   username: true,
+                  image: true,
                 },
               },
             },
@@ -116,6 +118,7 @@ async function getCalendarAppointments(
           id: true,
           name: true,
           email: true,
+          image: true,
         },
       },
     },
@@ -332,20 +335,16 @@ export default async function CalendarPage({
                         />
                       </div>
                       
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                        <Clock className="h-3 w-3" />
-                        <span>
-                          {new Date(appointment.startTime).toLocaleTimeString("fa-IR", {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
-                        </span>
-                        {appointment.staff && appointment.staff.user && (
-                          <>
-                            <User className="h-3 w-3 ml-2" />
-                            <span>{appointment.staff.user.name || appointment.staff.user.username}</span>
-                          </>
-                        )}
+                      <div className="flex items-center gap-2">
+                        <Avatar className="h-6 w-6">
+                          {appointment.staff?.user?.image && (
+                            <AvatarImage src={appointment.staff.user.image} alt={appointment.staff.user.name || ""} />
+                          )}
+                          <AvatarFallback className="text-xs">
+                            {(appointment.staff?.user?.name || appointment.staff?.user?.username || "?").charAt(0)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <span className="text-xs">{appointment.staff?.user?.name || appointment.staff?.user?.username}</span>
                       </div>
                     </div>
                   ))

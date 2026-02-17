@@ -138,6 +138,7 @@ export interface CalendarService {
 export interface CalendarStaffUser {
   name: string | null
   username: string
+  image: string | null
 }
 
 /**

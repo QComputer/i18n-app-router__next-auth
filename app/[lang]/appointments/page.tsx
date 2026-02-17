@@ -28,6 +28,7 @@ import {
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { 
   Select, 
   SelectContent, 
@@ -153,6 +154,7 @@ export default async function AppointmentsPage(props: {
           name: true,
           email: true,
           phone: true,
+          image: true,
         },
       },
     },
@@ -322,9 +324,14 @@ export default async function AppointmentsPage(props: {
                     
                     {/* Client Info */}
                     <div className="flex items-start gap-3">
-                      <div className="p-2 bg-primary/10 rounded-lg">
-                        <User className="h-5 w-5 text-primary" />
-                      </div>
+                      <Avatar className="h-10 w-10">
+                        {appointment.client?.image && (
+                          <AvatarImage src={appointment.client?.image} alt={appointment.clientName || ""} />
+                        )}
+                        <AvatarFallback>
+                          {appointment.clientName?.charAt(0) || "?"}
+                        </AvatarFallback>
+                      </Avatar>
                       <div>
                         <p className="text-sm text-muted-foreground">{t.client}</p>
                         <p className="font-medium">{appointment.clientName}</p>

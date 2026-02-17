@@ -23,15 +23,65 @@ export * from './enums';
  */
 export type Organization = Prisma.OrganizationModel
 /**
+ * Model Product
+ * 
+ */
+export type Product = Prisma.ProductModel
+/**
+ * Model ProductCategory
+ * 
+ */
+export type ProductCategory = Prisma.ProductCategoryModel
+/**
+ * Model Service
+ * 
+ */
+export type Service = Prisma.ServiceModel
+/**
  * Model ServiceField
  * 
  */
 export type ServiceField = Prisma.ServiceFieldModel
 /**
+ * Model Following
+ * 
+ */
+export type Following = Prisma.FollowingModel
+/**
+ * Model deviceFingerPrint
+ * 
+ */
+export type deviceFingerPrint = Prisma.deviceFingerPrintModel
+/**
  * Model User
  * 
  */
 export type User = Prisma.UserModel
+/**
+ * Model Item
+ * 
+ */
+export type Item = Prisma.ItemModel
+/**
+ * Model Driver
+ * 
+ */
+export type Driver = Prisma.DriverModel
+/**
+ * Model Path
+ * 
+ */
+export type Path = Prisma.PathModel
+/**
+ * Model Stop
+ * 
+ */
+export type Stop = Prisma.StopModel
+/**
+ * Model Order
+ * 
+ */
+export type Order = Prisma.OrderModel
 /**
  * Model Staff
  * 
@@ -62,11 +112,6 @@ export type VerificationToken = Prisma.VerificationTokenModel
  * 
  */
 export type ServiceCategory = Prisma.ServiceCategoryModel
-/**
- * Model Service
- * 
- */
-export type Service = Prisma.ServiceModel
 /**
  * Model Appointment
  * 
