@@ -22,7 +22,8 @@ model Organization {
   id             String           @id @default(cuid())
   name           String
   slug           String           @unique
-  type           OrganizationType
+  organizationType OrganizationType
+  image       String?
   coverImage     String?
   avatarImage    String?
   logo           String?
@@ -84,7 +85,7 @@ model Organization {
   orders            Order[]
 
   @@index([slug])
-  @@index([type])
+  @@index([organizationType])
 }
 
 model Product {
@@ -118,6 +119,7 @@ model Product {
 model ProductCategory {
   id          String  @id @default(cuid())
   name        String
+  image       String?
   description String?
   coverImage  String?
   avatarImage String?
@@ -130,6 +132,7 @@ model Service {
   name         String
   description  String?
   duration     Int // Duration in minutes
+  image  String?
   coverImage   String?
   avatarImage  String?
   price        Float?
@@ -382,6 +385,7 @@ model Staff {
   isDefault  Boolean @default(false) // Default staff for new bookings
   bufferTime Int     @default(0) // Buffer time in minutes between appointments
 
+  image  String?
   coverImage  String?
   avatarImage String?
 
@@ -468,6 +472,8 @@ model ServiceCategory {
   id          String  @id @default(cuid())
   name        String
   description String?
+
+  image  String?
   coverImage  String?
   avatarImage String?
 

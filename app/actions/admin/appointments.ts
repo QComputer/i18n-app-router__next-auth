@@ -119,7 +119,7 @@ export async function getAllAppointments(params: {
                   select: {
                     id: true,
                     name: true,
-                    type: true,
+                    organizationType: true,
                   },
                 },
               },

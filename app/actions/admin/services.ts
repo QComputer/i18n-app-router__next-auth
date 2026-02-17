@@ -65,7 +65,7 @@ export async function getAllServices(params: {
               select: {
                 id: true,
                 name: true,
-                type: true,
+                organizationType: true,
               },
             },
           },
@@ -76,7 +76,7 @@ export async function getAllServices(params: {
               select: {
                 id: true,
                 name: true,
-                type: true,
+                organizationType: true,
               },
             },
           },

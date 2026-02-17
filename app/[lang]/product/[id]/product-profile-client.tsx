@@ -32,6 +32,7 @@ interface Product {
     id: string
     name: string
     description: string | null
+    image: string | null
     coverImage: string | null
     avatarImage: string | null
   }
@@ -39,10 +40,13 @@ interface Product {
     id: string
     name: string
     slug: string
-    type: string
+    organizationType: string
     phone: string | null
     email: string | null
     address: string | null
+    image: string | null
+    coverImage: string | null
+    avatarImage: string | null
   }
 }
 

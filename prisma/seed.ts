@@ -1,18 +1,19 @@
 /**
- * Database Seed Script
+ * Comprehensive Database Seed Script
  * 
- * This script populates the database with realistic fake data
- * for testing the admin dashboard and all its features.
+ * Creates organizations with:
+ * - Owner account: {slug}_owner
+ * - Staff accounts: {slug}_staff_1 to {slug}_staff_5-10
+ * - Client accounts: {slug}_client_1 to {slug}_client_10-20
  * 
  * Run with: npm run db:seed
  */
 
 import "dotenv/config"
 
-import { OrganizationType, ThemeMode, Hierarchy } from "@/lib/generated/prisma/enums"
+import { OrganizationType, ThemeMode, Hierarchy, FollowingTargetType } from "@/lib/generated/prisma/enums"
 import bcrypt from "bcryptjs"
 
-import { syncAllUsersStaff, syncAllUsersStaffByPrisma } from "@/lib/sync/user-staff-sync"
 import prisma from "@/lib/db/prisma"
 
 
@@ -39,902 +40,454 @@ function generateSlug(text: string): string {
     .replace(/(^-|-$)/g, "")
 }
 
+// Get avatar URL from pravatar.cc (using index for consistency)
+function getAvatarUrl(index: number): string {
+  return `https://i.pravatar.cc/300?img=${index}`
+}
+
 // ============================================
-// Data Arrays
+// Organization Data
 // ============================================
 
-const NAMES = {
-  first: ["Ahmad", "Mohammad", "Reza", "Sara", "Mahsa", "Fatemeh", "Ali", "Hossein", "Maryam", "Nasim"],
-  last: ["Karimi", "Hosseini", "Rahimi", "Mohammadi", "Abbasi", "Sadeghi", "Tehrani", "Shirazi", "Esfahani"],
+interface ServiceData {
+  name: string
+  duration: number
+  price: number
+  color: string
+}
+
+interface CategoryData {
+  name: string
+  description: string
+  services: ServiceData[]
+}
+
+interface ProductData {
+  name: string
+  price: number
+}
+
+interface ProductCategoryData {
+  name: string
+  products: ProductData[]
 }
 
 interface OrgData {
   name: string
-  type: OrganizationType
+  organizationType: OrganizationType
   description: string
-  categories: Array<{ name: string; description: string; services: Array<{ name: string; duration: number; price: number; color: string }> }>
+  address: string
+  phone: string
+  email: string
+  website: string
+  categories: CategoryData[]
+  productCategories?: ProductCategoryData[]
 }
 
-const ORGANIZATION_DATA: OrgData[] = [
-  {
-    name: "Dr. Karimi Dental Clinic",
-    type: OrganizationType.DOCTOR,
-    description: "Professional dental care services including whitening, implants, and orthodontics.",
-    categories: [
-      {
-        name: "Consultations",
-        description: "Initial consultations and checkups",
-        services: [
-          { name: "Dental Consultation", duration: 30, price: 500000, color: "#3b82f6" },
-          { name: "Orthodontic Consultation", duration: 45, price: 750000, color: "#8b5cf6" },
-        ],
-      },
-      {
-        name: "Cosmetic Dentistry",
-        description: "Aesthetic dental treatments",
-        services: [
-          { name: "Teeth Whitening", duration: 60, price: 1500000, color: "#10b981" },
-        ],
-      },
-      {
-        name: "Surgical Procedures",
-        description: "Surgical dental treatments",
-        services: [
-          { name: "Dental Implant", duration: 120, price: 8000000, color: "#f59e0b" },
-        ],
-      },
-    ],
-  },
-  {
-    name: "Elite Beauty Salon",
-    type: OrganizationType.SALON,
-    description: "Premium hair and beauty services for all occasions.",
-    categories: [
-      {
-        name: "Hair Services",
-        description: "Hair styling and coloring",
-        services: [
-          { name: "Haircut & Styling", duration: 45, price: 350000, color: "#ec4899" },
-          { name: "Hair Coloring", duration: 120, price: 1200000, color: "#f97316" },
-        ],
-      },
-      {
-        name: "Nail Services",
-        description: "Manicure and pedicure treatments",
-        services: [
-          { name: "Manicure & Pedicure", duration: 60, price: 450000, color: "#06b6d4" },
-        ],
-      },
-      {
-        name: "Makeup Services",
-        description: "Professional makeup application",
-        services: [
-          { name: "Makeup Application", duration: 60, price: 800000, color: "#a855f7" },
-        ],
-      },
-    ],
-  },
-  {
-    name: "Iran Legal Associates",
-    type: OrganizationType.LAWYER,
-    description: "Comprehensive legal services for individuals and businesses.",
-    categories: [
-      {
-        name: "Consultations",
-        description: "Legal consultation services",
-        services: [
-          { name: "Initial Consultation", duration: 60, price: 1000000, color: "#1e40af" },
-        ],
-      },
-      {
-        name: "Contract Services",
-        description: "Contract review and drafting",
-        services: [
-          { name: "Contract Review", duration: 90, price: 2000000, color: "#3b82f6" },
-        ],
-      },
-      {
-        name: "Court Representation",
-        description: "Legal representation in court",
-        services: [
-          { name: "Court Representation", duration: 240, price: 5000000, color: "#1e3a8a" },
-        ],
-      },
-    ],
-  },
-  {
-    name: "Fresh Foods Supermarket",
-    type: OrganizationType.MARKET,
-    description: "Quality groceries and fresh produce.",
-    categories: [
-      {
-        name: "Order Services",
-        description: "Online ordering and pickup",
-        services: [
-          { name: "Online Order Pickup", duration: 30, price: 0, color: "#22c55e" },
-          { name: "Home Delivery", duration: 60, price: 150000, color: "#16a34a" },
-        ],
-      },
-    ],
-  },
+const ORGANIZATIONS: OrgData[] = [
+  // RESTAURANT
   {
     name: "Tehran Garden Restaurant",
-    type: OrganizationType.RESTAURANT,
-    description: "Traditional Persian cuisine in an elegant setting.",
+    organizationType: OrganizationType.RESTAURANT,
+    description: "Traditional Persian cuisine in an elegant setting. Experience authentic flavors with modern presentation.",
+    address: "123 Vali Asr Street, Tehran",
+    phone: "021-88881234",
+    email: "info@tehangarden.ir",
+    website: "https://tehangarden.ir",
     categories: [
-      {
-        name: "Reservations",
-        description: "Table booking services",
-        services: [
-          { name: "Table Reservation", duration: 15, price: 0, color: "#b45309" },
-        ],
-      },
-      {
-        name: "Special Events",
-        description: "Private dining and catering",
-        services: [
-          { name: "Private Dining", duration: 120, price: 5000000, color: "#92400e" },
-          { name: "Catering Service", duration: 240, price: 15000000, color: "#78350f" },
-        ],
-      },
+      { name: "Reservations", description: "Table booking services", services: [
+        { name: "Table Reservation", duration: 15, price: 0, color: "#b45309" },
+      ]},
+      { name: "Special Events", description: "Private dining and catering", services: [
+        { name: "Private Dining Room", duration: 180, price: 5000000, color: "#92400e" },
+        { name: "Catering Service", duration: 240, price: 15000000, color: "#78350f" },
+      ]},
+    ],
+    productCategories: [
+      { name: "Appetizers", products: [
+        { name: "Truffle Fries", price: 250000 },
+        { name: "Bruschetta", price: 180000 },
+        { name: "Calamari", price: 320000 },
+        { name: "Soup of the Day", price: 150000 },
+      ]},
+      { name: "Main Courses", products: [
+        { name: "Grilled Salmon", price: 850000 },
+        { name: "Filet Mignon", price: 1200000 },
+        { name: "Chicken Parmesan", price: 650000 },
+        { name: "Kebab Komb", price: 950000 },
+      ]},
+      { name: "Desserts", products: [
+        { name: "Tiramisu", price: 280000 },
+        { name: "Chocolate Lava Cake", price: 320000 },
+        { name: "Cheesecake", price: 250000 },
+      ]},
+      { name: "Beverages", products: [
+        { name: "Fresh Orange Juice", price: 120000 },
+        { name: "Espresso", price: 85000 },
+        { name: "Soft Drinks", price: 45000 },
+        { name: "Green Tea", price: 65000 },
+      ]},
     ],
   },
+  // MARKET
   {
-    name: "TechCare IT Solutions",
-    type: OrganizationType.OTHER,
-    description: "IT consulting and technical support services.",
+    name: "Fresh Foods Supermarket",
+    organizationType: OrganizationType.MARKET,
+    description: "Quality groceries and fresh produce delivered to your door.",
+    address: "456 Shariati Street, Tehran",
+    phone: "021-55551234",
+    email: "contact@freshfoods.ir",
+    website: "https://freshfoods.ir",
     categories: [
-      {
-        name: "Consulting",
-        description: "IT consultation services",
-        services: [
-          { name: "IT Consultation", duration: 60, price: 1500000, color: "#6366f1" },
-        ],
-      },
-      {
-        name: "Technical Services",
-        description: "Technical setup and maintenance",
-        services: [
-          { name: "Network Setup", duration: 180, price: 5000000, color: "#4f46e5" },
-          { name: "System Maintenance", duration: 120, price: 2000000, color: "#4338ca" },
-        ],
-      },
+      { name: "Order Services", description: "Online ordering and pickup", services: [
+        { name: "Online Order Pickup", duration: 30, price: 0, color: "#22c55e" },
+        { name: "Home Delivery", duration: 60, price: 150000, color: "#16a34a" },
+      ]},
+    ],
+    productCategories: [
+      { name: "Fruits & Vegetables", products: [
+        { name: "Fresh Apples (1kg)", price: 150000 },
+        { name: "Fresh Bananas (1kg)", price: 80000 },
+        { name: "Organic Tomatoes (1kg)", price: 120000 },
+        { name: "Fresh Lettuce", price: 90000 },
+        { name: "Cucumbers", price: 65000 },
+      ]},
+      { name: "Dairy Products", products: [
+        { name: "Whole Milk (1L)", price: 65000 },
+        { name: "Greek Yogurt", price: 95000 },
+        { name: "Cheese Block", price: 180000 },
+        { name: "Butter (250g)", price: 75000 },
+      ]},
+      { name: "Bakery", products: [
+        { name: "Sourdough Bread", price: 45000 },
+        { name: "Croissants (4pcs)", price: 60000 },
+        { name: "Bagels (6pcs)", price: 35000 },
+        { name: "Baguette", price: 28000 },
+      ]},
+      { name: "Beverages", products: [
+        { name: "Sparkling Water (6pcs)", price: 120000 },
+        { name: "Natural Juice (1L)", price: 95000 },
+        { name: "Tea Box", price: 85000 },
+      ]},
+    ],
+  },
+  // DOCTOR/DENTAL
+  {
+    name: "Dr. Karimi Dental Clinic",
+    organizationType: OrganizationType.DOCTOR,
+    description: "Professional dental care services including whitening, implants, and orthodontics.",
+    address: "789 Motahhari Street, Tehran",
+    phone: "021-33331234",
+    email: "info@karimidental.ir",
+    website: "https://karimidental.ir",
+    categories: [
+      { name: "Consultations", description: "Initial consultations and checkups", services: [
+        { name: "Dental Consultation", duration: 30, price: 500000, color: "#3b82f6" },
+        { name: "Orthodontic Consultation", duration: 45, price: 750000, color: "#8b5cf6" },
+      ]},
+      { name: "Cosmetic Dentistry", description: "Aesthetic dental treatments", services: [
+        { name: "Teeth Whitening", duration: 60, price: 1500000, color: "#10b981" },
+        { name: "Dental Veneers", duration: 90, price: 3500000, color: "#14b8a6" },
+      ]},
+      { name: "Surgical Procedures", description: "Surgical dental treatments", services: [
+        { name: "Dental Implant", duration: 120, price: 8000000, color: "#f59e0b" },
+        { name: "Root Canal", duration: 90, price: 2500000, color: "#f97316" },
+      ]},
+    ],
+  },
+  // SALON
+  {
+    name: "Elite Beauty Salon",
+    organizationType: OrganizationType.SALON,
+    description: "Premium hair and beauty services for all occasions.",
+    address: "321 Vanak Square, Tehran",
+    phone: "021-88881234",
+    email: "booking@elitebeauty.ir",
+    website: "https://elitebeauty.ir",
+    categories: [
+      { name: "Hair Services", description: "Hair styling and coloring", services: [
+        { name: "Haircut & Styling", duration: 45, price: 350000, color: "#ec4899" },
+        { name: "Hair Coloring", duration: 120, price: 1200000, color: "#f97316" },
+        { name: "Hair Treatment", duration: 60, price: 450000, color: "#f43f5e" },
+      ]},
+      { name: "Nail Services", description: "Manicure and pedicure treatments", services: [
+        { name: "Manicure", duration: 30, price: 250000, color: "#06b6d4" },
+        { name: "Pedicure", duration: 45, price: 350000, color: "#0891b2" },
+        { name: "Nail Art", duration: 60, price: 450000, color: "#0e7490" },
+      ]},
+      { name: "Makeup Services", description: "Professional makeup application", services: [
+        { name: "Makeup Application", duration: 60, price: 800000, color: "#a855f7" },
+        { name: "Bridal Makeup", duration: 120, price: 2500000, color: "#7c3aed" },
+      ]},
+    ],
+  },
+  // LAW FIRM
+  {
+    name: "Iran Legal Associates",
+    organizationType: OrganizationType.LAWYER,
+    description: "Comprehensive legal services for individuals and businesses.",
+    address: "555 Keshavarz Blvd, Tehran",
+    phone: "021-44441234",
+    email: "info@iranlegal.ir",
+    website: "https://iranlegal.ir",
+    categories: [
+      { name: "Consultations", description: "Legal consultation services", services: [
+        { name: "Initial Consultation", duration: 60, price: 1000000, color: "#1e40af" },
+        { name: "Emergency Consultation", duration: 30, price: 1500000, color: "#1e3a8a" },
+      ]},
+      { name: "Contract Services", description: "Contract review and drafting", services: [
+        { name: "Contract Review", duration: 90, price: 2000000, color: "#3b82f6" },
+        { name: "Contract Drafting", duration: 120, price: 3000000, color: "#2563eb" },
+      ]},
+      { name: "Court Representation", description: "Legal representation in court", services: [
+        { name: "Court Representation", duration: 240, price: 5000000, color: "#1e3a8a" },
+        { name: "Appeal Process", duration: 180, price: 4000000, color: "#172554" },
+      ]},
     ],
   },
 ]
-
-const CLIENT_NAMES = [
-  "Zahra Amiri",
-  "Hassan Najafi",
-  "Samira Rahmati",
-  "Mehdi Ghasemi",
-  "Leila Karimian",
-  "Amir Hosseini",
-  "Niloufar Mosavi",
-  "Ehsan Shakeri",
-  "Mina Sadeghi",
-  "Morteza Akhavan",
-  "Sara Farhadi",
-  "Ali Akbarpour",
-  "Roxana Hedayati",
-  "Kambiz Farzad",
-  "Maryam Gholami",
-]
-
-const HOLIDAYS = [
-  { name: "Nowruz", isRecurring: true },
-  { name: "Yalda Night", isRecurring: true },
-  { name: "Birthday Celebration", isRecurring: false },
-  { name: "Annual Party", isRecurring: false },
-]
-
-interface CreatedUser {
-  id: string
-  username: string
-  role: string
-  name: string | null
-}
-
-interface CreatedStaff {
-  id: string
-  userId: string | null
-  organizationId: string | null
-  hierarchy: string
-  name: string | null
-  bio: string | null
-}
-
-interface CreatedService {
-  id: string
-  name: string
-  duration: number
-}
-
-interface CreatedOrg {
-  id: string
-  name: string
-  slug: string
-  type: string
-  services: CreatedService[]
-}
 
 // ============================================
 // Seed Functions
 // ============================================
 
-async function createAdminUser() {
-  console.log("Creating admin user...")
+async function createUser(username: string, name: string, role: string, avatarIndex: number) {
+  const hashedPassword = await bcrypt.hash("Password123!", 10)
   
-  const hashedPassword = await bcrypt.hash("Admin@123!", 10)
-  
-  const admin = await prisma.user.upsert({
-    where: { username: "admin" },
+  return await prisma.user.upsert({
+    where: { username },
     update: {},
     create: {
-      username: "admin",
-      email: "admin@example.com",
-      name: "System Administrator",
+      username,
+      email: `${username}@example.com`,
+      name,
       phone: generatePhone(),
       password: hashedPassword,
-      role: "ADMIN",
-      locale: "fa",
-      themeMode: ThemeMode.SYSTEM,
+      role,
+      locale: randomElement(["fa", "en"]),
+      themeMode: randomElement([ThemeMode.LIGHT, ThemeMode.DARK, ThemeMode.SYSTEM]),
+      image: getAvatarUrl(avatarIndex),
     },
   })
-  
-  console.log(`Created admin user: ${admin.username}`)
-  return admin as CreatedUser
 }
 
-async function createTestUsers() {
-  console.log("Creating test users with specific roles...")
+async function createOrganization(orgData: OrgData, index: number) {
+  const slug = generateSlug(orgData.name)
   
-  const testUsers = [
-    { username: "owner", name: "Organization Owner", role: "OWNER", hierarchy: Hierarchy.OWNER },
-    { username: "manager", name: "Manager User", role: "MANAGER", hierarchy: Hierarchy.MANAGER },
-    { username: "staff", name: "Staff User", role: "STAFF", hierarchy: Hierarchy.MERCHANT },
-    { username: "client", name: "Client User", role: "CLIENT", hierarchy: null },
-  ]
+  return await prisma.organization.upsert({
+    where: { slug },
+    update: {},
+    create: {
+      name: orgData.name,
+      slug,
+      organizationType: orgData.organizationType,
+      description: orgData.description,
+      address: orgData.address,
+      phone: orgData.phone,
+      email: orgData.email,
+      website: orgData.website,
+      logo: getAvatarUrl(index + 1),
+      coverImage: getAvatarUrl(index + 20),
+      avatarImage: getAvatarUrl(index + 1),
+      timezone: "Asia/Tehran",
+      locale: "fa",
+      themeMode: ThemeMode.SYSTEM,
+      primaryColor: randomElement(["#0ea5e9", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6"]),
+      secondaryColor: "#64748b",
+      isActive: true,
+      workingHours: "شنبه تا چهارشنبه: 9:00 صبح - 6:00 عصر",
+    },
+  })
+}
+
+async function createStaffForOrganization(orgId: string, orgSlug: string, orgData: OrgData, ownerIndex: number, staffCount: number) {
+  const staffMembers = []
   
-  const createdUsers: CreatedUser[] = []
+  // Create owner
+  const ownerUsername = `${orgSlug}_owner`
+  const ownerName = `${orgData.name} Owner`
+  const owner = await createUser(ownerUsername, ownerName, "STAFF", ownerIndex)
   
-  for (const testUser of testUsers) {
-    const hashedPassword = await bcrypt.hash("Password123!", 10)
+  const ownerStaff = await prisma.staff.upsert({
+    where: { userId: owner.id },
+    update: {},
+    create: {
+      userId: owner.id,
+      organizationId: orgId,
+      hierarchy: Hierarchy.OWNER,
+      bio: `Owner of ${orgData.name}`,
+      isActive: true,
+      isDefault: true,
+      avatarImage: getAvatarUrl(ownerIndex),
+    },
+  })
+  staffMembers.push({ userId: owner.id, staffId: ownerStaff.id })
+  
+  // Create staff members
+  for (let i = 1; i <= staffCount; i++) {
+    const staffUsername = `${orgSlug}_staff_${i}`
+    const staffName = `${orgData.name} Staff ${i}`
+    const staff = await createUser(staffUsername, staffName, "STAFF", ownerIndex + i)
     
-    const user = await prisma.user.upsert({
-      where: { username: testUser.username },
+    const staffMember = await prisma.staff.upsert({
+      where: { userId: staff.id },
       update: {},
       create: {
-        username: testUser.username,
-        email: `${testUser.username}@example.com`,
-        name: testUser.name,
-        phone: generatePhone(),
-        password: hashedPassword,
-        role: testUser.role,
-        locale: "fa",
-        themeMode: ThemeMode.SYSTEM,
-      },
-    })
-    
-    createdUsers.push({ id: user.id, username: user.username, name: user.name, role: user.role })
-    console.log(`Created test user: ${user.username} (${user.role})`)
-  }
-  
-  return createdUsers
-}
-
-async function createClientUsers(): Promise<CreatedUser[]> {
-  console.log("Creating client users...")
-  
-  const clientUsers: CreatedUser[] = []
-  
-  for (let i = 0; i < 20; i++) {
-    const firstName = randomElement(NAMES.first)
-    const lastName = randomElement(NAMES.last)
-    const username = generateSlug(`${firstName}${lastName}${i}`)
-    const hashedPassword = await bcrypt.hash("Password123!", 10)
-    
-    const user = await prisma.user.upsert({
-      where: { username },
-      update: {},
-      create: {
-        username,
-        email: `${username}@example.com`,
-        name: `${firstName} ${lastName}`,
-        phone: generatePhone(),
-        password: hashedPassword,
-        role: "CLIENT",
-        locale: randomElement(["fa", "en", "ar"]),
-        themeMode: randomElement([ThemeMode.LIGHT, ThemeMode.DARK, ThemeMode.SYSTEM]),
-      },
-    })
-    
-    clientUsers.push({ id: user.id, username: user.username, name: user.name, role: user.role })
-  }
-  
-  console.log(`Created ${clientUsers.length} client users`)
-  return clientUsers
-}
-
-async function convertClientsToStaff(clientUsers: CreatedUser[], organizations: CreatedOrg[]): Promise<CreatedUser[]> {
-  console.log("Converting some CLIENT users to STAFF and creating Staff records...")
-  
-  const staffUsers: CreatedUser[] = []
-  
-  // Convert 8 random clients to staff
-  const staffCount = Math.min(8, clientUsers.length)
-  const shuffled = [...clientUsers].sort(() => Math.random() - 0.5)
-  const selectedClients = shuffled.slice(0, staffCount)
-  
-  for (let i = 0; i < selectedClients.length; i++) {
-    const client = selectedClients[i]
-    const orgIndex = i % organizations.length
-    const organization = organizations[orgIndex]
-    
-    // Determine hierarchy based on index
-    const hierarchy = i === 0 ? Hierarchy.OWNER as string : 
-                     i <= 2 ? Hierarchy.MANAGER as string : 
-                     Hierarchy.MERCHANT as string
-    
-    // Update user's role to STAFF
-    const updatedUser = await prisma.user.update({
-      where: { id: client.id },
-      data: { role: "STAFF" },
-    })
-    
-    // Create Staff record linked to User and Organization
-    await prisma.staff.upsert({
-      where: { userId: client.id },
-      update: {
-        organizationId: organization.id,
-        hierarchy,
-      },
-      create: {
-        userId: client.id,
-        organizationId: organization.id,
-        hierarchy,
+        userId: staff.id,
+        organizationId: orgId,
+        hierarchy: i <= 2 ? Hierarchy.MANAGER : Hierarchy.MERCHANT,
+        bio: `Staff member at ${orgData.name}`,
         isActive: true,
-        isDefault: i === 0,
-        bio: `${client.name} is a staff member at ${organization.name}`,
+        isDefault: false,
+        avatarImage: getAvatarUrl(ownerIndex + i),
       },
     })
-    
-    staffUsers.push({ 
-      id: updatedUser.id, 
-      username: updatedUser.username, 
-      name: updatedUser.name, 
-      role: updatedUser.role 
-    })
-    
-    console.log(`Converted client ${client.username} to STAFF with hierarchy ${hierarchy} for ${organization.name}`)
+    staffMembers.push({ userId: staff.id, staffId: staffMember.id })
   }
   
-  console.log(`Converted ${staffUsers.length} clients to staff`)
-  return staffUsers
+  return staffMembers
 }
 
-async function createOrganizations(): Promise<CreatedOrg[]> {
-  console.log("Creating organizations...")
-  
-  const createdOrgs: CreatedOrg[] = []
-  
-  for (const orgData of ORGANIZATION_DATA) {
-    const slug = generateSlug(orgData.name)
-    
-    const organization = await prisma.organization.upsert({
-      where: { slug },
-      update: {},
-      create: {
-        name: orgData.name,
-        slug,
-        type: orgData.type,
-        description: orgData.description,
-        logo: `https://api.dicebear.com/7.x/initials/svg?seed=${slug}`,
-        website: `https://${slug}.com`,
-        phone: generatePhone(),
-        email: `contact@${slug}.com`,
-        address: `${randomBetween(1, 999)} ${randomElement(NAMES.last)} Street, Tehran, Iran`,
-        timezone: "Asia/Tehran",
-        locale: "fa",
-        themeMode: ThemeMode.SYSTEM,
-        primaryColor: randomElement(["#0ea5e9", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6"]),
-        secondaryColor: randomElement(["#64748b", "#475569", "#334155"]),
-        isActive: true,
-        // Public Page Configuration
-        heroTitle: orgData.type === OrganizationType.LAWYER 
-          ? "تجربه. صداقت. نتیجه."
-          : "Professional Services, Excellent Results",
-        heroSubtitle: orgData.type === OrganizationType.LAWYER
-          ? "وکلای مجرب ما با تلاش بی‌وقفه از منافع شما دفاع می‌کنند"
-          : "Experience our premium services and dedicated team",
-        aboutEnabled: true,
-        aboutContent: orgData.description,
-        practiceAreasEnabled: true,
-        attorneysEnabled: true,
-        testimonialsEnabled: true,
-        caseResultsEnabled: true,
-        awardsEnabled: true,
-        faqEnabled: true,
-        contactEnabled: true,
-        appointmentEnabled: true,
-        // SEO Configuration
-        seoTitle: `${orgData.name} - Professional Services`,
-        seoDescription: orgData.description,
-        seoKeywords: `${orgData.type.toLowerCase()}, services, professional`,
-        // Contact Info
-        mapUrl: "https://maps.google.com",
-        workingHours: "شنبه تا چهارشنبه: 8:00 صبح - 6:00 عصر",
-        emergencyPhone: generatePhone(),
-        // Social Links
-        facebookUrl: `https://facebook.com/${slug}`,
-        twitterUrl: `https://twitter.com/${slug}`,
-        instagramUrl: `https://instagram.com/${slug}`,
-        linkedinUrl: `https://linkedin.com/company/${slug}`,
-        telegramUrl: `https://t.me/${slug}`,
-      },
-    })
-    
-    createdOrgs.push({
-      id: organization.id,
-      name: organization.name,
-      slug: organization.slug,
-      type: organization.type,
-      services: [],
-    })
-  }
-  
-  console.log(`Created ${createdOrgs.length} organizations`)
-  return createdOrgs
-}
-
-async function createServices(organizations: CreatedOrg[]) {
-  console.log("Creating service categories and services...")
-  
-  for (const orgData of ORGANIZATION_DATA) {
-    const org = organizations.find((o) => o.slug === generateSlug(orgData.name))
-    if (!org) continue
-    
-    // Get staff members for this organization
-    const staffMembers = await prisma.staff.findMany({
-      where: { organizationId: org.id },
-    })
-    
-    if (staffMembers.length === 0) {
-      console.log(`No staff found for ${org.name}, skipping services...`)
-      continue
-    }
-    
-    // Create service categories and services
-    for (const categoryData of orgData.categories) {
-      // Create the service category
-      const category = await prisma.serviceCategory.create({
-        data: {
-          name: categoryData.name,
-          description: categoryData.description,
-          organizationId: org.id,
-        },
-      })
-      
-      // Create services under this category
-      for (const serviceData of categoryData.services) {
-        // Assign service to a random staff member (each service is provided by one staff)
-        const assignedStaff = staffMembers[randomBetween(0, staffMembers.length - 1)]
-        
-        const service = await prisma.service.create({
-          data: {
-            name: serviceData.name,
-            description: `Professional ${serviceData.name.toLowerCase()} service`,
-            duration: serviceData.duration,
-            price: serviceData.price,
-            currency: "IRR",
-            color: serviceData.color,
-            slotInterval: randomElement([15, 30, 45, 60]),
-            isActive: true,
-            // Link through staff (organization is derived from staff.organizationId)
-            staffId: assignedStaff.id,
-            // Link through category (organization is derived from category.organizationId)
-            serviceCategoryId: category.id,
-          },
-        })
-        
-        const orgIndex = organizations.findIndex((o) => o.id === org.id)
-        organizations[orgIndex].services.push({
-          id: service.id,
-          name: service.name,
-          duration: service.duration,
-        })
-      }
-    }
-  }
-  
-  console.log("Service categories and services created")
-}
-
-async function createBusinessHours(organizations: CreatedOrg[]) {
-  console.log("Creating business hours...")
-  
-  for (const org of organizations) {
-    for (let day = 0; day < 7; day++) {
-      if (day === 6) {
-        await prisma.businessHours.upsert({
-          where: {
-            organizationId_dayOfWeek: {
-              organizationId: org.id,
-              dayOfWeek: day,
-            },
-          },
-          update: {},
-          create: {
-            dayOfWeek: day,
-            startTime: "00:00",
-            endTime: "00:00",
-            isActive: false,
-            organizationId: org.id,
-          },
-        })
-        continue
-      }
-      
-      const startHour = randomBetween(8, 10)
-      const endHour = randomBetween(17, 20)
-      
-      await prisma.businessHours.upsert({
-        where: {
-          organizationId_dayOfWeek: {
-            organizationId: org.id,
-            dayOfWeek: day,
-          },
-        },
-        update: {},
-        create: {
-          dayOfWeek: day,
-          startTime: `${startHour.toString().padStart(2, "0")}:00`,
-          endTime: `${endHour.toString().padStart(2, "0")}:00`,
-          isActive: true,
-          organizationId: org.id,
-        },
-      })
-    }
-  }
-  
-  console.log("Business hours created")
-}
-
-async function createHolidays(organizations: CreatedOrg[]) {
-  console.log("Creating holidays...")
-  
-  for (const org of organizations) {
-    for (const holidayData of HOLIDAYS) {
-      const date = new Date()
-      date.setDate(date.getDate() + randomBetween(1, 365))
-      
-      await prisma.holiday.create({
-        data: {
-          date,
-          name: holidayData.name,
-          isRecurring: holidayData.isRecurring,
-          organizationId: org.id,
-        },
-      })
-    }
-  }
-  
-  console.log("Holidays created")
-}
-
-/**
- * Create service fields and link to staff
- */
-async function createServiceFields(organizations: CreatedOrg[]) {
-  console.log("Creating service fields...")
-  
-  const serviceFieldsData = [
-    { name: "Consultation", description: "Initial consultations and advice" },
-    { name: "Treatment", description: "Medical and therapeutic treatments" },
-    { name: "Follow-up", description: "Follow-up appointments and care" },
+async function createClientsForOrganization(orgId: string, orgSlug: string, clientStartIndex: number, clientCount: number) {
+  const clientNames = [
+    "Zahra Amiri", "Hassan Najafi", "Samira Rahmati", "Mehdi Ghasemi", 
+    "Leila Karimian", "Amir Hosseini", "Niloufar Mosavi", "Ehsan Shakeri",
+    "Mina Sadeghi", "Morteza Akhavan", "Sara Farhadi", "Ali Akbarpour",
+    "Roxana Hedayati", "Kambiz Farzad", "Maryam Gholami", "Reza Tavakoli",
+    "Fatemeh Nosrati", "Hamed Soleimani", "Javad Ahmadi", "Parviz Mika"
   ]
   
-  for (const org of organizations) {
-    // Get staff members for this organization
-    const staffMembers = await prisma.staff.findMany({
-      where: { organizationId: org.id, isActive: true },
-    })
+  const clients = []
+  for (let i = 0; i < clientCount; i++) {
+    const clientUsername = `${orgSlug}_client_${i + 1}`
+    const nameIndex = (clientStartIndex + i) % clientNames.length
+    const clientName = `${clientNames[nameIndex]} ${i + 1}`
     
-    if (staffMembers.length === 0) continue
-    
-    // Create service fields
-    const createdFields = []
-    for (const fieldData of serviceFieldsData) {
-      const field = await prisma.serviceField.upsert({
-        where: {
-          id: `${org.slug}-${fieldData.name.toLowerCase().replace(/\s+/g, '-')}`,
-        },
-        update: {},
-        create: {
-          id: `${org.slug}-${fieldData.name.toLowerCase().replace(/\s+/g, '-')}`,
-          name: fieldData.name,
-          organizationId: org.id,
-        },
-      })
-      createdFields.push(field)
-    }
-    
-    // Assign staff to service fields (distribute staff across fields)
-    for (let i = 0; i < staffMembers.length; i++) {
-      const staff = staffMembers[i]
-      // Assign to 1-2 random service fields
-      const fieldCount = randomBetween(1, 2)
-      const assignedFields = []
-      
-      for (let j = 0; j < fieldCount; j++) {
-        const fieldIndex = (i + j) % createdFields.length
-        assignedFields.push(createdFields[fieldIndex].id)
-      }
-      
-      await prisma.staff.update({
-        where: { id: staff.id },
-        data: {
-          serviceField: {
-            connect: assignedFields.map(id => ({ id })),
-          },
-        },
-      })
-    }
-    
-    console.log(`Created ${createdFields.length} service fields for ${org.name}`)
+    const client = await createUser(clientUsername, clientName, "CLIENT", clientStartIndex + 50 + i)
+    clients.push({ userId: client.id, username: client.username })
   }
   
-  console.log("Service fields created")
+  return clients
 }
 
-/**
- * Create product categories and products for MARKET and RESTAURANT organizations
- */
-async function createProductCategoriesAndProducts(organizations: CreatedOrg[]) {
-  console.log("Creating product categories and products...")
-  
-  const marketProducts = [
-    { categoryName: "Fruits & Vegetables", products: [
-      { name: "Fresh Apples", price: 150000 },
-      { name: "Fresh Bananas", price: 80000 },
-      { name: "Organic Tomatoes", price: 120000 },
-      { name: "Fresh Lettuce", price: 90000 },
-    ]},
-    { categoryName: "Dairy Products", products: [
-      { name: "Whole Milk", price: 65000 },
-      { name: "Greek Yogurt", price: 95000 },
-      { name: "Cheese Block", price: 180000 },
-      { name: "Butter", price: 75000 },
-    ]},
-    { categoryName: "Bakery", products: [
-      { name: "Sourdough Bread", price: 45000 },
-      { name: "Croissants", price: 60000 },
-      { name: "Bagels", price: 35000 },
-    ]},
-  ]
-  
-  const restaurantProducts = [
-    { categoryName: "Appetizers", products: [
-      { name: "Truffle Fries", price: 250000 },
-      { name: "Bruschetta", price: 180000 },
-      { name: "Calamari", price: 320000 },
-    ]},
-    { categoryName: "Main Courses", products: [
-      { name: "Grilled Salmon", price: 850000 },
-      { name: "Filet Mignon", price: 1200000 },
-      { name: "Chicken Parmesan", price: 650000 },
-    ]},
-    { categoryName: "Desserts", products: [
-      { name: "Tiramisu", price: 280000 },
-      { name: "Chocolate Lava Cake", price: 320000 },
-      { name: "Cheesecake", price: 250000 },
-    ]},
-    { categoryName: "Beverages", products: [
-      { name: "Fresh Orange Juice", price: 120000 },
-      { name: "Espresso", price: 85000 },
-      { name: "Soft Drinks", price: 45000 },
-    ]},
-  ]
-  
-  for (const org of organizations) {
-    if (org.type === "MARKET") {
-      for (const categoryData of marketProducts) {
-        // Create product category
-        const category = await prisma.productCategory.create({
-          data: {
-            name: categoryData.categoryName,
-            description: `Fresh ${categoryData.categoryName.toLowerCase()}`,
-          },
-        })
-        
-        // Create products
-        for (const productData of categoryData.products) {
-          await prisma.product.create({
-            data: {
-              name: productData.name,
-              price: productData.price,
-              currency: "IRR",
-              isActive: true,
-              organizationId: org.id,
-              productCategoryId: category.id,
-            },
-          })
-        }
-        
-        console.log(`Created category "${categoryData.categoryName}" with ${categoryData.products.length} products for ${org.name}`)
-      }
-    } else if (org.type === "RESTAURANT") {
-      for (const categoryData of restaurantProducts) {
-        // Create product category
-        const category = await prisma.productCategory.create({
-          data: {
-            name: categoryData.categoryName,
-            description: `${categoryData.categoryName} - Tehran Garden Restaurant`,
-          },
-        })
-        
-        // Create products
-        for (const productData of categoryData.products) {
-          await prisma.product.create({
-            data: {
-              name: productData.name,
-              price: productData.price,
-              currency: "IRR",
-              isActive: true,
-              organizationId: org.id,
-              productCategoryId: category.id,
-            },
-          })
-        }
-        
-        console.log(`Created category "${categoryData.categoryName}" with ${categoryData.products.length} products for ${org.name}`)
-      }
-    }
-  }
-  
-  console.log("Product categories and products created")
-}
-
-/**
- * Convert some users to Drivers
- */
-async function createDrivers(clientUsers: CreatedUser[]) {
-  console.log("Creating drivers from client users...")
-  
-  // Select 3 random clients to convert to drivers
-  const driverCount = Math.min(3, clientUsers.length)
-  const shuffled = [...clientUsers].sort(() => Math.random() - 0.5)
-  const selectedClients = shuffled.slice(0, driverCount)
-  
-  for (const client of selectedClients) {
-    // Update user's role to DRIVER (if needed)
-    await prisma.user.update({
-      where: { id: client.id },
-      data: { role: "DRIVER" },
-    })
-    
-    // Create Driver record
-    await prisma.driver.create({
+async function createServiceCategoriesAndServices(orgId: string, orgData: OrgData, staffMembers: Array<{staffId: string}>) {
+  for (const categoryData of orgData.categories) {
+    const category = await prisma.serviceCategory.create({
       data: {
-        userId: client.id,
+        name: categoryData.name,
+        description: categoryData.description,
+        organizationId: orgId,
       },
     })
     
-    console.log(`Created driver from user: ${client.username}`)
-  }
-  
-  console.log(`Created ${driverCount} drivers`)
-}
-
-async function createStaffMembers(staffUsers: CreatedUser[], organizations: CreatedOrg[]) {
-  console.log("Creating staff members from converted staff users...")
-  
-  let staffCreated = 0
-  const usedStaff = new Set<string>()
-  
-  for (const org of organizations) {
-    // Assign 2-4 staff members per organization
-    const staffCount = randomBetween(2, 4)
-    
-    // Get available staff not already assigned to this organization
-    const availableStaff = staffUsers.filter(s => !usedStaff.has(s.id))
-    const selectedStaff = availableStaff.slice(0, staffCount)
-    
-    for (let i = 0; i < selectedStaff.length; i++) {
-      const user = selectedStaff[i]
+    for (const serviceData of categoryData.services) {
+      const assignedStaff = randomElement(staffMembers)
       
-      // Check if staff already exists
-      const existingStaff = await prisma.staff.findUnique({
-        where: { userId: user.id },
+      await prisma.service.create({
+        data: {
+          name: serviceData.name,
+          description: `Professional ${serviceData.name.toLowerCase()} service`,
+          duration: serviceData.duration,
+          price: serviceData.price,
+          currency: "IRR",
+          color: serviceData.color,
+          isActive: true,
+          staffId: assignedStaff.staffId,
+          serviceCategoryId: category.id,
+        },
       })
-      
-      if (!existingStaff) {
-        await prisma.staff.upsert({
-          where: { userId: user.id },
-          update: {},
-          create: {
-            userId: user.id,
-            organizationId: org.id,
-            hierarchy: i === 0 ? Hierarchy.OWNER as string : randomElement([Hierarchy.MANAGER, Hierarchy.MERCHANT]) as string,
-            bio: `${user.name} is a staff member at ${org.name}`,
-            isActive: true,
-            isDefault: i === 0,
-          },
-        })
-        usedStaff.add(user.id)
-        staffCreated++
-        console.log(`Created staff member ${user.username} for ${org.name}`)
-      }
     }
   }
-  
-  console.log(`Created ${staffCreated} staff members`)
 }
 
- async function createAppointments(staffUsers: CreatedUser[], organizations: CreatedOrg[]) {
-  console.log("Creating appointments...")
+async function createProductCategoriesAndProducts(orgId: string, orgData: OrgData) {
+  if (!orgData.productCategories) return
   
-  let appointmentCount = 0
-  const statuses: string[] = ["PENDING", "CONFIRMED", "COMPLETED", "CANCELLED"]
-  
-  for (const org of organizations) {
-    if (org.services.length === 0) continue
+  for (const categoryData of orgData.productCategories) {
+    const category = await prisma.productCategory.create({
+      data: {
+        name: categoryData.name,
+        description: `${categoryData.name} at ${orgData.name}`,
+      },
+    })
     
-    // Create appointments for different time periods
-    const dateRanges = [
-      { daysAgo: 14, daysAhead: 7, label: "Past and current" },
-      { daysAgo: 0, daysAhead: 14, label: "Current and near future" },
-      { daysAgo: -7, daysAhead: 30, label: "Future appointments" },
-    ]
+    for (const productData of categoryData.products) {
+      await prisma.product.create({
+        data: {
+          name: productData.name,
+          price: productData.price,
+          currency: "IRR",
+          isActive: true,
+          organizationId: orgId,
+          productCategoryId: category.id,
+          image: getAvatarUrl(randomBetween(1, 40)),
+        },
+      })
+    }
+  }
+}
+
+async function createFollows(orgId: string, clients: Array<{userId: string}>, staffMembers: Array<{staffId: string}>, services: Array<{id: string}>) {
+  // Each client follows 2-5 organizations, staff, and services
+  for (const client of clients) {
+    const followOrgCount = randomBetween(2, 5)
+    const followServiceCount = randomBetween(3, 7)
+    const followStaffCount = randomBetween(1, 3)
     
-    for (const range of dateRanges) {
-      const appointmentCountRange = randomBetween(8, 15)
+    // Follow organizations
+    for (let i = 0; i < followOrgCount; i++) {
+      const randomOrg = ORGANIZATIONS[randomBetween(0, ORGANIZATIONS.length - 1)]
+      const orgSlug = generateSlug(randomOrg.name)
       
-      for (let i = 0; i < appointmentCountRange; i++) {
-        const service = randomElement(org.services)
-        const status = randomElement(statuses)
-        const client = randomElement(CLIENT_NAMES)
-        const clientNameParts = client.split(" ")
-        
-        const startTime = new Date()
-        startTime.setDate(startTime.getDate() + randomBetween(range.daysAgo, range.daysAhead))
-        startTime.setHours(randomBetween(9, 18), randomBetween(0, 59), 0, 0)
-        
-        // Skip weekends
-        if (startTime.getDay() === 6) {
-          startTime.setDate(startTime.getDate() + 1)
-        }
-        
-        const endTime = new Date(startTime)
-        endTime.setMinutes(endTime.getMinutes() + service.duration)
-        
-        // Get a random staff member for this organization
-        const staff = await prisma.staff.findFirst({
-          where: { organizationId: org.id },
-        })
-        
-        await prisma.appointment.create({
+      try {
+        await prisma.following.create({
           data: {
-            startTime,
-            endTime,
-            status,
-            notes: status === "CANCELLED" ? "Customer requested cancellation" : "Appointment booked for service",
-            clientName: client,
-            clientEmail: `${clientNameParts[0].toLowerCase()}.${clientNameParts[1].toLowerCase()}@email.com`,
-            clientPhone: generatePhone(),
-            cancellationReason: status === "CANCELLED" ? "Customer requested cancellation" : null,
-            serviceId: service.id,
-            clientId: randomBetween(0, 1) === 0 ? staffUsers[randomBetween(0, staffUsers.length - 1)]?.id : null,
+            userId: client.userId,
+            targetId: orgSlug, // We'll need to look up the actual org ID
+            TargetType: FollowingTargetType.ORGANIZATION,
           },
         })
-        
-        appointmentCount++
+      } catch (e) {
+        // Ignore duplicate follows
+      }
+    }
+    
+    // Follow services
+    for (let i = 0; i < followServiceCount; i++) {
+      if (services.length === 0) break
+      const randomService = randomElement(services)
+      
+      try {
+        await prisma.following.create({
+          data: {
+            userId: client.userId,
+            targetId: randomService.id,
+            TargetType: FollowingTargetType.SERVICE,
+          },
+        })
+      } catch (e) {
+        // Ignore
+      }
+    }
+    
+    // Follow staff
+    for (let i = 0; i < followStaffCount; i++) {
+      if (staffMembers.length === 0) break
+      const randomStaff = randomElement(staffMembers)
+      
+      try {
+        await prisma.following.create({
+          data: {
+            userId: client.userId,
+            targetId: randomStaff.staffId,
+            TargetType: FollowingTargetType.STAFF,
+          },
+        })
+      } catch (e) {
+        // Ignore
       }
     }
   }
-  
-  console.log(`Created ${appointmentCount} appointments`)
-  return appointmentCount
 }
 
 // ============================================
@@ -943,21 +496,20 @@ async function createStaffMembers(staffUsers: CreatedUser[], organizations: Crea
 
 export default async function main() {
   console.log("========================================")
-  console.log("Database Seed Script")
+  console.log("Comprehensive Database Seed")
   console.log("========================================\n")
 
   try {
+    // Clean existing data
     console.log("Cleaning existing data...")
+    await prisma.following.deleteMany()
     await prisma.appointment.deleteMany()
-    await prisma.holiday.deleteMany()
-    await prisma.businessHours.deleteMany()
-    await prisma.service.deleteMany()
-    await prisma.serviceCategory.deleteMany()
-    await prisma.serviceField.deleteMany()
-    await prisma.staff.deleteMany()
-    await prisma.organization.deleteMany()
     await prisma.product.deleteMany()
     await prisma.productCategory.deleteMany()
+    await prisma.service.deleteMany()
+    await prisma.serviceCategory.deleteMany()
+    await prisma.staff.deleteMany()
+    await prisma.organization.deleteMany()
     await prisma.driver.deleteMany()
     await prisma.session.deleteMany()
     await prisma.account.deleteMany()
@@ -965,83 +517,146 @@ export default async function main() {
     await prisma.user.deleteMany()
     console.log("Existing data cleaned\n")
 
-    // Step 1: Create admin user
-    const admin = await createAdminUser()
-    
-    // Step 1.5: Create test users
-    const testUsers = await createTestUsers()
-    
-    // Step 2: Create organizations (needed for staff creation)
-    const organizations = await createOrganizations()
-    
-    // Step 3: Create client users
-    const clientUsers = await createClientUsers()
-    
-    // Step 4: Convert some clients to staff and create Staff records
-    const staffUsers = await convertClientsToStaff(clientUsers, organizations)
-    
-    // Step 5: Create services
-    await createServices(organizations)
-    
-    // Step 6: Create business hours
-    await createBusinessHours(organizations)
-    
-    // Step 7: Create holidays
-    await createHolidays(organizations)
-    
-    // Step 8: Create staff members (sync with existing staff users)
-    await createStaffMembers(staffUsers, organizations)
-    await syncAllUsersStaff()
-    //await syncAllUsersStaffByPrisma(prisma)
-    
-    
-    // Step 8.5: Create staff for test users (first organization)
-    console.log("Creating staff members from test users...")
-    if (organizations.length > 0) {
-      const org = organizations[0]
-      for (let i = 0; i < testUsers.length; i++) {
-        const testUser = testUsers[i]
-        if (testUser.role === "OWNER" || testUser.role === "MANAGER" || testUser.role === "MERCHANT"|| testUser.role === "STAFF") {
-          await prisma.staff.upsert({
-            where: { userId: testUser.id },
-            update: {},
-            create: {
-              userId: testUser.id,
-              organizationId: org.id,
-              hierarchy: testUser.role === "OWNER" ? Hierarchy.OWNER as string : 
-                         testUser.role === "MANAGER" ? Hierarchy.MANAGER as string : 
-                         Hierarchy.MERCHANT as string,
-              bio: `${testUser.name} - Test ${testUser.role}`,
-              isActive: true,
-              isDefault: testUser.role === "OWNER",
+    // Track all created entities
+    const allStaff: Array<{orgId: string; staffId: string}> = []
+    const allClients: Array<{orgId: string; userId: string}> = []
+    const allServices: Array<{orgId: string; id: string}> = []
+    const organizationMap: Record<string, string> = {}
+
+    // Create organizations with owners, staff, and clients
+    for (let i = 0; i < ORGANIZATIONS.length; i++) {
+      const orgData = ORGANIZATIONS[i]
+      const orgSlug = generateSlug(orgData.name)
+      
+      console.log(`Creating ${orgData.name}...`)
+      
+      // Create organization
+      const org = await createOrganization(orgData, i)
+      organizationMap[orgSlug] = org.id
+      console.log(`  - Organization created: ${org.name} (${org.organizationType})`)
+      
+      // Create staff (owner + 5-10 staff members)
+      const staffCount = randomBetween(5, 10)
+      const staffMembers = await createStaffForOrganization(org.id, orgSlug, orgData, i * 15, staffCount)
+      console.log(`  - Created ${staffMembers.length} staff members`)
+      
+      for (const staff of staffMembers) {
+        allStaff.push({ orgId: org.id, staffId: staff.staffId })
+      }
+      
+      // Create clients (10-20 clients)
+      const clientCount = randomBetween(10, 20)
+      const clients = await createClientsForOrganization(org.id, orgSlug, i * 25, clientCount)
+      console.log(`  - Created ${clients.length} client accounts`)
+      
+      for (const client of clients) {
+        allClients.push({ orgId: org.id, userId: client.userId })
+      }
+      
+      // Create service categories and services
+      await createServiceCategoriesAndServices(org.id, orgData, staffMembers)
+      console.log(`  - Created service categories and services`)
+      
+      // Get created services for follows
+      const services = await prisma.service.findMany({
+        where: { staff: { organizationId: org.id } },
+        select: { id: true }
+      })
+      for (const svc of services) {
+        allServices.push({ orgId: org.id, id: svc.id })
+      }
+      
+      // Create product categories and products for MARKET and RESTAURANT
+      if (orgData.productCategories) {
+        await createProductCategoriesAndProducts(org.id, orgData)
+        console.log(`  - Created product categories and products`)
+      }
+      
+      console.log("")
+    }
+
+    // Create follows
+    console.log("Creating follows...")
+    let followCount = 0
+    for (const orgData of ORGANIZATIONS) {
+      const orgSlug = generateSlug(orgData.name)
+      const orgId = organizationMap[orgSlug]
+      
+      // Get clients for this organization
+      const orgClients = allClients.filter(c => c.orgId === orgId)
+      const orgStaff = allStaff.filter(s => s.orgId === orgId)
+      const orgServices = allServices.filter(s => s.orgId === orgId)
+      
+      for (const client of orgClients.slice(0, 10)) { // Use first 10 clients to follow
+        // Follow the organization
+        try {
+          await prisma.following.create({
+            data: {
+              userId: client.userId,
+              targetId: orgId,
+              TargetType: FollowingTargetType.ORGANIZATION,
             },
           })
-          console.log(`Created staff member for test user: ${testUser.username}`)
+          followCount++
+        } catch (e) {}
+        
+        // Follow 2-4 random services
+        const serviceFollowCount = randomBetween(2, 4)
+        for (let i = 0; i < serviceFollowCount; i++) {
+          if (orgServices.length === 0) break
+          const randomSvc = randomElement(orgServices)
+          try {
+            await prisma.following.create({
+              data: {
+                userId: client.userId,
+                targetId: randomSvc.id,
+                TargetType: FollowingTargetType.SERVICE,
+              },
+            })
+            followCount++
+          } catch (e) {}
+        }
+        
+        // Follow 1-2 random staff
+        const staffFollowCount = randomBetween(1, 2)
+        for (let i = 0; i < staffFollowCount; i++) {
+          if (orgStaff.length === 0) break
+          const randomStaff = randomElement(orgStaff)
+          try {
+            await prisma.following.create({
+              data: {
+                userId: client.userId,
+                targetId: randomStaff.staffId,
+                TargetType: FollowingTargetType.STAFF,
+              },
+            })
+            followCount++
+          } catch (e) {}
         }
       }
     }
+    console.log(`  - Created ${followCount} follows\n`)
+
+    // Summary
+    const orgCount = ORGANIZATIONS.length
+    const totalStaff = allStaff.length
+    const totalClients = allClients.length
     
-    // Step 9: Create appointments
-    const appointmentCount = await createAppointments(staffUsers, organizations)
-
-    // Step 10: Create service fields and link to staff
-    await createServiceFields(organizations)
-
-    // Step 11: Create product categories and products for MARKET and RESTAURANT
-    await createProductCategoriesAndProducts(organizations)
-
-    // Step 12: Create drivers from client users
-    await createDrivers(clientUsers)
-
-    console.log("\n========================================")
+    console.log("========================================")
     console.log("Seed Complete!")
     console.log("========================================")
-    console.log(`- Admin User: admin / Admin@123!`)
-    console.log(`- Test Users: owner / Password123!, manager / Password123!, staff / Password123!, client / Password123!`)
-    console.log(`- Organizations: ${organizations.length}`)
-    console.log(`- Client Users: ${clientUsers.length}`)
-    console.log(`- Converted to Staff: ${staffUsers.length}`)
-    console.log(`- Appointments: ${appointmentCount}`)
+    console.log(`Organizations: ${orgCount}`)
+    console.log(`Staff Members: ${totalStaff}`)
+    console.log(`Client Accounts: ${totalClients}`)
+    console.log(`Follows: ${followCount}`)
+    console.log("\nTest Accounts:")
+    for (const orgData of ORGANIZATIONS) {
+      const slug = generateSlug(orgData.name)
+      console.log(`  ${orgData.name}:`)
+      console.log(`    Owner: ${slug}_owner / Password123!`)
+      console.log(`    Staff: ${slug}_staff_1 / Password123!`)
+      console.log(`    Client: ${slug}_client_1 / Password123!`)
+    }
     console.log("========================================\n")
   } catch (error) {
     console.error("Error seeding database:", error)

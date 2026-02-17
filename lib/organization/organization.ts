@@ -139,7 +139,7 @@ export type ContactInfoConfig = Pick<Organization,
 export async function createOrganization(data: {
   name: string
   slug: string
-  type: typeof OrganizationType[keyof typeof OrganizationType]
+  organizationType: typeof OrganizationType[keyof typeof OrganizationType]
   description?: string
   logo?: string
   website?: string
@@ -155,7 +155,7 @@ export async function createOrganization(data: {
     data: {
       name: data.name,
       slug: data.slug,
-      type: data.type,
+      organizationType: data.organizationType,
       description: data.description || null,
       logo: data.logo || null,
       website: data.website || null,

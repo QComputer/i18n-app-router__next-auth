@@ -28,6 +28,7 @@ export type ServiceCategoryMinAggregateOutputType = {
   id: string | null
   name: string | null
   description: string | null
+  image: string | null
   coverImage: string | null
   avatarImage: string | null
   organizationId: string | null
@@ -37,6 +38,7 @@ export type ServiceCategoryMaxAggregateOutputType = {
   id: string | null
   name: string | null
   description: string | null
+  image: string | null
   coverImage: string | null
   avatarImage: string | null
   organizationId: string | null
@@ -46,6 +48,7 @@ export type ServiceCategoryCountAggregateOutputType = {
   id: number
   name: number
   description: number
+  image: number
   coverImage: number
   avatarImage: number
   organizationId: number
@@ -57,6 +60,7 @@ export type ServiceCategoryMinAggregateInputType = {
   id?: true
   name?: true
   description?: true
+  image?: true
   coverImage?: true
   avatarImage?: true
   organizationId?: true
@@ -66,6 +70,7 @@ export type ServiceCategoryMaxAggregateInputType = {
   id?: true
   name?: true
   description?: true
+  image?: true
   coverImage?: true
   avatarImage?: true
   organizationId?: true
@@ -75,6 +80,7 @@ export type ServiceCategoryCountAggregateInputType = {
   id?: true
   name?: true
   description?: true
+  image?: true
   coverImage?: true
   avatarImage?: true
   organizationId?: true
@@ -157,6 +163,7 @@ export type ServiceCategoryGroupByOutputType = {
   id: string
   name: string
   description: string | null
+  image: string | null
   coverImage: string | null
   avatarImage: string | null
   organizationId: string
@@ -187,6 +194,7 @@ export type ServiceCategoryWhereInput = {
   id?: Prisma.StringFilter<"ServiceCategory"> | string
   name?: Prisma.StringFilter<"ServiceCategory"> | string
   description?: Prisma.StringNullableFilter<"ServiceCategory"> | string | null
+  image?: Prisma.StringNullableFilter<"ServiceCategory"> | string | null
   coverImage?: Prisma.StringNullableFilter<"ServiceCategory"> | string | null
   avatarImage?: Prisma.StringNullableFilter<"ServiceCategory"> | string | null
   organizationId?: Prisma.StringFilter<"ServiceCategory"> | string
@@ -198,6 +206,7 @@ export type ServiceCategoryOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  image?: Prisma.SortOrderInput | Prisma.SortOrder
   coverImage?: Prisma.SortOrderInput | Prisma.SortOrder
   avatarImage?: Prisma.SortOrderInput | Prisma.SortOrder
   organizationId?: Prisma.SortOrder
@@ -212,6 +221,7 @@ export type ServiceCategoryWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.ServiceCategoryWhereInput | Prisma.ServiceCategoryWhereInput[]
   name?: Prisma.StringFilter<"ServiceCategory"> | string
   description?: Prisma.StringNullableFilter<"ServiceCategory"> | string | null
+  image?: Prisma.StringNullableFilter<"ServiceCategory"> | string | null
   coverImage?: Prisma.StringNullableFilter<"ServiceCategory"> | string | null
   avatarImage?: Prisma.StringNullableFilter<"ServiceCategory"> | string | null
   organizationId?: Prisma.StringFilter<"ServiceCategory"> | string
@@ -223,6 +233,7 @@ export type ServiceCategoryOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  image?: Prisma.SortOrderInput | Prisma.SortOrder
   coverImage?: Prisma.SortOrderInput | Prisma.SortOrder
   avatarImage?: Prisma.SortOrderInput | Prisma.SortOrder
   organizationId?: Prisma.SortOrder
@@ -238,6 +249,7 @@ export type ServiceCategoryScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"ServiceCategory"> | string
   name?: Prisma.StringWithAggregatesFilter<"ServiceCategory"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"ServiceCategory"> | string | null
+  image?: Prisma.StringNullableWithAggregatesFilter<"ServiceCategory"> | string | null
   coverImage?: Prisma.StringNullableWithAggregatesFilter<"ServiceCategory"> | string | null
   avatarImage?: Prisma.StringNullableWithAggregatesFilter<"ServiceCategory"> | string | null
   organizationId?: Prisma.StringWithAggregatesFilter<"ServiceCategory"> | string
@@ -247,6 +259,7 @@ export type ServiceCategoryCreateInput = {
   id?: string
   name: string
   description?: string | null
+  image?: string | null
   coverImage?: string | null
   avatarImage?: string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutServiceCategoriesInput
@@ -257,6 +270,7 @@ export type ServiceCategoryUncheckedCreateInput = {
   id?: string
   name: string
   description?: string | null
+  image?: string | null
   coverImage?: string | null
   avatarImage?: string | null
   organizationId: string
@@ -267,6 +281,7 @@ export type ServiceCategoryUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutServiceCategoriesNestedInput
@@ -277,6 +292,7 @@ export type ServiceCategoryUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -287,6 +303,7 @@ export type ServiceCategoryCreateManyInput = {
   id?: string
   name: string
   description?: string | null
+  image?: string | null
   coverImage?: string | null
   avatarImage?: string | null
   organizationId: string
@@ -296,6 +313,7 @@ export type ServiceCategoryUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
@@ -304,6 +322,7 @@ export type ServiceCategoryUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -328,6 +347,7 @@ export type ServiceCategoryCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  image?: Prisma.SortOrder
   coverImage?: Prisma.SortOrder
   avatarImage?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
@@ -337,6 +357,7 @@ export type ServiceCategoryMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  image?: Prisma.SortOrder
   coverImage?: Prisma.SortOrder
   avatarImage?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
@@ -346,6 +367,7 @@ export type ServiceCategoryMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  image?: Prisma.SortOrder
   coverImage?: Prisma.SortOrder
   avatarImage?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
@@ -411,6 +433,7 @@ export type ServiceCategoryCreateWithoutOrganizationInput = {
   id?: string
   name: string
   description?: string | null
+  image?: string | null
   coverImage?: string | null
   avatarImage?: string | null
   services?: Prisma.ServiceCreateNestedManyWithoutServiceCategoryInput
@@ -420,6 +443,7 @@ export type ServiceCategoryUncheckedCreateWithoutOrganizationInput = {
   id?: string
   name: string
   description?: string | null
+  image?: string | null
   coverImage?: string | null
   avatarImage?: string | null
   services?: Prisma.ServiceUncheckedCreateNestedManyWithoutServiceCategoryInput
@@ -458,6 +482,7 @@ export type ServiceCategoryScalarWhereInput = {
   id?: Prisma.StringFilter<"ServiceCategory"> | string
   name?: Prisma.StringFilter<"ServiceCategory"> | string
   description?: Prisma.StringNullableFilter<"ServiceCategory"> | string | null
+  image?: Prisma.StringNullableFilter<"ServiceCategory"> | string | null
   coverImage?: Prisma.StringNullableFilter<"ServiceCategory"> | string | null
   avatarImage?: Prisma.StringNullableFilter<"ServiceCategory"> | string | null
   organizationId?: Prisma.StringFilter<"ServiceCategory"> | string
@@ -467,6 +492,7 @@ export type ServiceCategoryCreateWithoutServicesInput = {
   id?: string
   name: string
   description?: string | null
+  image?: string | null
   coverImage?: string | null
   avatarImage?: string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutServiceCategoriesInput
@@ -476,6 +502,7 @@ export type ServiceCategoryUncheckedCreateWithoutServicesInput = {
   id?: string
   name: string
   description?: string | null
+  image?: string | null
   coverImage?: string | null
   avatarImage?: string | null
   organizationId: string
@@ -501,6 +528,7 @@ export type ServiceCategoryUpdateWithoutServicesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutServiceCategoriesNestedInput
@@ -510,6 +538,7 @@ export type ServiceCategoryUncheckedUpdateWithoutServicesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -519,6 +548,7 @@ export type ServiceCategoryCreateManyOrganizationInput = {
   id?: string
   name: string
   description?: string | null
+  image?: string | null
   coverImage?: string | null
   avatarImage?: string | null
 }
@@ -527,6 +557,7 @@ export type ServiceCategoryUpdateWithoutOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   services?: Prisma.ServiceUpdateManyWithoutServiceCategoryNestedInput
@@ -536,6 +567,7 @@ export type ServiceCategoryUncheckedUpdateWithoutOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   services?: Prisma.ServiceUncheckedUpdateManyWithoutServiceCategoryNestedInput
@@ -545,6 +577,7 @@ export type ServiceCategoryUncheckedUpdateManyWithoutOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
@@ -584,6 +617,7 @@ export type ServiceCategorySelect<ExtArgs extends runtime.Types.Extensions.Inter
   id?: boolean
   name?: boolean
   description?: boolean
+  image?: boolean
   coverImage?: boolean
   avatarImage?: boolean
   organizationId?: boolean
@@ -596,6 +630,7 @@ export type ServiceCategorySelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   id?: boolean
   name?: boolean
   description?: boolean
+  image?: boolean
   coverImage?: boolean
   avatarImage?: boolean
   organizationId?: boolean
@@ -606,6 +641,7 @@ export type ServiceCategorySelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   id?: boolean
   name?: boolean
   description?: boolean
+  image?: boolean
   coverImage?: boolean
   avatarImage?: boolean
   organizationId?: boolean
@@ -616,12 +652,13 @@ export type ServiceCategorySelectScalar = {
   id?: boolean
   name?: boolean
   description?: boolean
+  image?: boolean
   coverImage?: boolean
   avatarImage?: boolean
   organizationId?: boolean
 }
 
-export type ServiceCategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "coverImage" | "avatarImage" | "organizationId", ExtArgs["result"]["serviceCategory"]>
+export type ServiceCategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "image" | "coverImage" | "avatarImage" | "organizationId", ExtArgs["result"]["serviceCategory"]>
 export type ServiceCategoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   services?: boolean | Prisma.ServiceCategory$servicesArgs<ExtArgs>
@@ -644,6 +681,7 @@ export type $ServiceCategoryPayload<ExtArgs extends runtime.Types.Extensions.Int
     id: string
     name: string
     description: string | null
+    image: string | null
     coverImage: string | null
     avatarImage: string | null
     organizationId: string
@@ -1075,6 +1113,7 @@ export interface ServiceCategoryFieldRefs {
   readonly id: Prisma.FieldRef<"ServiceCategory", 'String'>
   readonly name: Prisma.FieldRef<"ServiceCategory", 'String'>
   readonly description: Prisma.FieldRef<"ServiceCategory", 'String'>
+  readonly image: Prisma.FieldRef<"ServiceCategory", 'String'>
   readonly coverImage: Prisma.FieldRef<"ServiceCategory", 'String'>
   readonly avatarImage: Prisma.FieldRef<"ServiceCategory", 'String'>
   readonly organizationId: Prisma.FieldRef<"ServiceCategory", 'String'>

@@ -64,7 +64,7 @@ export default async function AdminDashboardPage({
           <ul className="mt-2 space-y-1">
             {orgStats.organizations.slice(0, 5).map((org) => (
               <li key={org.id} className="text-sm">
-                {org.name} ({org.type})
+                {org.name} ({org.organizationType})
               </li>
             ))}
           </ul>

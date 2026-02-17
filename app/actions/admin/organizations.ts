@@ -15,7 +15,7 @@ import { requireAdmin } from "@/lib/auth/admin"
  */
 export async function getOrganizations(params: {
   active?: boolean
-  type?: string
+  organizationType?: string
   page?: number
   limit?: number
   search?: string
@@ -24,7 +24,7 @@ export async function getOrganizations(params: {
 
   const {
     active,
-    type,
+    organizationType,
     page = 1,
     limit = 50,
     search = "",
@@ -36,8 +36,8 @@ export async function getOrganizations(params: {
     where.isActive = active
   }
 
-  if (type) {
-    where.type = type
+  if (organizationType) {
+    where.organizationType = organizationType
   }
 
   if (search) {
@@ -143,7 +143,7 @@ export async function getOrganizationById(id: string) {
 export async function createOrganization(data: {
   name: string
   slug: string
-  type: 'LAWYER' | 'DOCTOR' | 'MARKET' | 'RESTAURANT' | 'SALON' | 'OTHER'
+  organizationType: 'LAWYER' | 'DOCTOR' | 'MARKET' | 'RESTAURANT' | 'SALON' | 'OTHER'
   description?: string
   logo?: string
   website?: string
@@ -160,7 +160,7 @@ export async function createOrganization(data: {
   const {
     name,
     slug,
-    type,
+    organizationType,
     description,
     logo,
     website,
@@ -179,7 +179,7 @@ export async function createOrganization(data: {
     data: {
       name,
       slug: normalizedSlug,
-      type,
+      organizationType,
       description: description || null,
       logo: logo || null,
       website: website || null,
@@ -200,7 +200,7 @@ export async function createOrganization(data: {
 export async function updateOrganization(id: string, data: Partial<{
   name?: string
   slug?: string
-  type?: 'LAWYER' | 'DOCTOR' | 'SUPERMARKET' | 'RESTAURANT' | 'SALON' | 'OTHER'
+  organizationType?: 'LAWYER' | 'DOCTOR' | 'SUPERMARKET' | 'RESTAURANT' | 'SALON' | 'OTHER'
   description?: string
   logo?: string
   website?: string

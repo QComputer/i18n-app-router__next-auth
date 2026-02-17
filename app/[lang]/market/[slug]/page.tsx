@@ -22,7 +22,7 @@ export default async function MarketPageRoute({ params }: PageProps) {
   const session = await auth()
   
   const organization = await prisma.organization.findUnique({
-    where: { slug, type: "MARKET" },
+    where: { slug, organizationType: "MARKET" },
     include: {
       products: {
         where: { isActive: true },

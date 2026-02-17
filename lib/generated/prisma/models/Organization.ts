@@ -28,7 +28,8 @@ export type OrganizationMinAggregateOutputType = {
   id: string | null
   name: string | null
   slug: string | null
-  type: $Enums.OrganizationType | null
+  organizationType: $Enums.OrganizationType | null
+  image: string | null
   coverImage: string | null
   avatarImage: string | null
   logo: string | null
@@ -76,7 +77,8 @@ export type OrganizationMaxAggregateOutputType = {
   id: string | null
   name: string | null
   slug: string | null
-  type: $Enums.OrganizationType | null
+  organizationType: $Enums.OrganizationType | null
+  image: string | null
   coverImage: string | null
   avatarImage: string | null
   logo: string | null
@@ -124,7 +126,8 @@ export type OrganizationCountAggregateOutputType = {
   id: number
   name: number
   slug: number
-  type: number
+  organizationType: number
+  image: number
   coverImage: number
   avatarImage: number
   logo: number
@@ -174,7 +177,8 @@ export type OrganizationMinAggregateInputType = {
   id?: true
   name?: true
   slug?: true
-  type?: true
+  organizationType?: true
+  image?: true
   coverImage?: true
   avatarImage?: true
   logo?: true
@@ -222,7 +226,8 @@ export type OrganizationMaxAggregateInputType = {
   id?: true
   name?: true
   slug?: true
-  type?: true
+  organizationType?: true
+  image?: true
   coverImage?: true
   avatarImage?: true
   logo?: true
@@ -270,7 +275,8 @@ export type OrganizationCountAggregateInputType = {
   id?: true
   name?: true
   slug?: true
-  type?: true
+  organizationType?: true
+  image?: true
   coverImage?: true
   avatarImage?: true
   logo?: true
@@ -391,7 +397,8 @@ export type OrganizationGroupByOutputType = {
   id: string
   name: string
   slug: string
-  type: $Enums.OrganizationType
+  organizationType: $Enums.OrganizationType
+  image: string | null
   coverImage: string | null
   avatarImage: string | null
   logo: string | null
@@ -460,7 +467,8 @@ export type OrganizationWhereInput = {
   id?: Prisma.StringFilter<"Organization"> | string
   name?: Prisma.StringFilter<"Organization"> | string
   slug?: Prisma.StringFilter<"Organization"> | string
-  type?: Prisma.EnumOrganizationTypeFilter<"Organization"> | $Enums.OrganizationType
+  organizationType?: Prisma.EnumOrganizationTypeFilter<"Organization"> | $Enums.OrganizationType
+  image?: Prisma.StringNullableFilter<"Organization"> | string | null
   coverImage?: Prisma.StringNullableFilter<"Organization"> | string | null
   avatarImage?: Prisma.StringNullableFilter<"Organization"> | string | null
   logo?: Prisma.StringNullableFilter<"Organization"> | string | null
@@ -515,7 +523,8 @@ export type OrganizationOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
-  type?: Prisma.SortOrder
+  organizationType?: Prisma.SortOrder
+  image?: Prisma.SortOrderInput | Prisma.SortOrder
   coverImage?: Prisma.SortOrderInput | Prisma.SortOrder
   avatarImage?: Prisma.SortOrderInput | Prisma.SortOrder
   logo?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -573,7 +582,8 @@ export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.OrganizationWhereInput[]
   NOT?: Prisma.OrganizationWhereInput | Prisma.OrganizationWhereInput[]
   name?: Prisma.StringFilter<"Organization"> | string
-  type?: Prisma.EnumOrganizationTypeFilter<"Organization"> | $Enums.OrganizationType
+  organizationType?: Prisma.EnumOrganizationTypeFilter<"Organization"> | $Enums.OrganizationType
+  image?: Prisma.StringNullableFilter<"Organization"> | string | null
   coverImage?: Prisma.StringNullableFilter<"Organization"> | string | null
   avatarImage?: Prisma.StringNullableFilter<"Organization"> | string | null
   logo?: Prisma.StringNullableFilter<"Organization"> | string | null
@@ -628,7 +638,8 @@ export type OrganizationOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
-  type?: Prisma.SortOrder
+  organizationType?: Prisma.SortOrder
+  image?: Prisma.SortOrderInput | Prisma.SortOrder
   coverImage?: Prisma.SortOrderInput | Prisma.SortOrder
   avatarImage?: Prisma.SortOrderInput | Prisma.SortOrder
   logo?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -682,7 +693,8 @@ export type OrganizationScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Organization"> | string
   name?: Prisma.StringWithAggregatesFilter<"Organization"> | string
   slug?: Prisma.StringWithAggregatesFilter<"Organization"> | string
-  type?: Prisma.EnumOrganizationTypeWithAggregatesFilter<"Organization"> | $Enums.OrganizationType
+  organizationType?: Prisma.EnumOrganizationTypeWithAggregatesFilter<"Organization"> | $Enums.OrganizationType
+  image?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
   coverImage?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
   avatarImage?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
   logo?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
@@ -730,7 +742,8 @@ export type OrganizationCreateInput = {
   id?: string
   name: string
   slug: string
-  type: $Enums.OrganizationType
+  organizationType: $Enums.OrganizationType
+  image?: string | null
   coverImage?: string | null
   avatarImage?: string | null
   logo?: string | null
@@ -785,7 +798,8 @@ export type OrganizationUncheckedCreateInput = {
   id?: string
   name: string
   slug: string
-  type: $Enums.OrganizationType
+  organizationType: $Enums.OrganizationType
+  image?: string | null
   coverImage?: string | null
   avatarImage?: string | null
   logo?: string | null
@@ -840,7 +854,8 @@ export type OrganizationUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  organizationType?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -895,7 +910,8 @@ export type OrganizationUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  organizationType?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -950,7 +966,8 @@ export type OrganizationCreateManyInput = {
   id?: string
   name: string
   slug: string
-  type: $Enums.OrganizationType
+  organizationType: $Enums.OrganizationType
+  image?: string | null
   coverImage?: string | null
   avatarImage?: string | null
   logo?: string | null
@@ -998,7 +1015,8 @@ export type OrganizationUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  organizationType?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1046,7 +1064,8 @@ export type OrganizationUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  organizationType?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1094,7 +1113,8 @@ export type OrganizationCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
-  type?: Prisma.SortOrder
+  organizationType?: Prisma.SortOrder
+  image?: Prisma.SortOrder
   coverImage?: Prisma.SortOrder
   avatarImage?: Prisma.SortOrder
   logo?: Prisma.SortOrder
@@ -1142,7 +1162,8 @@ export type OrganizationMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
-  type?: Prisma.SortOrder
+  organizationType?: Prisma.SortOrder
+  image?: Prisma.SortOrder
   coverImage?: Prisma.SortOrder
   avatarImage?: Prisma.SortOrder
   logo?: Prisma.SortOrder
@@ -1190,7 +1211,8 @@ export type OrganizationMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
-  type?: Prisma.SortOrder
+  organizationType?: Prisma.SortOrder
+  image?: Prisma.SortOrder
   coverImage?: Prisma.SortOrder
   avatarImage?: Prisma.SortOrder
   logo?: Prisma.SortOrder
@@ -1365,7 +1387,8 @@ export type OrganizationCreateWithoutProductsInput = {
   id?: string
   name: string
   slug: string
-  type: $Enums.OrganizationType
+  organizationType: $Enums.OrganizationType
+  image?: string | null
   coverImage?: string | null
   avatarImage?: string | null
   logo?: string | null
@@ -1419,7 +1442,8 @@ export type OrganizationUncheckedCreateWithoutProductsInput = {
   id?: string
   name: string
   slug: string
-  type: $Enums.OrganizationType
+  organizationType: $Enums.OrganizationType
+  image?: string | null
   coverImage?: string | null
   avatarImage?: string | null
   logo?: string | null
@@ -1489,7 +1513,8 @@ export type OrganizationUpdateWithoutProductsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  organizationType?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1543,7 +1568,8 @@ export type OrganizationUncheckedUpdateWithoutProductsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  organizationType?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1597,7 +1623,8 @@ export type OrganizationCreateWithoutServiceFieldsInput = {
   id?: string
   name: string
   slug: string
-  type: $Enums.OrganizationType
+  organizationType: $Enums.OrganizationType
+  image?: string | null
   coverImage?: string | null
   avatarImage?: string | null
   logo?: string | null
@@ -1651,7 +1678,8 @@ export type OrganizationUncheckedCreateWithoutServiceFieldsInput = {
   id?: string
   name: string
   slug: string
-  type: $Enums.OrganizationType
+  organizationType: $Enums.OrganizationType
+  image?: string | null
   coverImage?: string | null
   avatarImage?: string | null
   logo?: string | null
@@ -1721,7 +1749,8 @@ export type OrganizationUpdateWithoutServiceFieldsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  organizationType?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1775,7 +1804,8 @@ export type OrganizationUncheckedUpdateWithoutServiceFieldsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  organizationType?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1829,7 +1859,8 @@ export type OrganizationCreateWithoutOrdersInput = {
   id?: string
   name: string
   slug: string
-  type: $Enums.OrganizationType
+  organizationType: $Enums.OrganizationType
+  image?: string | null
   coverImage?: string | null
   avatarImage?: string | null
   logo?: string | null
@@ -1883,7 +1914,8 @@ export type OrganizationUncheckedCreateWithoutOrdersInput = {
   id?: string
   name: string
   slug: string
-  type: $Enums.OrganizationType
+  organizationType: $Enums.OrganizationType
+  image?: string | null
   coverImage?: string | null
   avatarImage?: string | null
   logo?: string | null
@@ -1953,7 +1985,8 @@ export type OrganizationUpdateWithoutOrdersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  organizationType?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2007,7 +2040,8 @@ export type OrganizationUncheckedUpdateWithoutOrdersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  organizationType?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2061,7 +2095,8 @@ export type OrganizationCreateWithoutStaffsInput = {
   id?: string
   name: string
   slug: string
-  type: $Enums.OrganizationType
+  organizationType: $Enums.OrganizationType
+  image?: string | null
   coverImage?: string | null
   avatarImage?: string | null
   logo?: string | null
@@ -2115,7 +2150,8 @@ export type OrganizationUncheckedCreateWithoutStaffsInput = {
   id?: string
   name: string
   slug: string
-  type: $Enums.OrganizationType
+  organizationType: $Enums.OrganizationType
+  image?: string | null
   coverImage?: string | null
   avatarImage?: string | null
   logo?: string | null
@@ -2185,7 +2221,8 @@ export type OrganizationUpdateWithoutStaffsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  organizationType?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2239,7 +2276,8 @@ export type OrganizationUncheckedUpdateWithoutStaffsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  organizationType?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2293,7 +2331,8 @@ export type OrganizationCreateWithoutServiceCategoriesInput = {
   id?: string
   name: string
   slug: string
-  type: $Enums.OrganizationType
+  organizationType: $Enums.OrganizationType
+  image?: string | null
   coverImage?: string | null
   avatarImage?: string | null
   logo?: string | null
@@ -2347,7 +2386,8 @@ export type OrganizationUncheckedCreateWithoutServiceCategoriesInput = {
   id?: string
   name: string
   slug: string
-  type: $Enums.OrganizationType
+  organizationType: $Enums.OrganizationType
+  image?: string | null
   coverImage?: string | null
   avatarImage?: string | null
   logo?: string | null
@@ -2417,7 +2457,8 @@ export type OrganizationUpdateWithoutServiceCategoriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  organizationType?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2471,7 +2512,8 @@ export type OrganizationUncheckedUpdateWithoutServiceCategoriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  organizationType?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2525,7 +2567,8 @@ export type OrganizationCreateWithoutBusinessHoursInput = {
   id?: string
   name: string
   slug: string
-  type: $Enums.OrganizationType
+  organizationType: $Enums.OrganizationType
+  image?: string | null
   coverImage?: string | null
   avatarImage?: string | null
   logo?: string | null
@@ -2579,7 +2622,8 @@ export type OrganizationUncheckedCreateWithoutBusinessHoursInput = {
   id?: string
   name: string
   slug: string
-  type: $Enums.OrganizationType
+  organizationType: $Enums.OrganizationType
+  image?: string | null
   coverImage?: string | null
   avatarImage?: string | null
   logo?: string | null
@@ -2649,7 +2693,8 @@ export type OrganizationUpdateWithoutBusinessHoursInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  organizationType?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2703,7 +2748,8 @@ export type OrganizationUncheckedUpdateWithoutBusinessHoursInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  organizationType?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2757,7 +2803,8 @@ export type OrganizationCreateWithoutHolidaysInput = {
   id?: string
   name: string
   slug: string
-  type: $Enums.OrganizationType
+  organizationType: $Enums.OrganizationType
+  image?: string | null
   coverImage?: string | null
   avatarImage?: string | null
   logo?: string | null
@@ -2811,7 +2858,8 @@ export type OrganizationUncheckedCreateWithoutHolidaysInput = {
   id?: string
   name: string
   slug: string
-  type: $Enums.OrganizationType
+  organizationType: $Enums.OrganizationType
+  image?: string | null
   coverImage?: string | null
   avatarImage?: string | null
   logo?: string | null
@@ -2881,7 +2929,8 @@ export type OrganizationUpdateWithoutHolidaysInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  organizationType?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2935,7 +2984,8 @@ export type OrganizationUncheckedUpdateWithoutHolidaysInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  organizationType?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3074,7 +3124,8 @@ export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   id?: boolean
   name?: boolean
   slug?: boolean
-  type?: boolean
+  organizationType?: boolean
+  image?: boolean
   coverImage?: boolean
   avatarImage?: boolean
   logo?: boolean
@@ -3130,7 +3181,8 @@ export type OrganizationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   id?: boolean
   name?: boolean
   slug?: boolean
-  type?: boolean
+  organizationType?: boolean
+  image?: boolean
   coverImage?: boolean
   avatarImage?: boolean
   logo?: boolean
@@ -3178,7 +3230,8 @@ export type OrganizationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   id?: boolean
   name?: boolean
   slug?: boolean
-  type?: boolean
+  organizationType?: boolean
+  image?: boolean
   coverImage?: boolean
   avatarImage?: boolean
   logo?: boolean
@@ -3226,7 +3279,8 @@ export type OrganizationSelectScalar = {
   id?: boolean
   name?: boolean
   slug?: boolean
-  type?: boolean
+  organizationType?: boolean
+  image?: boolean
   coverImage?: boolean
   avatarImage?: boolean
   logo?: boolean
@@ -3270,7 +3324,7 @@ export type OrganizationSelectScalar = {
   updatedAt?: boolean
 }
 
-export type OrganizationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "slug" | "type" | "coverImage" | "avatarImage" | "logo" | "description" | "website" | "phone" | "email" | "address" | "timezone" | "locale" | "themeMode" | "primaryColor" | "secondaryColor" | "isActive" | "heroTitle" | "heroSubtitle" | "heroBackgroundImage" | "aboutEnabled" | "aboutContent" | "aboutImage" | "practiceAreasEnabled" | "attorneysEnabled" | "testimonialsEnabled" | "caseResultsEnabled" | "awardsEnabled" | "faqEnabled" | "contactEnabled" | "appointmentEnabled" | "seoTitle" | "seoDescription" | "seoKeywords" | "mapUrl" | "workingHours" | "emergencyPhone" | "facebookUrl" | "twitterUrl" | "instagramUrl" | "linkedinUrl" | "telegramUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["organization"]>
+export type OrganizationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "slug" | "organizationType" | "image" | "coverImage" | "avatarImage" | "logo" | "description" | "website" | "phone" | "email" | "address" | "timezone" | "locale" | "themeMode" | "primaryColor" | "secondaryColor" | "isActive" | "heroTitle" | "heroSubtitle" | "heroBackgroundImage" | "aboutEnabled" | "aboutContent" | "aboutImage" | "practiceAreasEnabled" | "attorneysEnabled" | "testimonialsEnabled" | "caseResultsEnabled" | "awardsEnabled" | "faqEnabled" | "contactEnabled" | "appointmentEnabled" | "seoTitle" | "seoDescription" | "seoKeywords" | "mapUrl" | "workingHours" | "emergencyPhone" | "facebookUrl" | "twitterUrl" | "instagramUrl" | "linkedinUrl" | "telegramUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["organization"]>
 export type OrganizationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   serviceCategories?: boolean | Prisma.Organization$serviceCategoriesArgs<ExtArgs>
   businessHours?: boolean | Prisma.Organization$businessHoursArgs<ExtArgs>
@@ -3299,7 +3353,8 @@ export type $OrganizationPayload<ExtArgs extends runtime.Types.Extensions.Intern
     id: string
     name: string
     slug: string
-    type: $Enums.OrganizationType
+    organizationType: $Enums.OrganizationType
+    image: string | null
     coverImage: string | null
     avatarImage: string | null
     logo: string | null
@@ -3774,7 +3829,8 @@ export interface OrganizationFieldRefs {
   readonly id: Prisma.FieldRef<"Organization", 'String'>
   readonly name: Prisma.FieldRef<"Organization", 'String'>
   readonly slug: Prisma.FieldRef<"Organization", 'String'>
-  readonly type: Prisma.FieldRef<"Organization", 'OrganizationType'>
+  readonly organizationType: Prisma.FieldRef<"Organization", 'OrganizationType'>
+  readonly image: Prisma.FieldRef<"Organization", 'String'>
   readonly coverImage: Prisma.FieldRef<"Organization", 'String'>
   readonly avatarImage: Prisma.FieldRef<"Organization", 'String'>
   readonly logo: Prisma.FieldRef<"Organization", 'String'>

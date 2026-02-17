@@ -22,7 +22,7 @@ export default async function RestaurantPageRoute({ params }: PageProps) {
   const session = await auth()
   
   const organization = await prisma.organization.findUnique({
-    where: { slug, type: "RESTAURANT" },
+    where: { slug, organizationType: "RESTAURANT" },
     include: {
       products: {
         where: { isActive: true },

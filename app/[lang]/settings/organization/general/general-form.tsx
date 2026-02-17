@@ -36,7 +36,7 @@ export function GeneralForm({ organization, dictionary, locale }: GeneralFormPro
     namePlaceholder: dict.namePlaceholder || "Enter organization name",
     slug: dict.slug || "Slug",
     slugPlaceholder: dict.slugPlaceholder || "organization-slug",
-    type: dict.type || "Type",
+    organizationType: dict.organizationType || "Type",
     description: dict.description || "Description",
     descriptionPlaceholder: dict.descriptionPlaceholder || "Enter organization description",
     website: dict.website || "Website",
@@ -142,10 +142,10 @@ export function GeneralForm({ organization, dictionary, locale }: GeneralFormPro
 
           {/* Organization Type */}
           <div className="space-y-2">
-            <Label htmlFor="type">{t.type}</Label>
-            <Select name="type" defaultValue={organization.type}>
+            <Label htmlFor="type">{t.organizationType}</Label>
+            <Select name="organizationType" defaultValue={organization.organizationType}>
               <SelectTrigger>
-                <SelectValue placeholder={t.type} />
+                <SelectValue placeholder={t.organizationType} />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="LAWYER">{t.lawyer}</SelectItem>

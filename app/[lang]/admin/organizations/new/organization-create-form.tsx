@@ -12,7 +12,7 @@ export default function OrganizationCreateForm({ dict, lang }: OrganizationCreat
   const [formData, setFormData] = useState({
     name: "",
     slug: "",
-    type: "OTHER" as 'LAWYER' | 'DOCTOR' | 'MARKET' | 'RESTAURANT' | 'SALON' | 'OTHER',
+    organizationType: "OTHER" as 'LAWYER' | 'DOCTOR' | 'MARKET' | 'RESTAURANT' | 'SALON' | 'OTHER',
     description: "",
     website: "",
     email: "",
@@ -37,7 +37,7 @@ export default function OrganizationCreateForm({ dict, lang }: OrganizationCreat
       setFormData({
         name: "",
         slug: "",
-        type: "OTHER",
+        organizationType: "OTHER",
         description: "",
         website: "",
         email: "",
@@ -110,12 +110,12 @@ export default function OrganizationCreateForm({ dict, lang }: OrganizationCreat
 
       <div>
         <label htmlFor="type" className="block text-sm font-medium text-foreground mb-1">
-          {dict.admin?.organizations?.type || "Type"}
+          {dict.admin?.organizations?.organizationType || "Type"}
         </label>
         <select
-          id="type"
-          name="type"
-          value={formData.type}
+          id="organizationType"
+          name="organizationType"
+          value={formData.organizationType}
           onChange={handleChange}
           className="w-full px-3 py-2 border rounded-lg"
           required
@@ -286,7 +286,7 @@ export default function OrganizationCreateForm({ dict, lang }: OrganizationCreat
             setFormData({
               name: "",
               slug: "",
-              type: "OTHER",
+              organizationType: "OTHER",
               description: "",
               website: "",
               email: "",

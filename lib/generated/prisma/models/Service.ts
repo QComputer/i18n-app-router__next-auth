@@ -45,6 +45,7 @@ export type ServiceMinAggregateOutputType = {
   name: string | null
   description: string | null
   duration: number | null
+  image: string | null
   coverImage: string | null
   avatarImage: string | null
   price: number | null
@@ -64,6 +65,7 @@ export type ServiceMaxAggregateOutputType = {
   name: string | null
   description: string | null
   duration: number | null
+  image: string | null
   coverImage: string | null
   avatarImage: string | null
   price: number | null
@@ -83,6 +85,7 @@ export type ServiceCountAggregateOutputType = {
   name: number
   description: number
   duration: number
+  image: number
   coverImage: number
   avatarImage: number
   price: number
@@ -118,6 +121,7 @@ export type ServiceMinAggregateInputType = {
   name?: true
   description?: true
   duration?: true
+  image?: true
   coverImage?: true
   avatarImage?: true
   price?: true
@@ -137,6 +141,7 @@ export type ServiceMaxAggregateInputType = {
   name?: true
   description?: true
   duration?: true
+  image?: true
   coverImage?: true
   avatarImage?: true
   price?: true
@@ -156,6 +161,7 @@ export type ServiceCountAggregateInputType = {
   name?: true
   description?: true
   duration?: true
+  image?: true
   coverImage?: true
   avatarImage?: true
   price?: true
@@ -262,6 +268,7 @@ export type ServiceGroupByOutputType = {
   name: string
   description: string | null
   duration: number
+  image: string | null
   coverImage: string | null
   avatarImage: string | null
   price: number | null
@@ -304,6 +311,7 @@ export type ServiceWhereInput = {
   name?: Prisma.StringFilter<"Service"> | string
   description?: Prisma.StringNullableFilter<"Service"> | string | null
   duration?: Prisma.IntFilter<"Service"> | number
+  image?: Prisma.StringNullableFilter<"Service"> | string | null
   coverImage?: Prisma.StringNullableFilter<"Service"> | string | null
   avatarImage?: Prisma.StringNullableFilter<"Service"> | string | null
   price?: Prisma.FloatNullableFilter<"Service"> | number | null
@@ -326,6 +334,7 @@ export type ServiceOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   duration?: Prisma.SortOrder
+  image?: Prisma.SortOrderInput | Prisma.SortOrder
   coverImage?: Prisma.SortOrderInput | Prisma.SortOrder
   avatarImage?: Prisma.SortOrderInput | Prisma.SortOrder
   price?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -351,6 +360,7 @@ export type ServiceWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"Service"> | string
   description?: Prisma.StringNullableFilter<"Service"> | string | null
   duration?: Prisma.IntFilter<"Service"> | number
+  image?: Prisma.StringNullableFilter<"Service"> | string | null
   coverImage?: Prisma.StringNullableFilter<"Service"> | string | null
   avatarImage?: Prisma.StringNullableFilter<"Service"> | string | null
   price?: Prisma.FloatNullableFilter<"Service"> | number | null
@@ -373,6 +383,7 @@ export type ServiceOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   duration?: Prisma.SortOrder
+  image?: Prisma.SortOrderInput | Prisma.SortOrder
   coverImage?: Prisma.SortOrderInput | Prisma.SortOrder
   avatarImage?: Prisma.SortOrderInput | Prisma.SortOrder
   price?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -400,6 +411,7 @@ export type ServiceScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"Service"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Service"> | string | null
   duration?: Prisma.IntWithAggregatesFilter<"Service"> | number
+  image?: Prisma.StringNullableWithAggregatesFilter<"Service"> | string | null
   coverImage?: Prisma.StringNullableWithAggregatesFilter<"Service"> | string | null
   avatarImage?: Prisma.StringNullableWithAggregatesFilter<"Service"> | string | null
   price?: Prisma.FloatNullableWithAggregatesFilter<"Service"> | number | null
@@ -419,6 +431,7 @@ export type ServiceCreateInput = {
   name: string
   description?: string | null
   duration: number
+  image?: string | null
   coverImage?: string | null
   avatarImage?: string | null
   price?: number | null
@@ -439,6 +452,7 @@ export type ServiceUncheckedCreateInput = {
   name: string
   description?: string | null
   duration: number
+  image?: string | null
   coverImage?: string | null
   avatarImage?: string | null
   price?: number | null
@@ -459,6 +473,7 @@ export type ServiceUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   duration?: Prisma.IntFieldUpdateOperationsInput | number
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -479,6 +494,7 @@ export type ServiceUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   duration?: Prisma.IntFieldUpdateOperationsInput | number
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -499,6 +515,7 @@ export type ServiceCreateManyInput = {
   name: string
   description?: string | null
   duration: number
+  image?: string | null
   coverImage?: string | null
   avatarImage?: string | null
   price?: number | null
@@ -518,6 +535,7 @@ export type ServiceUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   duration?: Prisma.IntFieldUpdateOperationsInput | number
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -535,6 +553,7 @@ export type ServiceUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   duration?: Prisma.IntFieldUpdateOperationsInput | number
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -554,6 +573,7 @@ export type ServiceCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   duration?: Prisma.SortOrder
+  image?: Prisma.SortOrder
   coverImage?: Prisma.SortOrder
   avatarImage?: Prisma.SortOrder
   price?: Prisma.SortOrder
@@ -580,6 +600,7 @@ export type ServiceMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   duration?: Prisma.SortOrder
+  image?: Prisma.SortOrder
   coverImage?: Prisma.SortOrder
   avatarImage?: Prisma.SortOrder
   price?: Prisma.SortOrder
@@ -599,6 +620,7 @@ export type ServiceMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   duration?: Prisma.SortOrder
+  image?: Prisma.SortOrder
   coverImage?: Prisma.SortOrder
   avatarImage?: Prisma.SortOrder
   price?: Prisma.SortOrder
@@ -738,6 +760,7 @@ export type ServiceCreateWithoutStaffInput = {
   name: string
   description?: string | null
   duration: number
+  image?: string | null
   coverImage?: string | null
   avatarImage?: string | null
   price?: number | null
@@ -757,6 +780,7 @@ export type ServiceUncheckedCreateWithoutStaffInput = {
   name: string
   description?: string | null
   duration: number
+  image?: string | null
   coverImage?: string | null
   avatarImage?: string | null
   price?: number | null
@@ -805,6 +829,7 @@ export type ServiceScalarWhereInput = {
   name?: Prisma.StringFilter<"Service"> | string
   description?: Prisma.StringNullableFilter<"Service"> | string | null
   duration?: Prisma.IntFilter<"Service"> | number
+  image?: Prisma.StringNullableFilter<"Service"> | string | null
   coverImage?: Prisma.StringNullableFilter<"Service"> | string | null
   avatarImage?: Prisma.StringNullableFilter<"Service"> | string | null
   price?: Prisma.FloatNullableFilter<"Service"> | number | null
@@ -824,6 +849,7 @@ export type ServiceCreateWithoutServiceCategoryInput = {
   name: string
   description?: string | null
   duration: number
+  image?: string | null
   coverImage?: string | null
   avatarImage?: string | null
   price?: number | null
@@ -843,6 +869,7 @@ export type ServiceUncheckedCreateWithoutServiceCategoryInput = {
   name: string
   description?: string | null
   duration: number
+  image?: string | null
   coverImage?: string | null
   avatarImage?: string | null
   price?: number | null
@@ -888,6 +915,7 @@ export type ServiceCreateWithoutAppointmentsInput = {
   name: string
   description?: string | null
   duration: number
+  image?: string | null
   coverImage?: string | null
   avatarImage?: string | null
   price?: number | null
@@ -907,6 +935,7 @@ export type ServiceUncheckedCreateWithoutAppointmentsInput = {
   name: string
   description?: string | null
   duration: number
+  image?: string | null
   coverImage?: string | null
   avatarImage?: string | null
   price?: number | null
@@ -942,6 +971,7 @@ export type ServiceUpdateWithoutAppointmentsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   duration?: Prisma.IntFieldUpdateOperationsInput | number
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -961,6 +991,7 @@ export type ServiceUncheckedUpdateWithoutAppointmentsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   duration?: Prisma.IntFieldUpdateOperationsInput | number
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -980,6 +1011,7 @@ export type ServiceCreateManyStaffInput = {
   name: string
   description?: string | null
   duration: number
+  image?: string | null
   coverImage?: string | null
   avatarImage?: string | null
   price?: number | null
@@ -998,6 +1030,7 @@ export type ServiceUpdateWithoutStaffInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   duration?: Prisma.IntFieldUpdateOperationsInput | number
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -1017,6 +1050,7 @@ export type ServiceUncheckedUpdateWithoutStaffInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   duration?: Prisma.IntFieldUpdateOperationsInput | number
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -1036,6 +1070,7 @@ export type ServiceUncheckedUpdateManyWithoutStaffInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   duration?: Prisma.IntFieldUpdateOperationsInput | number
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -1054,6 +1089,7 @@ export type ServiceCreateManyServiceCategoryInput = {
   name: string
   description?: string | null
   duration: number
+  image?: string | null
   coverImage?: string | null
   avatarImage?: string | null
   price?: number | null
@@ -1072,6 +1108,7 @@ export type ServiceUpdateWithoutServiceCategoryInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   duration?: Prisma.IntFieldUpdateOperationsInput | number
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -1091,6 +1128,7 @@ export type ServiceUncheckedUpdateWithoutServiceCategoryInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   duration?: Prisma.IntFieldUpdateOperationsInput | number
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -1110,6 +1148,7 @@ export type ServiceUncheckedUpdateManyWithoutServiceCategoryInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   duration?: Prisma.IntFieldUpdateOperationsInput | number
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -1159,6 +1198,7 @@ export type ServiceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   name?: boolean
   description?: boolean
   duration?: boolean
+  image?: boolean
   coverImage?: boolean
   avatarImage?: boolean
   price?: boolean
@@ -1182,6 +1222,7 @@ export type ServiceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   name?: boolean
   description?: boolean
   duration?: boolean
+  image?: boolean
   coverImage?: boolean
   avatarImage?: boolean
   price?: boolean
@@ -1203,6 +1244,7 @@ export type ServiceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   name?: boolean
   description?: boolean
   duration?: boolean
+  image?: boolean
   coverImage?: boolean
   avatarImage?: boolean
   price?: boolean
@@ -1224,6 +1266,7 @@ export type ServiceSelectScalar = {
   name?: boolean
   description?: boolean
   duration?: boolean
+  image?: boolean
   coverImage?: boolean
   avatarImage?: boolean
   price?: boolean
@@ -1238,7 +1281,7 @@ export type ServiceSelectScalar = {
   updatedAt?: boolean
 }
 
-export type ServiceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "duration" | "coverImage" | "avatarImage" | "price" | "currency" | "color" | "isActive" | "slotInterval" | "bufferTime" | "staffId" | "serviceCategoryId" | "createdAt" | "updatedAt", ExtArgs["result"]["service"]>
+export type ServiceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "duration" | "image" | "coverImage" | "avatarImage" | "price" | "currency" | "color" | "isActive" | "slotInterval" | "bufferTime" | "staffId" | "serviceCategoryId" | "createdAt" | "updatedAt", ExtArgs["result"]["service"]>
 export type ServiceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   staff?: boolean | Prisma.StaffDefaultArgs<ExtArgs>
   serviceCategory?: boolean | Prisma.ServiceCategoryDefaultArgs<ExtArgs>
@@ -1266,6 +1309,7 @@ export type $ServicePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     name: string
     description: string | null
     duration: number
+    image: string | null
     coverImage: string | null
     avatarImage: string | null
     price: number | null
@@ -1708,6 +1752,7 @@ export interface ServiceFieldRefs {
   readonly name: Prisma.FieldRef<"Service", 'String'>
   readonly description: Prisma.FieldRef<"Service", 'String'>
   readonly duration: Prisma.FieldRef<"Service", 'Int'>
+  readonly image: Prisma.FieldRef<"Service", 'String'>
   readonly coverImage: Prisma.FieldRef<"Service", 'String'>
   readonly avatarImage: Prisma.FieldRef<"Service", 'String'>
   readonly price: Prisma.FieldRef<"Service", 'Float'>

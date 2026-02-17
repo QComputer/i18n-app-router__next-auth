@@ -44,7 +44,7 @@ interface Staff {
     id: string
     name: string
     slug: string
-    type: string
+    organizationType: string
   }
   services: Array<{
     id: string
@@ -295,7 +295,7 @@ function ProfileContent({ staff, lang }: { staff: Staff; lang: string }) {
                 </div>
                 <div>
                   <p className="font-medium">{staff.organization.name}</p>
-                  <p className="text-sm text-muted-foreground">{staff.organization.type}</p>
+                  <p className="text-sm text-muted-foreground">{staff.organization.organizationType}</p>
                 </div>
               </Link>
             </CardContent>

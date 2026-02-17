@@ -363,7 +363,7 @@ export async function updateMyOrganization(data: {
     data: {
       name: data.name,
       slug: data.slug,
-      type: data.type,
+      organizationType: data.organizationType,
       description: data.description ?? undefined,
       logo: data.logo ?? undefined,
       website: data.website ?? undefined,

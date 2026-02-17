@@ -85,10 +85,10 @@ export default async function OrganizationDetailsPage({
 
             <div>
               <label className="block text-sm font-medium text-muted-foreground mb-1">
-                {dict.admin?.organizations?.type || "Type"}
+                {dict.admin?.organizations?.organizationType || "Type"}
               </label>
               <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                {dict.admin?.organizationTypes?.[orgData.type] || orgData.type}
+                {dict.admin?.organizationTypes?.[orgData.organizationType]}
               </span>
             </div>
 

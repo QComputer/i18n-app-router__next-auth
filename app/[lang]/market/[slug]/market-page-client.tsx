@@ -30,7 +30,7 @@ interface Staff {
 }
 
 interface MarketOrg {
-  id: string; name: string; slug: string; type: string
+  id: string; name: string; slug: string; organizationType: string
   coverImage: string | null; avatarImage: string | null; logo: string | null
   description: string | null; phone: string | null; email: string | null
   address: string | null; website: string | null; workingHours: string | null

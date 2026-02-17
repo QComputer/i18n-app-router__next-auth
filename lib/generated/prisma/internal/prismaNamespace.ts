@@ -2102,7 +2102,8 @@ export const OrganizationScalarFieldEnum = {
   id: 'id',
   name: 'name',
   slug: 'slug',
-  type: 'type',
+  organizationType: 'organizationType',
+  image: 'image',
   coverImage: 'coverImage',
   avatarImage: 'avatarImage',
   logo: 'logo',
@@ -2173,6 +2174,7 @@ export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeo
 export const ProductCategoryScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  image: 'image',
   description: 'description',
   coverImage: 'coverImage',
   avatarImage: 'avatarImage'
@@ -2186,6 +2188,7 @@ export const ServiceScalarFieldEnum = {
   name: 'name',
   description: 'description',
   duration: 'duration',
+  image: 'image',
   coverImage: 'coverImage',
   avatarImage: 'avatarImage',
   price: 'price',
@@ -2327,6 +2330,7 @@ export const StaffScalarFieldEnum = {
   isActive: 'isActive',
   isDefault: 'isDefault',
   bufferTime: 'bufferTime',
+  image: 'image',
   coverImage: 'coverImage',
   avatarImage: 'avatarImage',
   userId: 'userId',
@@ -2392,6 +2396,7 @@ export const ServiceCategoryScalarFieldEnum = {
   id: 'id',
   name: 'name',
   description: 'description',
+  image: 'image',
   coverImage: 'coverImage',
   avatarImage: 'avatarImage',
   organizationId: 'organizationId'

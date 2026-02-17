@@ -45,7 +45,7 @@ export default async function OrganizationsListPage({
               <thead className="bg-muted">
                 <tr>
                   <th className="p-3 text-left">{dict.admin?.organizations?.name || "Name"}</th>
-                  <th className="p-3 text-left">{dict.admin?.organizations?.type || "Type"}</th>
+                  <th className="p-3 text-left">{dict.admin?.organizations?.organizationType || "Type"}</th>
                   <th className="p-3 text-left">{dict.admin?.organizations?.email || "Email"}</th>
                   <th className="p-3 text-left">{dict.admin?.organizations?.phone || "Phone"}</th>
                   <th className="p-3 text-left">{dict.admin?.organizations?.status || "Status"}</th>
@@ -58,7 +58,7 @@ export default async function OrganizationsListPage({
                     <td className="p-3">{org.name}</td>
                     <td className="p-3">
                       <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                        {dict.admin?.organizationTypes?.[org.type] || org.type}
+                        {dict.admin?.organizationTypes?.[org.organizationType]}
                       </span>
                     </td>
                     <td className="p-3">{org.email || "-"}</td>

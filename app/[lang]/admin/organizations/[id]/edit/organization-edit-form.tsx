@@ -13,7 +13,7 @@ export default function OrganizationEditForm({ orgData, dict, lang }: Organizati
   const [formData, setFormData] = useState({
     name: orgData.name,
     slug: orgData.slug,
-    type: orgData.type,
+    organizationType: orgData.organizationType,
     description: orgData.description || "",
     website: orgData.website || "",
     email: orgData.email || "",
@@ -51,7 +51,7 @@ export default function OrganizationEditForm({ orgData, dict, lang }: Organizati
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form lang={lang} onSubmit={handleSubmit} className="space-y-4">
       {error && (
         <div className="p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg">
           {error}
@@ -96,12 +96,12 @@ export default function OrganizationEditForm({ orgData, dict, lang }: Organizati
 
       <div>
         <label htmlFor="type" className="block text-sm font-medium text-foreground mb-1">
-          {dict.admin?.organizations?.type || "Type"}
+          {dict.admin?.organizations?.organizationType || "Type"}
         </label>
         <select
           id="type"
-          name="type"
-          value={formData.type}
+          name="organizationType"
+          value={formData.organizationType}
           onChange={handleChange}
           className="w-full px-3 py-2 border rounded-lg"
           required
@@ -272,7 +272,7 @@ export default function OrganizationEditForm({ orgData, dict, lang }: Organizati
             setFormData({
               name: orgData.name,
               slug: orgData.slug,
-              type: orgData.type,
+              organizationType: orgData.organizationType,
               description: orgData.description || "",
               website: orgData.website || "",
               email: orgData.email || "",

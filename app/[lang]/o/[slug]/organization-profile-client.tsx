@@ -32,7 +32,7 @@ interface Organization {
   id: string
   name: string
   slug: string
-  type: OrganizationType
+  organizationType: OrganizationType
   coverImage: string | null
   avatarImage: string | null
   logo: string | null
@@ -402,7 +402,7 @@ function ProfileHeader({
               )}
             </div>
             <Badge className="absolute -bottom-2 -right-2 bg-primary text-primary-foreground">
-              {organization.type}
+              {organization.organizationType}
             </Badge>
           </div>
           
@@ -494,8 +494,8 @@ export function OrganizationProfileClient({
     }
   }
   
-  const isMarketOrRestaurant = organization.type === "MARKET" || organization.type === "RESTAURANT"
-  const isServiceBusiness = organization.type === "LAWYER" || organization.type === "DOCTOR" || organization.type === "SALON"
+  const isMarketOrRestaurant = organization.organizationType === "MARKET" || organization.organizationType === "RESTAURANT"
+  const isServiceBusiness = organization.organizationType === "LAWYER" || organization.organizationType === "DOCTOR" || organization.organizationType === "SALON"
   
   return (
     <div className={lang === "fa" || lang === "ar" ? "rtl" : "ltr"} dir={lang === "fa" || lang === "ar" ? "rtl" : "ltr"}>
@@ -557,7 +557,7 @@ export function OrganizationProfileClient({
                   <CardTitle>Quick Links</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  {organization.type === "MARKET" || organization.type === "RESTAURANT" ? (
+                  {organization.organizationType === "MARKET" || organization.organizationType === "RESTAURANT" ? (
                     <Link href={`/${lang}/o/${organization.slug}`} className="block">
                       <Button variant="outline" className="w-full justify-between">
                         View Products
@@ -566,7 +566,7 @@ export function OrganizationProfileClient({
                     </Link>
                   ) : null}
                   
-                  {organization.type !== "MARKET" && organization.type !== "RESTAURANT" && (
+                  {organization.organizationType !== "MARKET" && organization.organizationType !== "RESTAURANT" && (
                     <Link href={`/${lang}/o/${organization.slug}/services`} className="block">
                       <Button variant="outline" className="w-full justify-between">
                         Book Services
