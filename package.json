@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && npx prisma generate",
+    "build": "npm install @tailwindcss/postcss@4.1.18 tailwindcss@4.1.18 && next build && npx prisma generate",
     "heap-profile": "node --heap-prof node_modules/next/dist/bin/next build",
     "start": "next start",
     "lint": "eslint",
@@ -25,6 +25,7 @@
     "i18next": "^25.8.1",
     "i18next-resources-to-backend": "^1.2.1",
     "jalaali-js": "^1.2.8",
+    "lightningcss": "^1.31.1",
     "lucide-react": "^0.563.0",
     "negotiator": "^1.0.0",
     "next": "^16.1.6",
